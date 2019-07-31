@@ -1,0 +1,14 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* 去掉a标签的样式 */
+a {
+    text-decoration: none;
+    color: #333;
+}
+/* 去掉list样式 */
+ul,li{
+    list-style: none;
+}
