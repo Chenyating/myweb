@@ -4,6 +4,12 @@
   "description": "Nuxt.js project",
   "author": "yating <924471303@qq.com>",
   "private": true,
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "3000"
+    }
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
@@ -13,6 +19,8 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
