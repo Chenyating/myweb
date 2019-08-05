@@ -15,7 +15,7 @@
     </div> -->
     <!-- 这是导航栏 -->
     <ul class="nav">
-        <li v-for="(item,index) in indexRoutes" :key="index" @click="clickNav(index)" class="unget-a" :class="{'get-a':navId==index}"> {{item.name}}</li>
+        <nuxt-link tag='li' v-for="(item,index) in indexRoutes" :key="index" :to="{name:item.path}" class="unget-a" exact-active-class="get-a"> {{item.name}}</nuxt-link>
     </ul>
     <!--  -->
 </div>
@@ -50,12 +50,6 @@ export default {
         }
     },
     methods: {
-        clickNav(id) {
-            this.navId = id;
-           this.$router.push({
-               name:this.indexRoutes[id].path
-           })
-        }
     },
     mounted() {
     }
