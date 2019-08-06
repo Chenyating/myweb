@@ -10,7 +10,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .content {
-    border: solid 1px red;
     width: 100%;
     height: 500px;
 }

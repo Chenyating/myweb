@@ -1,7 +1,7 @@
 <template>
 <div>
     <Header></Header>
-    <nuxt class="content"/>
+    <nuxt/>
     <Footer></Footer>
 </div>
 </template>
@@ -15,9 +15,4 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
-.content{
-    margin-bottom: 20px;
-}
-</style>
 
