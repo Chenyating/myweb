@@ -2,17 +2,17 @@
 <!-- 这是头部 -->
 <div class="mobile-header">
     <!-- 这是logo -->
-    <!-- <div class="logo">
+    <div class="logo">
         <img class="logo" src="https://www.baidu.com/img/bd_logo1.png">
-    </div> -->
+    </div>
     <!-- 搜索框 -->
-    <!-- <div class="search-box">
+    <div class="search-box">
         <div class="flex-left">
             <img src="~static/mobile/index/baidu.png" class="small-log" />
             <div class="name">陈雅婷</div>
         </div>
         <div class="connect" data-toggle="modal" data-target="#myModal">联系一下</div>
-    </div> -->
+    </div>
     <!-- 这是导航栏 -->
     <ul class="nav">
         <nuxt-link tag='li' v-for="(item,index) in indexRoutes" :key="index" :to="{name:item.path}" class="unget-a" exact-active-class="get-a"> {{item.name}}</nuxt-link>

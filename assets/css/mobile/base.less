@@ -6,6 +6,9 @@
 @black:#000000;
 @text-color:#555555;
 @line-color:#e8eaec;
+@red:#d00;
+@blue:#1862ab;
+@white:#ffffff;
 
 // 通用尺寸；
 @distansBig:15px;//大间距
@@ -15,13 +18,20 @@
 @icon-size:14px;
 
 // 文字样式；
+//  文本省略
+.text-ignore{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space:nowrap;
+}
+
 // 标题
 @title-size:19px;//大小
 @title-lineHeight:40px;//行高
 
 // 正文样式
 @text-size:14px;//大小
-@text-lineHeight:25px;// 行高
+@text-lineHeight:28px;// 行高
 
 // 图片
 @more-img:'~static/mobile/index/more.png';
@@ -32,6 +42,7 @@
     font-size: @title-size;
     line-height: @title-lineHeight;
     color: @black;
+    font-weight: bold;
 }
 // 正文样式
 .text{
