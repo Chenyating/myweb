@@ -16,7 +16,8 @@
     <div class="intro-box" v-for="(item,index) in infoList" :key="index">
         <div class="title">{{item.title}}</div>
         <div class="img-box">
-            <img class="img" :src="item.imgUrl">
+            <!-- 文字环绕在图片周围：图片设置标签的属性align="right"即可，其中 vspace 表示图片与文字的上下距离，hspace表示左右距离。 -->
+            <img class="img" align="left" :src="item.imgUrl" width="120" hspace="5" vspace="5">
             <div class="content">{{item.content}}</div>
         </div>
         <!--链接列表 -->
@@ -85,7 +86,7 @@ export default {
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 .mobile-index-box {
-    @imgSize: 108px; // 图片大小；
+    @imgSize: 108px; // 本页的图片大小；
     .img {
         width: @imgSize;
         height: @imgSize;
@@ -103,9 +104,8 @@ export default {
             font-size: @title-size;
         } // 图片
         .img-box {
-            .flex;
             .content {
-                .text;
+                .text();
             }
         } // 链接列表
         .link {

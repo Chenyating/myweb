@@ -1,51 +1,53 @@
 // 弹性布局，向右移动
-.flex{
+.flex {
     display: flex;
 }
+
 // 颜色
-@black:#000000;
-@text-color:#555555;
-@line-color:#e8eaec;
-@red:#d00;
-@blue:#1862ab;
-@white:#ffffff;
+@black: #000000;
+@text-color: #555555;
+@line-color: #e8eaec;
+@red: #d00;
+@blue: #1862ab;
+@white: #ffffff;
 
 // 通用尺寸；
-@distansBig:15px;//大间距
-@distansSmall:5px;//小间距
-@line-sizeBig:2px;
-@line-sizeSmall:1px;
-@icon-size:14px;
+@distansBig: 15px; //大间距
+@distansSmall: 5px; //小间距
+@line-sizeBig: 2px;
+@line-sizeSmall: 1px;
+@icon-size: 14px;
 
 // 文字样式；
 //  文本省略
-.text-ignore{
-    text-overflow:ellipsis;
+.text-ignore {
+    text-overflow: ellipsis;
     overflow: hidden;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 // 标题
-@title-size:19px;//大小
-@title-lineHeight:40px;//行高
+@title-size: 19px; //大小
+@title-lineHeight: 40px; //行高
 
 // 正文样式
-@text-size:14px;//大小
-@text-lineHeight:28px;// 行高
+@text-size: 14px; //大小
+@text-lineHeight: 28px; // 行高
 
 // 图片
-@more-img:'~static/mobile/index/more.png';
+@more-img: '~static/mobile/index/more.png';
 
 // 通用文字样式
 // 标题样式
-.title{
+.title {
     font-size: @title-size;
     line-height: @title-lineHeight;
     color: @black;
     font-weight: bold;
 }
+
 // 正文样式
-.text{
+.text {
     font-size: @text-size;
     color: @text-color;
     line-height: @text-lineHeight;
