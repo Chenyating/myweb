@@ -1,8 +1,7 @@
 <template>
-<div>
+<div class="skill-box">
     <div v-for="(item,index) in skillList" :key="index">
         <div>{{index}}：{{item.skillName}}</div>
-        <div>{{item.Percentage}}</div>
     </div>
 </div>
 </template>
@@ -12,15 +11,12 @@ export default {
         return {
             skillList: [{
                     skillName: "掌握前端基础HTML、CSS",
-                    Percentage: "80%"
                 },
                 {
                     skillName: "掌握前端基础HTML、CSS",
-                    Percentage: "80%"
                 },
                 {
                     skillName: "掌握前端基础HTML、CSS",
-                    Percentage: "80%"
                 },
             ]
         }
@@ -28,5 +24,8 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+@import "~assets/css/mobile/base.less";
+.skill-box {
+    padding: @distansBig;
+}
 </style>
