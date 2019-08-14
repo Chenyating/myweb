@@ -7,9 +7,12 @@
             <h1>{{me.name}}</h1>
             <h4>{{me.intro}}</h4>
         </div>
-        <div class="flex">
-            <img class="img" src="~/static/mobile/index/yating.jpg">
-            <div></div>
+        <div class="intro-box"> 
+            <img class="img" src="~/static/mobile/index/yating.jpg" align="left"  hspace="5" vspace="5">
+            <div class="text">
+                陈雅婷，女，毕业于天津工业大学，籍贯福建，2018年3月开始参加工作，开始从事于前端开发工作。她的梦想是成为一名优秀的前端开发工程师！
+                是一个喜欢接触新的事物，喜欢专研新的东西，思维活跃，富有创意，认真负责，待人亲切，有团队意识的小伙伴
+            </div>
         </div>
     </div>
     <!-- 列表介绍 -->
@@ -22,9 +25,9 @@
         </div>
         <!--链接列表 -->
         <div v-if="item.linkList" v-for="(link,index) in item.linkList" :key="index">
-            <a class="link" :href="link.a">
-          {{link.title}}
-        </a> </div>
+            <a class="link" :href="link.a">{{link.title}}</a>
+        </div>
+        <div class="tip-text">用心写代码，不辜负程序员之名</div>
     </div>
 
 </div>
@@ -98,7 +101,7 @@ export default {
         padding: @distansBig;
     } // csdn,github,zhanku
     .intro-box {
-        padding: 0 @distansBig;
+        padding:@distansBig;
         border-bottom: solid @distansSmall @line-color; // 标题
         .title {
             font-size: @title-size;
@@ -115,6 +118,7 @@ export default {
             border-bottom: @line-sizeSmall @line-color solid;
             padding-right: @distansBig;
             width: 100%;
+            font-size: @text-size;
             &:after {
                 content: url("@{more-img}");
                 font-weight: bold;
@@ -122,6 +126,10 @@ export default {
                 line-height: @text-lineHeight;
                 vertical-align: middle;
             }
+        }
+        .tip-text{
+            .gray-text();
+            padding-top:  @distansSmall;
         }
     }
 }

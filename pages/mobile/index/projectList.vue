@@ -1,7 +1,8 @@
 <template>
-    <div>
-        <div v-for="(item,index) in projectList" :key="index">
-            <img class="icon" align="left" :src="item.imgUrl" width="120" hspace="5" vspace="5">
+    <div class="flex">
+        <div class="project-item" v-for="(item,index) in projectList" :key="index">
+            <img class="icon" align="left" :src="item.imgUrl" width="120">
+            <div class="name">{{item.name}}</div>
             <div>{{item.content}}</div>
         </div>
     </div>
@@ -14,19 +15,19 @@ export default {
                 {
                     imgUrl:require("~/static/mobile/index/fruit.png"),
                     name:"第一个项目",
-                    content:"这是第一个项目项目，这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目",
+                    content:"对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
                     link:"www.baidu.com"
                 },
                 {
                     imgUrl:require("~/static/mobile/index/fruit.png"),
                     name:"第一个项目",
-                    content:"这是第一个项目项目，这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目",
+                    content:"对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
                     link:"www.baidu.com"
                 },
                 {
                     imgUrl:require("~/static/mobile/index/fruit.png"),
                     name:"第一个项目",
-                    content:"这是第一个项目项目，这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目这是第一个项目项目",
+                    content:"对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
                     link:"www.baidu.com"
                 }
             ]
@@ -36,9 +37,20 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-.icon{
-    width: 40px;
-    height: 40px;
+.flex{
+    padding: 0 @distansBig;
+    .icon{
+        width: 60px;
+        height: 60px;
+    }
+    .project-item{
+        width:50%;
+        padding:0 @distansBig;
+        .name{
+           .text();
+           font-weight: bold;
+        }
+    }
 }
 </style>
 
