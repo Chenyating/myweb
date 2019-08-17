@@ -34,10 +34,6 @@ export default {
                     name: '项目'
                 },
                 {
-                    path: 'mobile-index-skill',
-                    name: '技能'
-                },
-                {
                     path: 'mobile-articleList',
                     name: '文章'
                 },
