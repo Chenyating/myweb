@@ -1,72 +1,94 @@
 <template>
 <div>
-    <div class="project-item" v-for="(item,index) in projectList" :key="index">
-        <div class="flex-item">
-            <img class="icon" :src="item.imgUrl" width="120">
-            <div class="name">{{item.name}}</div>
-        </div>
-        <div class="flex-row-between">
-            <div class="gray-text">{{item.time}}</div>
-            <div>去预览</div>
-        </div>
-        <div class="item-content">{{item.content}}</div>
-        <!-- 标签 -->
-        <div>
-            <Tag color="magenta">magenta</Tag>
-            <Tag color="red">red</Tag>
-            <Tag color="volcano">volcano</Tag>
-            <Tag color="orange">orange</Tag>
-            <Tag color="gold">gold</Tag>
-            <Tag color="yellow">yellow</Tag>
-            <Tag color="lime">lime</Tag>
-            <Tag color="green">green</Tag>
-            <Tag color="cyan">cyan</Tag>
-            <Tag color="blue">blue</Tag>
-            <Tag color="geekblue">geekblue</Tag>
-            <Tag color="purple">purple</Tag>
-            <Tag color="#FFA2D3">Custom Color</Tag>
+    <!-- 项目菜单 -->
+    <div class="flex-row-around">
+        <div  v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
+            <img :src="imgpath+item.imgUrl" />
+            <div v-bind:class="{'choosed':index==choose}">{{item.name}}</div>
         </div>
     </div>
+    <!-- 项目详情 -->
+    <transition name="slide-fade">
+        <div class="project-item" v-if="show" v-for="(item,index) in projectList" :key="index">
+            <div class="flex-item">
+                <img class="icon" :src="item.imgUrl" width="120">
+                <div class="name">{{item.name}}</div>
+            </div>
+            <div class="flex-row-between">
+                <div class="gray-text">{{item.time}}</div>
+                <div>去预览</div>
+            </div>
+            <div class="item-content">{{item.content}}</div>
+            <!-- 标签 -->
+            <div>
+                <Tag color="magenta">magenta</Tag>
+                <Tag color="red">red</Tag>
+                <Tag color="volcano">volcano</Tag>
+            </div>
+        </div>
+    </transition>
 </div>
 </template>
 <script>
 export default {
     data() {
         return {
+            show: true,
+            choose: 0,
+            imgpath: '/_nuxt/static/mobile/index/',
+            menu: [{
+                    name: "自己瞎搞",
+                    imgUrl: "me.png",
+                },
+                {
+                    name: "H5页面",
+                    imgUrl: "h5.png",
+                },
+                {
+                    name: "官方网页",
+                    imgUrl: "guanfang.png",
+                },
+                {
+                    name: "小程序",
+                    imgUrl: "weapp.png",
+                },
+            ],
             projectList: [{
-                    imgUrl: require("~/static/mobile/index/fruit.png"),
-                    name: "第一个项目",
-                    content: "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
-                    link: "www.baidu.com",
-                    keyword: "vuxex",
-                    time: "2019-12-10~2018-12-40"
-                },
-                {
-                    imgUrl: require("~/static/mobile/index/fruit.png"),
-                    name: "第一个项目",
-                    content: "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
-                    link: "www.baidu.com",
-                    keyword: "vuxex",
-                    time: "2019-12-10~2018-12-40"
-                },
-                {
-                    imgUrl: require("~/static/mobile/index/fruit.png"),
-                    name: "第一个项目",
-                    content: "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
-                    link: "www.baidu.com",
-                    keyword: "vuxex",
-                    time: "2019-12-10~2018-12-40"
-                }
-            ]
+                imgUrl: require("~/static/mobile/index/fruit.png"),
+                name: "第一个项目",
+                content: "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
+                link: "www.baidu.com",
+                keyword: "vuxex",
+                time: "2019-12-10~2018-12-40"
+            }]
         };
+    },
+    methods: {
+        showThis(index) {
+            [this.show, this.choose] = [!this.show, index];
+            setTimeout(() =>
+                this.show = !this.show, 1000)
+        }
     }
 };
 </script>
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 .icon {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
+}
+
+// 选中的项目颜色；
+.choosed {
+    color: @red;
+}
+
+.flex-row-around {
+    margin: @distansBig;
+    img {
+        .icon();
+    }
 }
 
 .project-item {
@@ -88,6 +110,27 @@ export default {
     .item-key {
         color: @red;
     }
+}
+
+// /* 可以设置不同的进入和离开动画 */
+
+/* 设置持续时间和动画函数 */
+
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */
+
+{
+    transform: translateX(10px);
+    opacity: 0;
 }
 </style>
 

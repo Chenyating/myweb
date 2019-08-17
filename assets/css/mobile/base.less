@@ -3,10 +3,17 @@
     display: flex;
     flex-wrap: wrap;
 }
-.flex-row-between{
+
+.flex-row-between {
     .flex();
     justify-content: space-between;
-   align-items: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.flex-row-around {
+    .flex();
+    justify-content: space-around;
+    align-items: center;
     flex-wrap: nowrap;
 }
 
@@ -17,10 +24,10 @@
 @red: #d00;
 @blue: #1862ab;
 @white: #ffffff;
-@gray:#999999;
+@gray: #999999;
 
 // 背景
-@bg-gray:#f8f8f9;
+@bg-gray: #f8f8f9;
 
 // 通用尺寸；
 @distansBig: 10px; //大间距
@@ -46,7 +53,7 @@
 @text-lineHeight: 28px; // 行高
 
 // 提示样式
-@tip-size:12px;
+@tip-size: 12px;
 
 // 图片
 @more-img: '~static/mobile/index/more.png';
@@ -66,6 +73,7 @@
     color: @text-color;
     line-height: @text-lineHeight;
 }
+
 .text-bold {
     font-size: @text-size;
     color: @text-color;
@@ -73,29 +81,30 @@
 }
 
 // 灰色提示文字
-.gray-text{
+.gray-text {
     font-size: @tip-size;
     color: @gray;
 }
 
 // 边框阴影
-.border-shadow{
+.border-shadow {
     box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
     border-color: #eee;
 }
 
 // icon
-.icon{
+.icon {
     width: 20px;
     height: 20px;
 }
 
 // 改动的标签
-.em-blue{
+.em-blue {
     font-size: @tip-size;
     color: @blue;
 }
-.em-red{
+
+.em-red {
     font-size: @tip-size;
     color: @red;
 }
