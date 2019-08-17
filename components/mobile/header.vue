@@ -41,6 +41,10 @@ export default {
                     path: 'mobile-articleList',
                     name: '文章'
                 },
+                {
+                    path: 'mobile-index-message',
+                    name: '留言'
+                },
             ]
 
         }

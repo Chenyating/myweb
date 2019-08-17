@@ -13,6 +13,9 @@
 @white: #ffffff;
 @gray:#999999;
 
+// 背景
+@bg-gray:#f8f8f9;
+
 // 通用尺寸；
 @distansBig: 10px; //大间距
 @distansSmall: 5px; //小间距
@@ -29,7 +32,7 @@
 }
 
 // 标题
-@title-size: 19px; //大小
+@title-size: 16px; //大小
 @title-lineHeight: 40px; //行高
 
 // 正文样式
@@ -37,7 +40,7 @@
 @text-lineHeight: 28px; // 行高
 
 // 提示样式
-@tip-size:10px;
+@tip-size:12px;
 
 // 图片
 @more-img: '~static/mobile/index/more.png';
@@ -57,8 +60,27 @@
     color: @text-color;
     line-height: @text-lineHeight;
 }
+.text-bold {
+    font-size: @text-size;
+    color: @text-color;
+    font-weight: bold;
+}
 
+// 灰色提示文字
 .gray-text{
-    color: @gray;
     font-size: @tip-size;
+    color: @gray;
+}
+
+// 边框阴影
+.border-shadow{
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+    border-color: #eee;
+}
+
+
+// 改动的标签
+em{
+    font-size: @tip-size;
+    color: @blue;
 }

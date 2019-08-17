@@ -19,21 +19,35 @@ export default {
   data() {
     return {
       text: '',
+      aa:''
     }
   },
   methods: {
     postmessage() {
       console.log(this.text)
-      this.$axios.get(`/users?text=${this.text}`)
+      this.$axios.get(`/users`)
+        .then(function(response) {
+          this.aa=response;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    haha() {
+      console.log(this.text)
+      this.$axios.get(`/aa`)
         .then(function(response) {
           console.log(response);
+          this.aa=response;
         })
         .catch(function(error) {
           console.log(error);
         });
     }
   },
-  mounted() {}
+  mounted() {
+    this.haha();
+  }
 }
 </script>
 

@@ -30,6 +30,10 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  // 引入iview；
+  plugins: [
+    { src: '~plugins/iview', ssr: true }
+  ],
   css: ['~assets/css/base.less'],
   /*
   ** Customize the progress bar color

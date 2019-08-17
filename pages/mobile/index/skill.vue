@@ -2,6 +2,7 @@
 <div class="skill-box">
     <div v-for="(item,index) in skillList" :key="index">
         <div>{{index}}：{{item.skillName}}</div>
+         <Progress :percent="45" status="active" />
     </div>
 </div>
 </template>
