@@ -23,7 +23,7 @@
         </div>
         <div class="text">
             <div>{{item.content}}</div>
-            <div v-if="item.return"><em>楼主回复：</em>{{item.return}}</div>
+            <div v-if="item.return"><em class="em-blue">楼主回复：</em>{{item.return}}</div>
         </div>
     </Card>
 </div>
@@ -57,12 +57,20 @@ export default {
                 name: '',
                 message: ''
             },
+            // 留言填入规则
             messageRule: {
                 name: [{
-                    required: true,
-                    message: '歪！你的名字捏？',
-                    trigger: 'blur'
-                }],
+                        required: true,
+                        message: '歪！你的名字捏？',
+                        trigger: 'blur'
+                    },
+                    {
+                        type: 'string',
+                        max: 10,
+                        message: '你的名字有介么长的吗？',
+                        trigger: 'blur'
+                    },
+                ],
                 message: [{
                         required: true,
                         message: '对我说的话捏？',
@@ -73,18 +81,25 @@ export default {
                         min: 6,
                         message: '字数有点儿少啊￣へ￣',
                         trigger: 'blur'
-                    }
+                    },
+                    {
+                        type: 'string',
+                        max: 100,
+                        message: '字数有点略多啊￣へ￣',
+                        trigger: 'blur'
+                    },
                 ]
             }
         }
     },
     methods: {
+        // 提交留言
         takeMessage(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('Success!');
+                    this.$Message.success('感谢你的留言~!');
                 } else {
-                    this.$Message.error('Fail!');
+                    this.$Message.error('居然没有填东西就想提交||!');
                 }
             })
         }

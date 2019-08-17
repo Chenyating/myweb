@@ -3,6 +3,12 @@
     display: flex;
     flex-wrap: wrap;
 }
+.flex-row-between{
+    .flex();
+    justify-content: space-between;
+   align-items: center;
+    flex-wrap: nowrap;
+}
 
 // 颜色
 @black: #000000;
@@ -78,9 +84,18 @@
     border-color: #eee;
 }
 
+// icon
+.icon{
+    width: 20px;
+    height: 20px;
+}
 
 // 改动的标签
-em{
+.em-blue{
     font-size: @tip-size;
     color: @blue;
+}
+.em-red{
+    font-size: @tip-size;
+    color: @red;
 }
