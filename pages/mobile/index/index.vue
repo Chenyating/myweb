@@ -12,19 +12,25 @@
             <div class="text">
                 2018年3月开始参加工作，开始从事于前端开发工作。梦想是成为一名优秀的前端开发工程师！ 是一个喜欢接触新的事物，喜欢专研新的东西，思维活跃，富有创意，认真负责，待人亲切，有团队意识的小伙伴。
                 <div>
-                    <Tag color="magenta">magenta</Tag>
-                    <Tag color="red">red</Tag>
-                    <Tag color="volcano">volcano</Tag>
-                    <Tag color="orange">orange</Tag>
-                    <Tag color="gold">gold</Tag>
-                    <Tag color="yellow">yellow</Tag>
-                    <Tag color="lime">lime</Tag>
-                    <Tag color="green">green</Tag>
-                    <Tag color="cyan">cyan</Tag>
-                    <Tag color="blue">blue</Tag>
-                    <Tag color="geekblue">geekblue</Tag>
-                    <Tag color="purple">purple</Tag>
-                    <Tag color="#FFA2D3">Custom Color</Tag>
+                    <Tag color="magenta">javascript</Tag>
+                    <Tag color="orange">es6</Tag>
+                    <Tag color="red">html5</Tag>
+                    <br/>
+                    <Tag color="volcano">css3</Tag>
+                    <Tag color="blue">less</Tag>
+                    <Tag color="yellow">iview</Tag>
+                    <br/>
+                    <Tag color="gold">vue.js</Tag>
+                    <Tag color="yellow">vue-cli</Tag>
+                    <Tag color="lime">nuxt</Tag>
+                    <Tag color="green">vue-router</Tag>
+                    <Tag color="cyan">vuex</Tag>
+                    <br/>
+                    <Tag color="geekblue">node.js</Tag>
+                    <Tag color="#FFA2D3">node express</Tag>
+                    <br/>
+                    <Tag color="#FFA2D3">mysql</Tag>
+                    <Tag color="purple">sql</Tag>
                 </div>
             </div>
         </div>
