@@ -14,31 +14,48 @@
 </template>
 
 <script>
-// import axios from "axios";
+import {
+  GET,
+  POST
+} from '~/assets/server/http.js'
+import SERVER from '~/assets/server/api.js'
 export default {
   data() {
     return {
-      text: '',
-      aa:''
-    }
+      text: "",
+      aa: ""
+    };
   },
   methods: {
-    postmessage() {
-      console.log(this.text)
-      this.$axios.get(`/users`)
-        .then(function(response) {
-          this.aa=response;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+    postmessage(url, params) {
+      var params = {
+        firstName: "Fred",
+        lastName: "Flintstone"
+      };
+      JSON.stringify(params);
+      return new Promise((scuessful, fail) => {
+        this.$axios.get(url, params)
+          .then(function(response) {
+            scuessful(response);
+            console.log(params, "!!!")
+          })
+          .catch(function(error) {
+            console.log(params, "!!!")
+            fail(error);
+          });
+      });
     },
     haha() {
-      console.log(this.text)
-      this.$axios.get(`/aa`)
+      console.log(this.text);
+      this.$axios
+        .get(`/users`, {
+          params: {
+            id: 10
+          }
+        })
         .then(function(response) {
           console.log(response);
-          this.aa=response;
+          this.aa = response;
         })
         .catch(function(error) {
           console.log(error);
@@ -46,9 +63,20 @@ export default {
     }
   },
   mounted() {
-    this.haha();
+    // POST('api/a2a', {
+    //   id: 10
+    // }).then((data) => {
+    //   console.log("???")
+    // }).catch(() =>
+    //   console.log("!!!")
+    // )
+    SERVER.aa({id:10}).then((data) => {
+      console.log("???")
+    }).catch(() =>
+      console.log("!!!")
+    )
   }
-}
+};
 </script>
 
 <style>
