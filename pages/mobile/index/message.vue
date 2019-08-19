@@ -5,8 +5,8 @@
         <FormItem class='input-fill' prop="name" label="你的姓名：">
             <Input type="text" v-model="messageForm.name" placeholder="请输入你的大名~" />
         </FormItem>
-        <FormItem class='input-fill' prop="message" label="给我的留言：">
-            <Input type="textarea" v-model="messageForm.message" placeholder="等你好久，快跟我说话~" />
+        <FormItem class='input-fill' prop="content" label="给我的留言：">
+            <Input type="textarea" v-model="messageForm.content" placeholder="等你好久，快跟我说话~" />
         </FormItem>
         <Button class="input-btn" type="primary" @click="takeMessage('messageForm')">提交</Button>
     </Form>
@@ -18,12 +18,13 @@
             <Avatar shape="square" src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" />
             <div class="message-info">
                 <div class="text-bold">{{item.name}}</div>
-                <div class="gray-text">{{item.createTime}}</div>
+                <div class="gray-text">{{item.createTime.replace('T',"  ").replace('.000Z',"  ")}}</div>
             </div>
         </div>
         <div class="text">
             <div>{{item.content}}</div>
-            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnContent}}</div>
+            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime}}</div>
+            <div v-if="item.returnContent">{{item.returnContent}}</div>
         </div>
     </Card>
 </div>
@@ -38,7 +39,7 @@ export default {
             // 表单信息
             messageForm: {
                 name: '',
-                message: ''
+                content: ''
             },
             // 留言填入规则
             messageRule: {
@@ -54,14 +55,14 @@ export default {
                         trigger: 'blur'
                     },
                 ],
-                message: [{
+                content: [{
                         required: true,
                         message: '对我说的话捏？',
                         trigger: 'blur'
                     },
                     {
                         type: 'string',
-                        min: 6,
+                        min: 5,
                         message: '字数有点儿少啊￣へ￣',
                         trigger: 'blur'
                     },
@@ -81,7 +82,13 @@ export default {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     SERVER.postMessage(this.messageForm).then((data)=>{
-                        this.$Message.success('感谢你的留言~!');
+                        if(data.data.code==1){
+                            this.$Message.info(data.data.info);
+                            this.messageList.unshift(this.messageForm);
+                        }else{
+                            this.$Message.info(data.data.info);
+                        }
+                        // this.getMessageList();
                     }).catch((err)=>{
                         this.$Message.error(err);
                     })
@@ -95,7 +102,7 @@ export default {
             SERVER.getMessageList().then((data)=>{
                 this.messageList=data.data;
             }).catch((err)=>{
-                console.log(err)
+               this.$Message.error(err);
             })
         }
     },
