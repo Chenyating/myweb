@@ -14,11 +14,7 @@
 </template>
 
 <script>
-import {
-  GET,
-  POST
-} from '~/assets/server/http.js'
-import SERVER from '~/assets/server/api.js'
+import SERVER from '~/assets/server/api.js'//引入接口地址
 export default {
   data() {
     return {
@@ -63,14 +59,7 @@ export default {
     }
   },
   mounted() {
-    // POST('api/a2a', {
-    //   id: 10
-    // }).then((data) => {
-    //   console.log("???")
-    // }).catch(() =>
-    //   console.log("!!!")
-    // )
-    SERVER.aa({id:10}).then((data) => {
+    SERVER.getAticleList().then((data) => {
       console.log("???")
     }).catch(() =>
       console.log("!!!")
