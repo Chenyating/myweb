@@ -18,40 +18,23 @@
             <Avatar shape="square" src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" />
             <div class="message-info">
                 <div class="text-bold">{{item.name}}</div>
-                <div class="gray-text">{{item.time}}</div>
+                <div class="gray-text">{{item.createTime}}</div>
             </div>
         </div>
         <div class="text">
             <div>{{item.content}}</div>
-            <div v-if="item.return"><em class="em-blue">楼主回复：</em>{{item.return}}</div>
+            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnContent}}</div>
         </div>
     </Card>
 </div>
 </template>
 <script>
+import SERVER from '~/assets/server/api.js'
 export default {
     data() {
         return {
             // 留言列表
-            messageList: [{
-                    name: "yating",
-                    time: '2019-10-1 10:25:56',
-                    content: "感觉还不错，继续努力哦~",
-                },
-                {
-                    name: "yating",
-                    time: '2019-10-1 10:25:56',
-                    content: "感觉还不错，继续努力哦~",
-                    return: "谢谢，我也觉得不错，哈哈哈哈~"
-                },
-                {
-                    name: "yating",
-                    time: '2019-10-1 10:25:56',
-                    content: "感觉还不错，继续努力哦~",
-                    return: "谢谢，我也觉得不错，哈哈哈哈~"
-                },
-
-            ],
+            messageList: null,
             // 表单信息
             messageForm: {
                 name: '',
@@ -97,12 +80,27 @@ export default {
         takeMessage(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('感谢你的留言~!');
+                    SERVER.postMessage(this.messageForm).then((data)=>{
+                        this.$Message.success('感谢你的留言~!');
+                    }).catch((err)=>{
+                        this.$Message.error(err);
+                    })
                 } else {
                     this.$Message.error('居然没有填东西就想提交||!');
                 }
             })
+        },
+        // 获得留言列表
+        getMessageList(){
+            SERVER.getMessageList().then((data)=>{
+                this.messageList=data.data;
+            }).catch((err)=>{
+                console.log(err)
+            })
         }
+    },
+    mounted(){
+        this.getMessageList();
     }
 }
 </script>

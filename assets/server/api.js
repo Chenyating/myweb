@@ -14,15 +14,48 @@ import HTTP from '~/assets/server/http.js'
 // }
 
 // ##############################################################################################
+// ————次数————
+function getVisitors(){
+   return HTTP.GET('/article/articleList')//访问次数
+}
 
-
+// ————文章————
 function getAticleList(){
    return HTTP.GET('/article/articleList')//获得文章列表
 }
 
+function postAticle(){
+   return HTTP.POST('/article/articleList')//获得文章内容
+}
+
+function getAticleRead(){
+   return HTTP.get('/article/articleList')//获得文章阅读次数
+}
+
+// ————评论————
+function getMessageList(){
+   return HTTP.GET('/message/messageList')//获得评论列表
+}
+
+function postMessage(params){
+   return HTTP.POST('/message/takeMessage',params)//提交评论
+}
+
+
 export default{
     // funcName
-    getAticleList
+
+    // 访问次数
+    getVisitors,
+
+    // 博客接口
+    getAticleList,
+    postAticle,
+    getAticleRead,
+
+    // 留言接口
+    getMessageList,
+    postMessage,
 }
 
 // ##############################################################################################
