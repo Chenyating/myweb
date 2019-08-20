@@ -33,8 +33,8 @@ function getAticleRead(){
 }
 
 // ————评论————
-function getMessageList(){
-   return HTTP.GET('/message/messageList')//获得评论列表
+function getMessageList(params){//parames:{每页显示个数，页码}
+   return HTTP.GET('/message/messageList',params)//获得评论列表
 }
 
 function postMessage(params){

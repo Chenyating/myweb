@@ -11,22 +11,25 @@
         <Button class="input-btn" type="primary" @click="takeMessage('messageForm')">提交</Button>
     </Form>
     <!-- 留言列表 -->
-    <Divider orientation="left">留言列表</Divider>
+    <Divider orientation="left" class="title">留言列表</Divider>
     <Card class="message-card" v-for="(item,index) in messageList" :key="index">
         <div slot="extra">回复</div>
         <div class="flex">
-            <Avatar shape="square" src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" />
+            <Avatar shape="square" :src="require('~/static/mobile/headImg/'+item.headImg+'.png')" size="large" />
             <div class="message-info">
                 <div class="text-bold">{{item.name}}</div>
-                <div class="gray-text">{{item.createTime.replace('T',"  ").replace('.000Z',"  ")}}</div>
+                <div class="gray-text" v-if="item.createTime">{{item.createTime.replace('T'," ").replace('.000Z'," ")}}</div>
             </div>
         </div>
         <div class="text">
             <div>{{item.content}}</div>
-            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime}}</div>
+            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime.replace('T'," ").replace('.000Z'," ")}}</div>
             <div v-if="item.returnContent">{{item.returnContent}}</div>
         </div>
     </Card>
+    <div @click="getmore">
+        <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
+    </div>
 </div>
 </template>
 <script>
@@ -35,7 +38,7 @@ export default {
     data() {
         return {
             // 留言列表
-            messageList: null,
+            messageList: [],
             // 表单信息
             messageForm: {
                 name: '',
@@ -73,7 +76,10 @@ export default {
                         trigger: 'blur'
                     },
                 ]
-            }
+            },
+            num: 5,
+            page: 0, //页码
+            ifmore: true, //是否有更多
         }
     },
     methods: {
@@ -81,33 +87,57 @@ export default {
         takeMessage(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    SERVER.postMessage(this.messageForm).then((data)=>{
-                        if(data.data.code==1){
+                    SERVER.postMessage(this.messageForm).then((data) => {
+                        if (data.data.code == 1) {
                             this.$Message.info(data.data.info);
-                            this.messageList.unshift(this.messageForm);
-                        }else{
+                            [this.page, this.ifmore] = [0, true];
+                            this.getMessageList(this.num, this.page);
+                        } else {
                             this.$Message.info(data.data.info);
                         }
-                        // this.getMessageList();
-                    }).catch((err)=>{
+                    }).catch((err) => {
                         this.$Message.error(err);
                     })
                 } else {
-                    this.$Message.error('居然没有填东西就想提交||!');
+                    this.$Message.error('是不是你填的姿势有问题？||!');
                 }
             })
         },
         // 获得留言列表
-        getMessageList(){
-            SERVER.getMessageList().then((data)=>{
-                this.messageList=data.data;
-            }).catch((err)=>{
-               this.$Message.error(err);
+        getMessageList(num, page) {
+            var params = {
+                num: num,
+                page: page
+            }
+            SERVER.getMessageList(params).then((data) => {
+                // 返回的长度为0则表示，没有更多了。
+                if (data.data.length == 0) {
+                    this.ifmore = false;
+                } else {
+                    // 如果当前页码为0，那么就重新赋值给留言列表；
+                    if (this.page == 0) {
+                        this.messageList = data.data;
+                    } else {
+                        // 否则就在留言列表后面继续添加
+                        this.messageList = this.messageList.concat(data.data);
+                    }
+                }
+            }).catch((err) => {
+                this.$Message.error(err);
             })
+        },
+        // 获得更多；
+        getmore() {
+            if (this.ifmore) {
+                this.page = this.page + 1;
+                this.getMessageList(this.num, this.page);
+            } else {
+                return;
+            }
         }
     },
-    mounted(){
-        this.getMessageList();
+    mounted() {
+        this.getMessageList(this.num, this.page);
     }
 }
 </script>

@@ -4,7 +4,7 @@
     <div v-for="(item,index) in blogList" :key="index">
         <Card class="card-box">
             <div class="title">{{item[0]}}</div>
-            <div class="gray-text">{{item[1]}}</div>
+            <div class="gray-text">{{item[1].replace('T'," ").replace('Z'," ")}}</div>
         </Card>
     </div>
 </div>
