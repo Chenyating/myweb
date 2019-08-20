@@ -92,8 +92,10 @@ export default {
                             this.$Message.info(data.data.info);
                             [this.page, this.ifmore] = [0, true];
                             this.getMessageList(this.num, this.page);
-                        } else {
+                        } else if(data.data.code == 0) {
                             this.$Message.info(data.data.info);
+                        }else{
+                            this.$Message.info("出现了其他错误，一会再提交吧~");
                         }
                     }).catch((err) => {
                         this.$Message.error(err);

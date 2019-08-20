@@ -5,9 +5,15 @@
 </template>
 <script>
 export default {
+    props: {
+        // 校验父组件传入子组件的值
+        num: {
+            type: String,
+            default: "0"
+        }
+    },
     data() {
         return {
-            num: 1
         }
     }
 }

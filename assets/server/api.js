@@ -41,6 +41,14 @@ function postMessage(params){
    return HTTP.POST('/message/takeMessage',params)//提交评论
 }
 
+// ————统计次数————
+function addTimes(params){
+   return HTTP.GET('/times/addTimes',params)//增加次数
+}
+
+function getTimes(params){
+   return HTTP.GET('/times/getTimes',params)//获得次数
+}
 
 export default{
     // funcName
@@ -56,6 +64,10 @@ export default{
     // 留言接口
     getMessageList,
     postMessage,
+
+   //  统计次数
+   addTimes,
+   getTimes
 }
 
 // ##############################################################################################
