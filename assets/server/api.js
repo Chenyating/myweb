@@ -49,6 +49,12 @@ function addTimes(params){
 function getTimes(params){
    return HTTP.GET('/times/getTimes',params)//获得次数
 }
+// ————项目————
+function getProjectByType(params){
+   return HTTP.POST('/project/getProjectByType',params)//增加次数
+}
+
+
 
 export default{
     // funcName
@@ -67,7 +73,10 @@ export default{
 
    //  统计次数
    addTimes,
-   getTimes
+   getTimes,
+
+   // 项目
+   getProjectByType
 }
 
 // ##############################################################################################

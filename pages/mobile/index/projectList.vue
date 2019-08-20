@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <!-- 项目菜单 -->
-    <div class="flex-row-around">
-      <div v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
-        <img :src="item.imgUrl" />
-        <div v-bind:class="{'choosed':index==choose}">{{item.name}}</div>
-      </div>
+<div>
+  <!-- 项目菜单 -->
+  <div class="flex-row-around">
+    <div v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
+      <img :src="item.imgUrl" />
+      <div v-bind:class="{'choosed':index==choose}">{{item.name}}</div>
     </div>
-    <!-- 项目详情 -->
-    <div v-for="(item,index) in projectList" :key="index">
+  </div>
+  <!-- 项目详情 -->
+  <div v-for="(item,index) in projectList" :key="index">
     <transition name="slide-fade">
-      <div class="project-item" v-if="show" >
+      <div class="project-item" v-if="show">
         <div class="flex-item">
           <img class="icon" :src="item.imgUrl" width="120" />
           <div class="name">{{item.name}}</div>
@@ -28,17 +28,17 @@
         </div>
       </div>
     </transition>
-    </div>
   </div>
+</div>
 </template>
 <script>
+import SERVER from '~/assets/server/api.js'
 export default {
   data() {
     return {
       show: true,
       choose: 0,
-      menu: [
-        {
+      menu: [{
           name: "自己瞎搞",
           imgUrl: require("~/static/mobile/index/me.png")
         },
@@ -55,33 +55,33 @@ export default {
           imgUrl: require("~/static/mobile/index/weapp.png")
         }
       ],
-      projectList: [
-        {
-          imgUrl: require("~/static/mobile/index/fruit.png"),
-          name: "第一个项目",
-          content:
-            "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
-          link: "www.baidu.com",
-          keyword: "vuxex",
-          time: "2019-12-10~2018-12-40"
-        },
-        {
-          imgUrl: require("~/static/mobile/index/fruit.png"),
-          name: "第一个项目",
-          content:
-            "对完成的页面进行维护和对网站前端性能做相应的优化。另外，一名合格的前端开发工程师，应该具有一定的审美能力和基础的美工操作能力，能很好的与交互及视觉协作。",
-          link: "www.baidu.com",
-          keyword: "vuxex",
-          time: "2019-12-10~2018-12-40"
-        }
-      ]
+      projectList:null,
+      num: 1,
+      page: 0,
+      projectType:2
     };
   },
   methods: {
     showThis(index) {
       [this.show, this.choose] = [!this.show, index];
       setTimeout(() => (this.show = !this.show), 1000);
+    },
+    getProjectByType() {
+      var params = {
+        tableName: 'project',
+        type: this.projectType,
+        num: this.num,
+        page: this.page,
+      }
+      SERVER.getProjectByType(params).then((data) => {
+        this.projectList=data.data
+      }).catch((err) => {
+
+      })
     }
+  },
+  mounted() {
+    this.getProjectByType();
   }
 };
 </script>
@@ -141,7 +141,7 @@ export default {
 .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */
 
- {
+{
   transform: translateX(10px);
   opacity: 0;
 }

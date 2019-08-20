@@ -13,17 +13,17 @@
     <!-- 留言列表 -->
     <Divider orientation="left" class="title">留言列表</Divider>
     <Card class="message-card" v-for="(item,index) in messageList" :key="index">
-        <div slot="extra">回复</div>
+        <!-- <div slot="extra">回复</div> -->
         <div class="flex">
             <Avatar shape="square" :src="require('~/static/mobile/headImg/'+item.headImg+'.png')" size="large" />
             <div class="message-info">
                 <div class="text-bold">{{item.name}}</div>
-                <div class="gray-text" v-if="item.createTime">{{item.createTime.replace('T'," ").replace('.000Z'," ")}}</div>
+                <div class="gray-text" v-if="item.createTime">{{item.createTime}}</div>
             </div>
         </div>
         <div class="text">
             <div>{{item.content}}</div>
-            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime.replace('T'," ").replace('.000Z'," ")}}</div>
+            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime}}</div>
             <div v-if="item.returnContent">{{item.returnContent}}</div>
         </div>
     </Card>
@@ -42,7 +42,8 @@ export default {
             // 表单信息
             messageForm: {
                 name: '',
-                content: ''
+                content: '',
+                creatTime: ''
             },
             // 留言填入规则
             messageRule: {
@@ -53,7 +54,7 @@ export default {
                     },
                     {
                         type: 'string',
-                        max: 10,
+                        max: 15,
                         message: '你的名字有介么长的吗？',
                         trigger: 'blur'
                     },
@@ -87,14 +88,20 @@ export default {
         takeMessage(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    SERVER.postMessage(this.messageForm).then((data) => {
+                    var createTime = new Date();
+                    var messageForm = {
+                            name: this.messageForm.name,
+                            content: this.messageForm.content,
+                            createTime: createTime.toLocaleString()
+                    }
+                    SERVER.postMessage(messageForm).then((data) => {
                         if (data.data.code == 1) {
                             this.$Message.info(data.data.info);
                             [this.page, this.ifmore] = [0, true];
                             this.getMessageList(this.num, this.page);
-                        } else if(data.data.code == 0) {
-                            this.$Message.info(data.data.info);
-                        }else{
+                        } else if (data.data.code == 0) {
+                            this.$Message.error(data.data.info);
+                        } else {
                             this.$Message.info("出现了其他错误，一会再提交吧~");
                         }
                     }).catch((err) => {
