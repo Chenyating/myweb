@@ -35,20 +35,6 @@
             </div>
         </div>
     </div>
-    <!-- 列表介绍 -->
-    <div class="intro-box" v-for="(item,index) in infoList" :key="index">
-        <div class="title">{{item.title}}</div>
-        <div class="img-box">
-            <!-- 文字环绕在图片周围：图片设置标签的属性align="right"即可，其中 vspace 表示图片与文字的上下距离，hspace表示左右距离。 -->
-            <img class="img" align="left" :src="item.imgUrl" width="120" hspace="5" vspace="5">
-            <div class="content" v-html="item.content">{{item.content}}</div>
-        </div>
-        <!--链接列表 -->
-        <div v-if="item.linkList" v-for="(link,index) in item.linkList" :key="index">
-            <outer-router :link='link.a' :title="link.title"></outer-router>
-        </div>
-    </div>
-
 </div>
 </template>
 <script>
@@ -63,48 +49,7 @@ export default {
             me: {
                 name: "YATING",
                 intro: "用心写代码，不辜负程序员之名"
-            },
-            infoList: [{
-                    title: "CSDN:YaTing 的 Soil solution",
-                    imgUrl: require("~/static/mobile/index/csdn.jpg"),
-                    content: "在<em>CSDN</em>中,写博客已经快<em>2</em>年了,原创<em>54</em>篇,总浏览量<em>1万</em>。每天记录自己在技术方面的成长，由一只小小菜鸟演变成一只<em>菜鸟</em>，只为通往大神的方向……",
-                    linkList: [{
-                            a: "https://blog.csdn.net/lemisi/article/details/88831289",
-                            title: "艺术二维码生成过程canvas+html2canvas.js+qrcode.js"
-                        },
-                        {
-                            a: "https://blog.csdn.net/lemisi/article/details/82824676",
-                            title: "详解前端俄罗斯方块代码：HTML+JS+CANVAS实现原理"
-                        },
-                        {
-                            a: "https://blog.csdn.net/lemisi/article/details/88051630",
-                            title: "详解球球保卫大作战：html+js+canvas实现原理"
-                        },
-                        {
-                            a: "https://blog.csdn.net/lemisi/article/details/83242543",
-                            title: "详解前端扫雷代码：HTML+JS+DIV实现原理"
-                        },
-                        {
-                            a: "https://blog.csdn.net/lemisi/article/details/82219322",
-                            title: "贪吃蛇前端代码"
-                        }
-                    ]
-                },
-                {
-                    title: "github YATING",
-                    imgUrl: require("~/static/mobile/index/github.jpg"),
-                    content: "My interest is to write <em>interesting small games</em>, through thinking about the logic of the game, to achieve it, beautify it.Because I'm a<em>ofront-end development engineer!</em>",
-                    linkList: [{
-                        a: "#",
-                        title: "小游戏集合：https://github.com/Chenyating/easyGame"
-                    }]
-                },
-                {
-                    title: "站酷（ZCOOL）-YATING的主页",
-                    imgUrl: require("~/static/mobile/index/zhanku.jpg"),
-                    content: "拥有<em>11</em>年ps使用经验,<em>4年</em>平面设计经验，非科班出身，累计成交<em>60</em>多单交易，好评率<em>99%</em>。累计<em>100</em>多个原创设计作品，把兴趣当成一种爱好，修出美丽的世界……"
-                }
-            ]
+            }
         };
     }
 };

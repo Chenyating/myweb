@@ -2,36 +2,29 @@
 <div>
   <!-- 项目菜单 -->
   <div class="flex-row-around">
-    <div v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
+    <div :class="{'choosed':index==choose}" v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
       <img :src="item.imgUrl" />
-      <div v-bind:class="{'choosed':index==choose}">{{item.name}}</div>
+      <div>{{item.name}}</div>
     </div>
   </div>
   <!-- 项目详情 -->
-  <div v-for="(item,index) in projectList" :key="index">
-    <transition name="slide-fade">
-      <div class="project-item" v-if="show">
-        <div class="flex-item">
-          <img v-if="projectType!=0" class="icon" :src="item.img"  width="120" />
-          <!-- <img v-else class="icon" :src="require('~/static/mobile/index/'+item.img+'.png')"  width="120" /> -->
-          <div class="name">{{item.name}}</div>
-        </div>
-        <div class="flex-row-between">
-          <div class="gray-text">{{item.time}}</div>
-          <div>去预览</div>
-        </div>
-        <div class="item-content">{{item.intro}}</div>
-        <!-- 标签 -->
-        <div>
-          <Tag color="magenta">magenta</Tag>
-          <Tag color="red">red</Tag>
-          <Tag color="volcano">volcano</Tag>
-        </div>
+  <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
+    <div class="project-item" v-if="show">
+      <div class="flex-item">
+        <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
+        <div class="name">{{item.name}}</div>
       </div>
-    </transition>
-  </div>
-  <div @click="getmore">
-    <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
+      <div class="flex-row-between">
+        <div class="gray-text">{{item.time}}</div>
+        <div v-if="projectType==0">去玩一下</div>
+        <div v-if="projectType==1||projectType==2">查看页面</div>
+        <div v-if="projectType==3">去预览</div>
+      </div>
+      <div class="content">{{item.intro}}</div>
+      <div class="text-right" v-if="projectType==0">查看文章</div>
+      <!-- 标签 -->
+      <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
+    </div>
   </div>
 </div>
 </template>
@@ -60,21 +53,24 @@ export default {
         }
       ],
       projectList: null,
-      num: 5, //每页数量
+      num: 100, //每页数量
       page: 0, //分页
       projectType: 0, //项目类型
       ifmore: false, //是否还有更多
     };
   },
   methods: {
+    // 显示当前选中的项目
     showThis(index) {
       [this.show, this.choose] = [!this.show, index];
       [this.projectType, this.page] = [index, 0];
       setTimeout(() => {
         this.show = !this.show;
+
         this.getProjectByType();
       }, 1000);
     },
+    // 根据项目类型返回项目列表
     getProjectByType() {
       var params = {
         tableName: 'project',
@@ -82,23 +78,16 @@ export default {
         num: this.num,
         page: this.page,
       }
+      // 接口方法
       SERVER.getProjectByType(params).then((data) => {
-        if(data.data.length==0){
-          this.ifmore=false
-        }else{
+        if (data.data.length == 0) {
+          this.ifmore = false
+        } else {
           this.projectList = data.data
         }
       }).catch((err) => {
 
       })
-    },
-    getmore() {
-      if (this.ifmore) {
-        this.page = this.page + 1;
-        this.getProjectByType(this.num, this.page);
-      } else {
-        return;
-      }
     }
   },
   mounted() {
@@ -129,7 +118,6 @@ export default {
 .project-item {
   width: 100%;
   padding: @distansBig;
-  border-bottom: @distansSmall @line-color solid;
   .flex-item {
     .flex();
     align-items: center;
@@ -141,30 +129,13 @@ export default {
   .item-content {
     .text();
   }
+  .text-right{
+    .text();
+    text-align:right;
+  }
   .item-key {
     color: @red;
   }
-}
-
-// /* 可以设置不同的进入和离开动画 */
-
-/* 设置持续时间和动画函数 */
-
-.slide-fade-enter-active {
-  transition: all 0.2s ease;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to
-/* .slide-fade-leave-active for below version 2.1.8 */
-
-{
-  transform: translateX(10px);
-  opacity: 0;
 }
 </style>
 

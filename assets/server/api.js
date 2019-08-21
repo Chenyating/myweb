@@ -24,8 +24,8 @@ function getAticleList(){
    return HTTP.GET('/article/articleList')//获得文章列表
 }
 
-function postAticle(){
-   return HTTP.POST('/article/articleList')//获得文章内容
+function postAticle(params){
+   return HTTP.POST('/article/articleContent',params)//获得文章内容
 }
 
 function getAticleRead(){
