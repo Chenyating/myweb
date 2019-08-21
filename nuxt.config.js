@@ -1,4 +1,21 @@
 module.exports = {
+  modules: [
+    '@nuxtjs/axios', '@nuxtjs/proxy'
+  ],
+  axios: {
+    proxy: true, // 表示开启代理
+    prefix: '/api', // 表示给请求url加个前缀 /api
+    credentials: true // 表示跨域请求时是否需要使用凭证
+  },
+  proxy: {
+    '/api': {
+      target: 'http://172.28.194.52:3000/', // 目标接口域名
+      changeOrigin: true, // 表示是否跨域
+      pathRewrite: {
+        '^/api': '/', // 把 /api 替换成 /
+      }
+    }
+  },
   /*
   ** Headers of the page
   */
@@ -13,7 +30,11 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  css:['~assets/css/base.css'],
+  // 引入iview；
+  plugins: [
+    { src: '~plugins/iview', ssr: true }
+  ],
+  css: ['~assets/css/base.less'],
   /*
   ** Customize the progress bar color
   */
@@ -25,7 +46,7 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -34,7 +55,8 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    vendor: ['axios'] //为防止重复打包
   }
 }
 

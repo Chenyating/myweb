@@ -34,16 +34,12 @@ export default {
                     name: '项目'
                 },
                 {
-                    path: 'mobile-index-skill',
-                    name: '技能'
-                },
-                {
-                    path: 'mobile-index-experience',
-                    name: '经历'
-                },
-                {
                     path: 'mobile-articleList',
                     name: '文章'
+                },
+                {
+                    path: 'mobile-index-message',
+                    name: '留言'
                 },
             ]
 
@@ -66,6 +62,7 @@ export default {
     // 导航栏
     .nav {
         margin: 10px;
+        margin-bottom: 0;
         display: flex;
         .unget-a {
             font-size: 15px;
