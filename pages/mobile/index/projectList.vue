@@ -12,14 +12,15 @@
     <transition name="slide-fade">
       <div class="project-item" v-if="show">
         <div class="flex-item">
-          <img class="icon" :src="item.imgUrl" width="120" />
+          <img v-if="projectType!=0" class="icon" :src="item.img"  width="120" />
+          <!-- <img v-else class="icon" :src="require('~/static/mobile/index/'+item.img+'.png')"  width="120" /> -->
           <div class="name">{{item.name}}</div>
         </div>
         <div class="flex-row-between">
           <div class="gray-text">{{item.time}}</div>
           <div>去预览</div>
         </div>
-        <div class="item-content">{{item.content}}</div>
+        <div class="item-content">{{item.intro}}</div>
         <!-- 标签 -->
         <div>
           <Tag color="magenta">magenta</Tag>
@@ -28,6 +29,9 @@
         </div>
       </div>
     </transition>
+  </div>
+  <div @click="getmore">
+    <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
   </div>
 </div>
 </template>
@@ -55,16 +59,21 @@ export default {
           imgUrl: require("~/static/mobile/index/weapp.png")
         }
       ],
-      projectList:null,
-      num: 1,
-      page: 0,
-      projectType:2
+      projectList: null,
+      num: 5, //每页数量
+      page: 0, //分页
+      projectType: 0, //项目类型
+      ifmore: false, //是否还有更多
     };
   },
   methods: {
     showThis(index) {
       [this.show, this.choose] = [!this.show, index];
-      setTimeout(() => (this.show = !this.show), 1000);
+      [this.projectType, this.page] = [index, 0];
+      setTimeout(() => {
+        this.show = !this.show;
+        this.getProjectByType();
+      }, 1000);
     },
     getProjectByType() {
       var params = {
@@ -74,10 +83,22 @@ export default {
         page: this.page,
       }
       SERVER.getProjectByType(params).then((data) => {
-        this.projectList=data.data
+        if(data.data.length==0){
+          this.ifmore=false
+        }else{
+          this.projectList = data.data
+        }
       }).catch((err) => {
 
       })
+    },
+    getmore() {
+      if (this.ifmore) {
+        this.page = this.page + 1;
+        this.getProjectByType(this.num, this.page);
+      } else {
+        return;
+      }
     }
   },
   mounted() {
@@ -89,7 +110,8 @@ export default {
 @import "~assets/css/mobile/base.less";
 .icon {
   width: 40px;
-  height: 40px;
+  height: auto;
+  margin-right: @distansSmall;
 }
 
 // 选中的项目颜色；
@@ -110,7 +132,6 @@ export default {
   border-bottom: @distansSmall @line-color solid;
   .flex-item {
     .flex();
-    justify-content: center;
     align-items: center;
   }
   .name {
