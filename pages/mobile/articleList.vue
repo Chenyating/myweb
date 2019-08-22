@@ -33,7 +33,8 @@ export default {
             })
         },
         goArticle(title) {
-            this.$router.push({ name: 'mobile-article', params: { title: title }})
+            // this.$router.push({ name: `mobile-article`, params: { title: title }})
+            this.$router.push(`/mobile/article?title=${title}`);
 
         }
     },

@@ -2,10 +2,7 @@
 <template>
 <div class="mavonEditor">
     <no-ssr>
-        <mavon-editor :toolbars="markdownOption"
-        :toolbarsFlag="false"
-        :boxShadow="false"
-        :ishljs="true"  :subfield="false" defaultOpen="preview" v-model="content1" />
+        <mavon-editor :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" v-model="content1" />
     </no-ssr>
 </div>
 </template>
@@ -14,7 +11,7 @@ import SERVER from "~/assets/server/api.js";
 export default {
     data() {
         return {
-            title: this.$route.params.title,
+            title: this.$route.query.title,
             content: null,
             content1: "# ART-QR-Code",
             markdownOption: {
@@ -29,7 +26,7 @@ export default {
             };
             SERVER.postAticle(params)
                 .then(data => {
-                    this.content1 =data.data;
+                    this.content1 = data.data;
                     console.log(this.content1)
                 })
                 .catch();
