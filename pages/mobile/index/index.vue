@@ -1,7 +1,7 @@
 <template>
 <!-- mobile首页 -->
 <div class="mobile-index-box">
-    <!-- 个人资料 -->
+    <!-- 个人资料
     <div class="about-me">
         <div class="me">
             <h1>{{me.name}}</h1>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 </template>
 <script>

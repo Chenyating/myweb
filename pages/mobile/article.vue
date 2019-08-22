@@ -1,22 +1,29 @@
 
 <template>
-<div class="mavonEditor">
-    <no-ssr>
+<div>
+    <go-back ></go-back>
+    <div v-if="ifhas" class="mavonEditor">
         <mavon-editor :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" v-model="content" />
-    </no-ssr>
+    </div>
+    <div class="article-item">225</div>
 </div>
 </template>
 <script>
 import SERVER from "~/assets/server/api.js";
+import goBack from "~/components/mobile/back.vue";
 export default {
+    components:{
+        goBack
+    },
     data() {
         return {
             // 标题
             title: this.$route.query.title,
-            content: "",//内容
+            content: "#haha",//内容
             markdownOption: {
                 bold: true // 粗体
-            }
+            },
+            ifhas:false,
         };
     },
     methods: {
@@ -29,6 +36,7 @@ export default {
                 .then(data => {
                     if(data.data.code==1){
                         this.content =JSON.parse(data.data.content);
+                        this.ifhas=true;
                     }else{
                         this.content =data.data.content;
                     }
@@ -37,14 +45,28 @@ export default {
         }
     },
     mounted() {
+        console.log("???")
+        this.title=this.$route.query.title;
         this.getArticle(this.title);
     }
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import "~assets/css/mobile/base.less";
 .mavonEditor {
     width: 100%;
     height: 100%;
+}
+.mavon-editor{
+    background: white;
+
+}
+.article-item {
+  // x方向重复背景
+  background: url("~static/mobile/icon/hua.png");
+  background-position: bottom;
+//   background-repeat: repeat-x;
+height: 80px;
 }
 </style>
