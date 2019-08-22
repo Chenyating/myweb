@@ -30,9 +30,11 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  // 引入iview；
   plugins: [
-    { src: '~plugins/iview', ssr: true }
+    // 引入iview；
+    { src: '~plugins/iview', ssr: true },
+    // 引入mavonEditor
+    { src: '@/plugins/vue-mavon-editor', srr: false }
   ],
   css: ['~assets/css/base.less'],
   /*
@@ -53,10 +55,11 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        })
+        }
+        )
       }
     },
-    vendor: ['axios'] //为防止重复打包
+    vendor: ['axios'] //为防止重复打包,
   }
 }
 
