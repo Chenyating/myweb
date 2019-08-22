@@ -2,7 +2,7 @@
 <template>
 <div class="mavonEditor">
     <no-ssr>
-        <mavon-editor :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" v-model="content1" />
+        <mavon-editor :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" v-model="content" />
     </no-ssr>
 </div>
 </template>
@@ -11,23 +11,27 @@ import SERVER from "~/assets/server/api.js";
 export default {
     data() {
         return {
+            // 标题
             title: this.$route.query.title,
-            content: null,
-            content1: "# ART-QR-Code",
+            content: "",//内容
             markdownOption: {
                 bold: true // 粗体
             }
         };
     },
     methods: {
+        // 获得文字内容
         getArticle(title) {
             var params = {
                 title: title
             };
             SERVER.postAticle(params)
                 .then(data => {
-                    this.content1 = data.data;
-                    console.log(this.content1)
+                    if(data.data.code==1){
+                        this.content =JSON.parse(data.data.content);
+                    }else{
+                        this.content =data.data.content;
+                    }
                 })
                 .catch();
         }

@@ -68,41 +68,6 @@ export default {
         color: @white;
         padding: @distansBig;
     } // csdn,github,zhanku
-    .intro-box {
-        padding: @distansBig;
-        border-bottom: solid @distansSmall @line-color; // 标题
-        .title {
-            font-size: @title-size;
-        } // 图片
-        .img-box {
-            .content {
-                .text();
-                em {
-                    color: @red;
-                }
-            }
-        } // 链接列表
-        .link {
-            .text-ignore;
-            display: inline-block;
-            padding: @distansSmall 0;
-            border-bottom: @line-sizeSmall @line-color solid;
-            padding-right: @distansBig;
-            width: 100%;
-            font-size: @text-size;
-            &:after {
-                content: url("@{more-img}");
-                font-weight: bold;
-                padding: @distansSmall;
-                line-height: @text-lineHeight;
-                vertical-align: middle;
-            }
-        }
-        .tip-text {
-            .gray-text();
-            padding-top: @distansSmall;
-        }
-    }
 }
 </style>
 
