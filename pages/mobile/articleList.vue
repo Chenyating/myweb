@@ -1,11 +1,13 @@
 <template>
 <div>
-  <go-back routerName="mobile-index"></go-back>
+  <go-back routerName="mobile-index" title="文章列表"></go-back>
   <div class="article-box">
     <div class="article-item" v-for="(item,index) in blogList" :key="index">
       <div @click="goArticle(item[0])" class="title"> 《 {{item[0]}} 》</div>
       <div class="flex-row-between">
+        <!-- 最新编辑时间 -->
         <div class="icon-time">{{item[1]}}</div>
+        <!-- 阅读次数 -->
         <div class="icon-read">10</div>
       </div>
     </div>

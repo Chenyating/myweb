@@ -17,11 +17,11 @@
       <div class="flex-row-between">
         <div class="gray-text">{{item.time}}</div>
         <div v-if="projectType==0">去玩一下</div>
-        <div v-if="projectType==1||projectType==2">查看页面</div>
+        <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
         <div v-if="projectType==3">去预览</div>
       </div>
       <div class="content">{{item.intro}}</div>
-      <div class="text-right" v-if="projectType==0">查看文章</div>
+      <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
       <!-- 标签 -->
       <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
     </div>
@@ -88,6 +88,14 @@ export default {
       }).catch((err) => {
 
       })
+    },
+    // 阅读文章
+    readArticle(){
+
+    },
+    // 查看页面
+    readWeb(){
+
     }
   },
   mounted() {

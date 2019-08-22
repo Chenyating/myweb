@@ -13,6 +13,7 @@
     <!-- 留言列表 -->
     <Divider orientation="left" class="title">留言列表</Divider>
     <Card class="message-card" v-for="(item,index) in messageList" :key="index">
+        <img class="border-message" src="~static/mobile/icon/borderMessage.png" />
         <!-- <div slot="extra">回复</div> -->
         <div class="flex">
             <Avatar shape="square" :src="require('~/static/mobile/headImg/'+item.headImg+'.png')" size="large" />
@@ -90,9 +91,9 @@ export default {
                 if (valid) {
                     var createTime = new Date();
                     var messageForm = {
-                            name: this.messageForm.name,
-                            content: this.messageForm.content,
-                            createTime: createTime.toLocaleString()
+                        name: this.messageForm.name,
+                        content: this.messageForm.content,
+                        createTime: createTime.toLocaleString()
                     }
                     SERVER.postMessage(messageForm).then((data) => {
                         if (data.data.code == 1) {
@@ -170,5 +171,12 @@ export default {
     .message-info {
         margin-left: @distansBig;
     }
+}
+
+.border-message {
+    position: absolute;
+    right: 0;
+    .icon(@width:50px);
+    bottom: 0;
 }
 </style>
