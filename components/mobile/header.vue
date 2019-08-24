@@ -1,22 +1,20 @@
 <template>
 <!-- 这是头部 -->
 <div class="mobile-header">
-    <!-- 这是logo -->
-    <!-- <div class="logo">
-        <img class="logo" src="https://www.baidu.com/img/bd_logo1.png">
-    </div> -->
-    <!-- 搜索框 -->
-    <!-- <div class="search-box">
-        <div class="flex-left">
-            <img src="~static/mobile/index/baidu.png" class="small-log" />
-            <div class="name">陈雅婷</div>
-        </div>
-        <div class="connect" data-toggle="modal" data-target="#myModal">联系一下</div>
-    </div> -->
     <!-- 这是导航栏 -->
-    <ul class="nav">
-        <nuxt-link tag='li' v-for="(item,index) in indexRoutes" :key="index" :to="{name:item.path}" class="unget-a" exact-active-class="get-a"> {{item.name}}</nuxt-link>
-    </ul>
+    <div class="bg">
+        <div class="inf-me">
+            <img class="head-img" src="~static/mobile/index/yating.jpg" />
+            <div>用心写代码，不负程序员之名</div>
+        </div>
+        <ul class="nav">
+            <nuxt-link tag='div' v-for="(item,index) in indexRoutes" :key="index" :to="{name:item.path}" class="unget-a" exact-active-class="get-a">
+                <img class="nav-img" :src="item.imgUrl" />
+                <div>{{item.name}}</div>
+            </nuxt-link>
+        </ul>
+
+    </div>
     <!--  -->
 </div>
 </template>
@@ -27,83 +25,66 @@ export default {
             navId: '0',
             indexRoutes: [{
                     path: 'mobile-index',
-                    name: '首页'
+                    name: '我的世界',
+                    imgUrl: require("~/static/mobile/index/index.png")
                 },
                 {
                     path: 'mobile-index-projectList',
-                    name: '项目'
+                    name: '项目工程',
+                    imgUrl: require("~/static/mobile/index/project.png")
                 },
                 {
                     path: 'mobile-articleList',
-                    name: '文章'
+                    name: '我的博客',
+                    imgUrl: require("~/static/mobile/index/article.png")
                 },
                 {
                     path: 'mobile-index-message',
-                    name: '留言'
+                    name: '留言板',
+                    imgUrl: require("~/static/mobile/index/message.png")
                 },
             ]
 
         }
     },
-    methods: {
-    },
-    mounted() {
-    }
 }
 </script>
 <style lang="less" scoped>
+@import "~assets/css/mobile/base.less";
 .mobile-header {
     width: 100%;
-    // logo
-    .logo {
-        width: 150px;
-        margin: 0 auto;
+    margin-bottom: 9*@distansBig;
+    .bg {
+        background-image: url("~static/mobile/index/bg.jpg");
+        width: 100%;
+        height: 200px;
+        background-size: 100%;
+        position: relative;
+        .inf-me {
+            position: absolute;
+            text-align: right;
+            bottom: -80px;
+            right: @distansBig;
+        }
+        .head-img {
+            .icon(@width: 80px);
+        }
     }
-    // 导航栏
     .nav {
-        margin: 10px;
-        margin-bottom: 0;
-        display: flex;
+        position: absolute;
+        bottom: -50px;
+        .nav-img {
+            .icon(@width: 20px);
+        }
+        .flex();
+        text-align: center;
+        height: 50px; // 导航选中情况
         .unget-a {
-            font-size: 15px;
-            margin: 0 5px;
-            padding: 5px 0;
-            color: #666;
+            margin: @distansBig;
         }
         .get-a {
-            font-size: 15px;
-            margin: 0 5px;
-            padding: 5px 0;
-            color: #000;
-            border-bottom: solid 3px #000000;
-        }
-    }
-    /* 搜索框 */
-    .search-box {
-        border: solid 1px #000000;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 15px;
-        margin: 0 10px;
-        padding: 5px;
-        .flex-left {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .small-log {
-            width: 30px;
-            height: 30px;
-        }
-        .name {
-            text-align: left;
-        }
-        .connect {
-            color: #38f;
+            text-shadow: 0 1px 6px white;
             font-weight: bold;
-            margin: 0 10px;
         }
     }
 }

@@ -7,7 +7,7 @@
             <div class="title">用户名</div>
             <div class="text">{{item.content}}</div>
             <!-- 视频 -->
-            <video v-if="item.type==3" class="content-img" width="320" height="240" controls="controls" autoplay="autoplay"><source :src="item.url" type="video/mp4" /></video>
+            <video v-if="item.type==3"  class="content-img"  autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""><source :src="item.url" type="video/mp4" /></video>
             <img v-if="item.type==2" class="content-img" :src="item.url" />
             <div class="gray-text">2019-11-13 11:20</div>
         </div>
@@ -29,7 +29,7 @@ export default {
         return {
             list: null,
             page: 0,
-            num: 2,
+            num: 5,
             ifmore: true
         };
     },
