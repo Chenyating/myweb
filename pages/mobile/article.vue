@@ -47,9 +47,6 @@ export default {
                 })
                 .catch();
         },
-        gotop() {
-            console.log("去顶部")
-        },
         // 回到顶部
         backTop() {
             const that = this
@@ -75,7 +72,6 @@ export default {
         }
     },
     mounted() {
-        console.log("???");
         this.title = this.$route.query.title;
         this.getArticle(this.title);
         window.addEventListener('scroll', this.scrollToTop)
