@@ -19,6 +19,7 @@
 import SERVER from '~/assets/server/api.js'
 import goBack from '~/components/mobile/back.vue'
 export default {
+  transition: 'article',
   components: {
     goBack,
   },

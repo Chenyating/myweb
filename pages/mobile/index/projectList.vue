@@ -115,7 +115,7 @@ export default {
 .choosed-img {
   text-align: center;
   font-weight: bold;
-  animation: choosed 10s infinite;
+  animation: rotateLong 10s infinite;
 }
 
 .choosed-text {
@@ -152,19 +152,6 @@ export default {
   }
   .item-key {
     color: @red;
-  }
-}
-
-// 被选中的动画
-@keyframes choosed {
-  30% {
-    transform: scale(1) rotate(180deg);
-  }
-  60% {
-    transform: scale(.5) rotate();
-  }
-  100% {
-    transform: scale(1) rotate(360deg);
   }
 }
 </style>

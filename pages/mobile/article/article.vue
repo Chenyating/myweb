@@ -3,9 +3,9 @@
 <div class="D-big">
     <div class="hua"></div>
     <transition v-if="btnFlag" name="toptop">
-    <img class="gotop"  @click="backTop" src="~static/mobile/icon/top.png" />
+        <img class="gotop" @click="backTop" src="~static/mobile/icon/top.png" />
     </transition>
-    <go-back routerName="mobile-article-list"  :title="title"></go-back>
+    <go-back routerName="mobile-article-list" :title="title"></go-back>
     <div>
         <mavon-editor class="md-box" v-if="ifhas" :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" codeStyle="atom-one-dark" v-model="content" />
     </div>
@@ -15,6 +15,7 @@
 import SERVER from "~/assets/server/api.js";
 import goBack from "~/components/mobile/back.vue";
 export default {
+    transition: 'article',
     components: {
         goBack
     },
@@ -123,18 +124,24 @@ export default {
 
 .before {
     .icon(@width: 30px);
-    transform:rotate(180deg)
+    transform: rotate(180deg)
 }
 
 .after {
     .icon(@width: 30px);
-    transform:rotate(-180deg)
+    transform: rotate(-180deg)
 }
 
-.toptop-enter-active, .toptop-leave-active {
-  transition: opacity .5s;
+.toptop-enter-active,
+.toptop-leave-active {
+    transition: opacity .5s;
 }
-.toptop-enter, .toptop-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+
+.toptop-enter,
+.toptop-leave-to
+/* .fade-leave-active below version 2.1.8 */
+
+{
+    opacity: 0;
 }
 </style>
