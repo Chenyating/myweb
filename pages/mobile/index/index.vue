@@ -1,107 +1,107 @@
 <template>
 <!-- mobile首页 -->
 <div class="mobile-index-box">
-    <!-- 个人资料 -->
-    <div class="about-me">
-        <div class="me">
-            <h1>{{me.name}}</h1>
-            <h4>{{me.intro}}</h4>
+    <div class="flex" v-for="(item,index) in list" :key="index">
+        <img class="head-img" src="~static/mobile/index/yating.jpg" />
+        <div class="shuoshuo">
+            <div class="title">用户名</div>
+            <div class="text">{{item.content}}</div>
+            <!-- 视频 -->
+            <video v-if="item.type==3"  class="content-img"  autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""><source :src="item.url" type="video/mp4" /></video>
+            <img v-if="item.type==2" class="content-img" :src="item.url" />
+            <div class="gray-text">2019-11-13 11:20</div>
         </div>
-        <div class="intro-box">
-            <img class="img" src="~/static/mobile/index/yating.jpg" align="left" hspace="5" vspace="5">
-            <div class="text">
-                2018年3月开始参加工作，开始从事于前端开发工作。梦想是成为一名优秀的前端开发工程师！ 是一个喜欢接触新的事物，喜欢专研新的东西，思维活跃，富有创意，认真负责，待人亲切，有团队意识的小伙伴。
-                <div>
-                    <Tag color="magenta">javascript</Tag>
-                    <Tag color="orange">es6</Tag>
-                    <Tag color="red">html5</Tag>
-                    <br/>
-                    <Tag color="volcano">css3</Tag>
-                    <Tag color="blue">less</Tag>
-                    <Tag color="yellow">iview</Tag>
-                    <br/>
-                    <Tag color="gold">vue.js</Tag>
-                    <Tag color="yellow">vue-cli</Tag>
-                    <Tag color="lime">nuxt</Tag>
-                    <Tag color="green">vue-router</Tag>
-                    <Tag color="cyan">vuex</Tag>
-                    <br/>
-                    <Tag color="geekblue">node.js</Tag>
-                    <Tag color="#FFA2D3">node express</Tag>
-                    <br/>
-                    <Tag color="#FFA2D3">mysql</Tag>
-                    <Tag color="purple">sql</Tag>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div @click="getmore">
+        <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
     </div>
 </div>
 </template>
 <script>
-import outerRouter from '~/components/public/outerRouter'
+import outerRouter from '~/components/public/outerRouter';
+import SERVER from '~/assets/server/api.js';
+
 export default {
+    transition:'mobilePage',
     components: {
         outerRouter
     },
     data() {
         return {
-            name: "YATING",
-            me: {
-                name: "YATING",
-                intro: "用心写代码，不辜负程序员之名"
-            }
+            list: null,
+            page: 0,
+            num: 5,
+            ifmore: true
         };
+    },
+    methods: {
+        getshuoshuo(page, num) {
+            var params = {
+                page: page,
+                num: num
+            }
+            SERVER.getshuoshuo(params)
+                .then((data) => {
+                    // 返回的长度为0则表示，没有更多了。
+                    if (data.data.length == 0) {
+                        this.ifmore = false;
+                    } else {
+                        // 如果当前页码为0，那么就重新赋值给留言列表；
+                        if (this.page == 0) {
+                            this.list = data.data;
+                        } else {
+                            // 否则就在留言列表后面继续添加
+                            this.list = this.list.concat(data.data);
+                        }
+                    }
+                })
+                .catch(err => {});
+        },
+        // 获得更多；
+        getmore() {
+            if (this.ifmore) {
+                this.page = this.page + 1;
+                this.getshuoshuo(this.num, this.page);
+            } else {
+                return;
+            }
+        }
+    },
+    mounted() {
+        this.getshuoshuo(this.page, this.num);
     }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.flex {
+    flex-wrap: nowrap;
+    margin: @distansBig;
+    padding: @distansBig 0;
+    border-bottom: @line-sizeSmall @line-color solid;
+}
+
+.title {
+    line-height: 16px;
+}
+
+.text {
+    line-height: 24px;
+}
+
 .mobile-index-box {
-    @imgSize: 108px; // 本页的图片大小；
-    .img {
-        width: @imgSize;
-        height: @imgSize;
-        margin-right: @distansSmall;
+    .head-img {
+        @smallWidth: 20%;
+        .icon(@width: 20%);
+        padding: 0 @distansBig;
     }
-    .me {
-        background: @blue;
-        color: @white;
-        padding: @distansBig;
-    } // csdn,github,zhanku
-    .intro-box {
-        padding: @distansBig;
-        border-bottom: solid @distansSmall @line-color; // 标题
-        .title {
-            font-size: @title-size;
-        } // 图片
-        .img-box {
-            .content {
-                .text();
-                em {
-                    color: @red;
-                }
-            }
-        } // 链接列表
-        .link {
-            .text-ignore;
-            display: inline-block;
-            padding: @distansSmall 0;
-            border-bottom: @line-sizeSmall @line-color solid;
-            padding-right: @distansBig;
-            width: 100%;
-            font-size: @text-size;
-            &:after {
-                content: url("@{more-img}");
-                font-weight: bold;
-                padding: @distansSmall;
-                line-height: @text-lineHeight;
-                vertical-align: middle;
-            }
-        }
-        .tip-text {
-            .gray-text();
-            padding-top: @distansSmall;
-        }
+    .shuoshuo {
+        width: 80%;
+    }
+    .content-img {
+        width: 80%;
+        height: auto;
+        margin: @distansSmall 0;
     }
 }
 </style>
