@@ -1,3 +1,5 @@
+
+const webpack = require('webpack')
 module.exports = {
   modules: [
     '@nuxtjs/axios', '@nuxtjs/proxy'
@@ -34,7 +36,8 @@ module.exports = {
     // 引入iview；
     { src: '~plugins/iview', ssr: true },
     // 引入mavonEditor
-    { src: '@/plugins/vue-mavon-editor', srr: false }
+    { src: '@/plugins/vue-mavon-editor', srr: false },
+    
   ],
   css: ['~assets/css/base.less'],
   /*
@@ -45,6 +48,11 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        '$': 'jquery'
+      })
+    ],
     /*
     ** Run ESLint on save
     */
