@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div class="D-big">
     <div class="hua"></div>
     <transition v-if="btnFlag" name="toptop">
     <img class="gotop"  @click="backTop" src="~static/mobile/icon/top.png" />

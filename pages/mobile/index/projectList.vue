@@ -8,29 +8,30 @@
     </div>
   </div>
   <!-- 项目详情 -->
-    <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
-      <div class="project-item" v-if="show">
-        <div class="flex-item">
-          <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
-          <div class="name">{{item.name}}</div>
-        </div>
-        <div class="flex-row-between">
-          <div class="gray-text">{{item.time}}</div>
-          <div v-if="projectType==0">去玩一下</div>
-          <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
-          <div v-if="projectType==3">去预览</div>
-        </div>
-        <div class="content">{{item.intro}}</div>
-        <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
-        <!-- 标签 -->
-        <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
+  <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
+    <div class="project-item" v-if="show">
+      <div class="flex-item">
+        <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
+        <div class="name">{{item.name}}</div>
       </div>
+      <div class="flex-row-between">
+        <div class="gray-text">{{item.time}}</div>
+        <div v-if="projectType==0">去玩一下</div>
+        <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
+        <div v-if="projectType==3">去预览</div>
+      </div>
+      <div class="content">{{item.intro}}</div>
+      <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
+      <!-- 标签 -->
+      <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
     </div>
+  </div>
 </div>
 </template>
 <script>
 import SERVER from '~/assets/server/api.js'
 export default {
+  transition: 'mobilePage',
   data() {
     return {
       show: true,
@@ -166,6 +167,5 @@ export default {
     transform: scale(1) rotate(360deg);
   }
 }
-
 </style>
 

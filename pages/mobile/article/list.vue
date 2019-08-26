@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="D-big">
   <go-back routerName="mobile-index" title="文章列表"></go-back>
   <div class="article-box">
     <div class="article-item" v-for="(item,index) in blogList" :key="index">

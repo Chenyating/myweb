@@ -22,6 +22,7 @@ import outerRouter from '~/components/public/outerRouter';
 import SERVER from '~/assets/server/api.js';
 
 export default {
+    transition:'mobilePage',
     components: {
         outerRouter
     },

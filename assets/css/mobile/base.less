@@ -125,3 +125,35 @@
     font-size: @tip-size;
     color: @red;
 }
+
+// 全局页面路由动画
+.mobilePage-enter-active,
+.mobilePage-leave-active {
+    transition: opacity .5s;
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+
+}
+
+.mobilePage-enter{
+    transform: translateX(-150px);
+    opacity: 0;
+}
+.mobilePage-leave-active {
+    transform: translateX(150px);
+    opacity: 0;
+}
+
+// 由小变大
+@keyframes beBig {
+    from{
+      transform: scale(.1)
+    }
+    to{
+      transform: scale(1)
+    }
+  }
+
+  .D-big{
+    animation: beBig 2s ;
+  
+  }

@@ -36,6 +36,7 @@
 <script>
 import SERVER from '~/assets/server/api.js'
 export default {
+    transition: 'mobilePage',
     data() {
         return {
             // 留言列表
@@ -176,7 +177,7 @@ export default {
 .border-message {
     position: absolute;
     right: 0;
-    .icon(@width:50px);
+    .icon(@width: 50px);
     bottom: 0;
 }
 </style>
