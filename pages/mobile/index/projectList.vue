@@ -2,30 +2,30 @@
 <div>
   <!-- 项目菜单 -->
   <div class="flex-row-around">
-    <div :class="{'choosed':index==choose}" v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
-      <img :src="item.imgUrl" />
-      <div>{{item.name}}</div>
+    <div v-for="(item ,index) in menu" :key="index" @click="showThis(index)">
+      <img :class="{'choosed-img':index==choose}" :src="item.imgUrl" />
+      <div :class="{'choosed-text':index==choose}">{{item.name}}</div>
     </div>
   </div>
   <!-- 项目详情 -->
-  <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
-    <div class="project-item" v-if="show">
-      <div class="flex-item">
-        <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
-        <div class="name">{{item.name}}</div>
+    <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
+      <div class="project-item" v-if="show">
+        <div class="flex-item">
+          <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
+          <div class="name">{{item.name}}</div>
+        </div>
+        <div class="flex-row-between">
+          <div class="gray-text">{{item.time}}</div>
+          <div v-if="projectType==0">去玩一下</div>
+          <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
+          <div v-if="projectType==3">去预览</div>
+        </div>
+        <div class="content">{{item.intro}}</div>
+        <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
+        <!-- 标签 -->
+        <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
       </div>
-      <div class="flex-row-between">
-        <div class="gray-text">{{item.time}}</div>
-        <div v-if="projectType==0">去玩一下</div>
-        <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
-        <div v-if="projectType==3">去预览</div>
-      </div>
-      <div class="content">{{item.intro}}</div>
-      <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
-      <!-- 标签 -->
-      <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
     </div>
-  </div>
 </div>
 </template>
 <script>
@@ -90,11 +90,11 @@ export default {
       })
     },
     // 阅读文章
-    readArticle(){
+    readArticle() {
 
     },
     // 查看页面
-    readWeb(){
+    readWeb() {
 
     }
   },
@@ -108,11 +108,18 @@ export default {
 .icon {
   width: 40px;
   height: auto;
-  margin-right: @distansSmall;
 }
 
 // 选中的项目颜色；
-.choosed {
+.choosed-img {
+  text-align: center;
+  font-weight: bold;
+  animation: choosed 10s infinite;
+}
+
+.choosed-text {
+  text-align: center;
+  font-weight: bold;
   color: @red;
 }
 
@@ -132,18 +139,33 @@ export default {
   }
   .name {
     .text();
+    margin-left: @distansBig;
     font-weight: bold;
   }
   .item-content {
     .text();
   }
-  .text-right{
+  .text-right {
     .text();
-    text-align:right;
+    text-align: right;
   }
   .item-key {
     color: @red;
   }
 }
+
+// 被选中的动画
+@keyframes choosed {
+  30% {
+    transform: scale(1) rotate(180deg);
+  }
+  60% {
+    transform: scale(.5) rotate();
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
 </style>
 

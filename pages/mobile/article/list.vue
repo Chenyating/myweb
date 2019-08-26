@@ -43,7 +43,7 @@ export default {
     },
     goArticle(title) {
       // 跳转去查看文章详情
-      this.$router.push(`/mobile/article?title=${title}`);
+      this.$router.push(`/mobile/article/article?title=${title}`);
     }
   },
   mounted() {
@@ -58,10 +58,8 @@ export default {
 }
 
 .article-item {
-  padding:@distansBig @distansSmall;
-  margin: @distansBig;
-
-  // x方向重复背景
+  padding: @distansBig @distansSmall;
+  margin: @distansBig; // x方向重复背景
   background-image: url("~static/mobile/icon/cao.png");
   background-position: bottom;
   background-repeat: repeat-x;

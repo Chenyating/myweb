@@ -5,7 +5,7 @@
     <transition v-if="btnFlag" name="toptop">
     <img class="gotop"  @click="backTop" src="~static/mobile/icon/top.png" />
     </transition>
-    <go-back :title="title"></go-back>
+    <go-back routerName="mobile-article-list"  :title="title"></go-back>
     <div>
         <mavon-editor class="md-box" v-if="ifhas" :toolbars="markdownOption" :toolbarsFlag="false" :boxShadow="false" :ishljs="true" :subfield="false" defaultOpen="preview" codeStyle="atom-one-dark" v-model="content" />
     </div>

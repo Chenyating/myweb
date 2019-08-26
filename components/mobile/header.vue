@@ -34,7 +34,7 @@ export default {
                     imgUrl: require("~/static/mobile/index/project.png")
                 },
                 {
-                    path: 'mobile-articleList',
+                    path: 'mobile-article-list',
                     name: '我的博客',
                     imgUrl: require("~/static/mobile/index/article.png")
                 },
