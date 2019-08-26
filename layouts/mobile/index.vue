@@ -1,5 +1,5 @@
 <template>
-<div class="D-big">
+<div class="D-show">
     <Header></Header>
     <nuxt/>
     <Footer :num="times"></Footer>

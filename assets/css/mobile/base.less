@@ -10,11 +10,13 @@
     align-items: center;
     flex-wrap: nowrap;
 }
+
 .flex-col-between {
     .flex();
     flex-direction: column;
     justify-content: space-between;
 }
+
 .flex-row-around {
     .flex();
     justify-content: space-around;
@@ -64,9 +66,9 @@
 
 // 图片
 @img-more: '~static/mobile/index/more.png';
-@img-read:'~static/mobile/icon/read.png';
-@img-time:'~static/mobile/icon/time.png';
-@img-back:'~static/mobile/icon/back.png';
+@img-read: '~static/mobile/icon/read.png';
+@img-time: '~static/mobile/icon/time.png';
+@img-back: '~static/mobile/icon/back.png';
 
 // 通用文字样式
 // 标题样式
@@ -91,7 +93,7 @@
     font-weight: bold;
 }
 
-.content{
+.content {
     .text();
     text-indent: 2em;
 }
@@ -111,7 +113,7 @@
 // icon 传参（宽度）
 .icon(@width) {
     width: @width;
-    height:@width;
+    height: @width;
 }
 
 
@@ -129,31 +131,79 @@
 // 全局页面路由动画
 .mobilePage-enter-active,
 .mobilePage-leave-active {
-    transition: opacity .5s;
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    transition: opacity .3s;
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 
 }
 
-.mobilePage-enter{
+.mobilePage-enter {
     transform: translateX(-150px);
     opacity: 0;
 }
+
 .mobilePage-leave-active {
     transform: translateX(150px);
     opacity: 0;
 }
 
+// 全局页面路由动画
+
+.article-enter-active,
+.article-leave-active {
+    transition: opacity .3s;
+    transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+
+}
+
+.article-enter {
+    transform: rotate(180deg) scale(.5);
+    opacity: 0;
+}
+
+.article-leave-active {
+    transform: rotate(180deg) scale(1);
+    opacity: 0;
+}
+
 // 由小变大
 @keyframes beBig {
-    from{
-      transform: scale(.1)
+    from {
+        transform: rotate(180deg) scale(.1);
     }
-    to{
-      transform: scale(1)
-    }
-  }
 
-  .D-big{
-    animation: beBig 2s ;
-  
+    to {
+        transform: scale(1)
+    }
+}
+// 由小变大
+@keyframes beShow {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// 360度旋转
+@keyframes rotateLong {
+    30% {
+      transform: scale(1) rotate(180deg);
+    }
+    60% {
+      transform: scale(.5) rotate();
+    }
+    100% {
+      transform: scale(1) rotate(360deg);
+    }
   }
+.D-big {
+    animation: beBig .5s;
+}
+.D-show {
+    animation: beShow 2s;
+}
+.D-rotate-Long {
+    animation: rotateLong 2s infinite;
+}
