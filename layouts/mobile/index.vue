@@ -1,6 +1,7 @@
 <template>
 <div class="D-show">
   <div id="PendantBox">
+    <div :class="ifshow?'showPendant':'noshowPendant'" @click="showPendant"></div>
   </div>
   <Header></Header>
   <nuxt />
@@ -23,6 +24,7 @@ export default {
       pendant: null, //挂件
       pendantNum: 1, //数量
       pendantSpeed: 10000, //速度
+      ifshow: false,
     };
   },
   methods: {
@@ -84,6 +86,24 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    showPendant() {
+      this.ifshow = !this.ifshow;
+      if (this.ifshow) {
+        // 循环挂件，每隔1秒来一次
+        this.pendant = setInterval(() => {
+          this.makePendant();
+          // 当漂浮物宽度为0的时候，那就清除它自己
+          $("#PendantBox img").each(function(index, element) {
+            if (element.style.width == "10px") {
+              element.remove();
+            }
+          });
+        }, 1000)
+      } else {
+        $("#PendantBox img").remove();
+        clearInterval(this.pendant)
+      }
     }
   },
   mounted() {
@@ -92,21 +112,8 @@ export default {
     };
     this.addTimes(params);
     this.getTimes(params);
-    // 循环挂件，每隔10秒来一次
-    this.pendant = setInterval(() => {
-      this.makePendant();
-      // 当漂浮物宽度为0的时候，那就清除它自己
-      $("#PendantBox img").each(function(index, element) {
-        if (element.style.width == "10px") {
-          element.remove();
-        }
-      });
-    }, 3000)
-
+    this.showPendant();
   },
-  destroyed() {
-    clearInterval(this.pendant)
-  }
 };
 </script>
 <style lang="less" scoped>
@@ -116,10 +123,26 @@ export default {
   z-index: 2;
 }
 
+.showPendant {
+  position: fixed;
+  background-image: url("~static/mobile/index/leaf.png");
+  background-size: 100%;
+  .D-rotate-Long();
+  .icon(@width: 40px);
+}
+
+.noshowPendant {
+  position: fixed;
+  background-image: url("~static/mobile/index/leaf.png");
+  background-size: 100%;
+  .icon(@width: 40px);
+}
+
 .icon {
   .icon(@width: 40px);
 }
 
+// 最外框绝对定位，内部滚动
 .D-show {
   display: fixed;
   height: 100%;
