@@ -11,8 +11,8 @@ module.exports = {
   },
   proxy: {
     '/api': {
-      target: 'http://172.28.194.52:3000/', // 目标接口域名
-      // target: 'http://192.168.43.121:3000/', // 目标接口域名
+      // target: 'http://172.28.194.52:3000/', // 目标接口域名
+      target: 'http://192.168.43.121:3000/', // 目标接口域名
       changeOrigin: true, // 表示是否跨域
       pathRewrite: {
         '^/api': '/', // 把 /api 替换成 /

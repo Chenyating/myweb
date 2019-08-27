@@ -8,12 +8,11 @@
             <div>用心写代码，不负程序员之名</div>
         </div>
         <ul class="nav">
-            <nuxt-link tag='div' v-for="(item,index) in indexRoutes" :key="index" :to="{name:item.path}" class="unget-a" exact-active-class="get-a">
+            <nuxt-link tag='div' v-for="(item,index) in indexRoutes" :key="index" :to="item.path" class="unget-a" exact-active-class="get-a">
                 <img class="nav-img" :src="item.imgUrl" />
                 <div>{{item.name}}</div>
             </nuxt-link>
         </ul>
-
     </div>
     <!--  -->
 </div>
@@ -24,22 +23,22 @@ export default {
         return {
             navId: '0',
             indexRoutes: [{
-                    path: 'mobile-index',
+                    path: '/',
                     name: '我的世界',
                     imgUrl: require("~/static/mobile/index/index.png")
                 },
                 {
-                    path: 'mobile-index-projectList',
+                    path: '/projectList',
                     name: '项目工程',
                     imgUrl: require("~/static/mobile/index/project.png")
                 },
                 {
-                    path: 'mobile-article-list',
+                    path: '/articles',
                     name: '我的博客',
                     imgUrl: require("~/static/mobile/index/article.png")
                 },
                 {
-                    path: 'mobile-index-message',
+                    path: '/message',
                     name: '留言板',
                     imgUrl: require("~/static/mobile/index/message.png")
                 },

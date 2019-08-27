@@ -14,12 +14,12 @@ export default {
         },
         routerName:{
             type:String,
-            default:"mobile-index"
+            default:"/"
         },
     },
     methods:{
         goBack(){
-            this.$router.push({name:this.routerName})
+            this.$router.push(this.routerName)
         }
     }
 }
