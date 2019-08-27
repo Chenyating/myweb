@@ -121,7 +121,9 @@ export default {
 }
 
 .D-show {
-  position: relative;
+  display: fixed;
+  height: 100%;
+  overflow: scroll;
 }
 </style>
 
