@@ -1,68 +1,152 @@
 <template>
 <div class="D-show">
-    <div id="box"></div>
-    <Header></Header>
-    <nuxt/>
-    <Footer :num="times"></Footer>
+  <div id="PendantBox">
+    <div :class="ifshow?'showPendant':'noshowPendant'" @click="showPendant"></div>
+  </div>
+  <Header></Header>
+  <nuxt />
+  <Footer :num="times"></Footer>
 </div>
 </template>
 <script>
-import SERVER from '~/assets/server/api.js'
-import Header from '~/components/mobile/header';
-import Footer from '~/components/mobile/footer'
+import SERVER from "~/assets/server/api.js";
+import Header from "~/components/mobile/header";
+import Footer from "~/components/mobile/footer";
 export default {
-    components: {
-        Header,
-        Footer
+  components: {
+    Header,
+    Footer
+  },
+  data() {
+    return {
+      times: null,
+      imgUrl: require("~/static/mobile/index/leaf.png"),
+      pendant: null, //挂件
+      pendantNum: 1, //数量
+      pendantSpeed: 10000, //速度
+      ifshow: false,
+    };
+  },
+  methods: {
+    // 获取随机数
+    getRandom(x, y) {
+      return Math.floor(Math.random() * (y - x)) + x;
     },
-    data() {
-        return {
-            times: null,
-            imgUrl: require("~/static/mobile/index/me.png")
-        }
+    // 悬浮挂件
+    makePendant() {
+      var getPendantBox = $("#PendantBox");
+      // 一次出现pendantNum个挂件
+      for (let index = 0; index < this.pendantNum; index++) {
+        var item = $(` <img src="${this.imgUrl}"/>`);
+        // 设置基础样式
+        item.css({
+          "position": "fixed",
+          "top": `${this.getRandom(0, 100)}%`,
+          "right": `${this.getRandom(0, 100)}%`,
+          "transfrom": `rotate(${this.getRandom(0, 180)}deg)`,
+          "width": `${this.getRandom(30, 40)}px`,
+          "height": "auto",
+          "opacity": "0",
+        });
+        // 第一次移动的动画
+        item.animate({
+          transfrom: `rotate(${this.getRandom(0, 180)}deg)`,
+          opacity: "1",
+          width: "20px",
+          top: `${this.getRandom(0, 100)}%`,
+          right: `${this.getRandom(0, 100)}%`
+        }, this.pendantSpeed);
+        // 第二次移动的动画
+        item.animate({
+          transfrom: `rotate(${this.getRandom(0, 180)}deg)`,
+          opacity: "0",
+          width: "10",
+          top: `${this.getRandom(0, 100)}%`,
+          right: `${this.getRandom(0, 100)}%`
+        }, this.pendantSpeed);
+        getPendantBox.append(item);
+      }
     },
-    methods: {
-        playFloatBox() {
-            var getbox = $("#box");
-            for (let index = 0; index < 10; index++) {
-                getbox.append(` <img class="icon" src="${this.imgUrl}"/>`);
+    // 添加浏览次数
+    addTimes(params) {
+      SERVER.addTimes(params)
+        .then(data => {
+          // console.log(data)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getTimes(params) {
+      SERVER.getTimes(params)
+        .then(data => {
+          this.times = data.data[0].times;
+          console.log(this.times);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    showPendant() {
+      this.ifshow = !this.ifshow;
+      if (this.ifshow) {
+        // 循环挂件，每隔1秒来一次
+        this.pendant = setInterval(() => {
+          this.makePendant();
+          // 当漂浮物宽度为0的时候，那就清除它自己
+          $("#PendantBox img").each(function(index, element) {
+            if (element.style.width == "10px") {
+              element.remove();
             }
-            $("#box img").animate({
-                opacity: '1',
-                height: '40px',
-                width: '40px',
-                rotate:'180deg',
-            });
-        }
-    },
-    mounted() {
-        var params = {
-            name: "mobileIndex"
-        }
-        SERVER.addTimes(params).then((data) => {
-            // console.log(data)
-        }).catch((err) => {
-            console.log(err)
-        })
-        SERVER.getTimes(params).then((data) => {
-            this.times = data.data[0].times;
-            console.log(this.times)
-        }).catch((err) => {
-            console.log(err)
-        })
-        this.playFloatBox();
+          });
+        }, 1000)
+      } else {
+        $("#PendantBox img").remove();
+        clearInterval(this.pendant)
+      }
     }
-}
+  },
+  mounted() {
+    var params = {
+      name: "mobileIndex"
+    };
+    this.addTimes(params);
+    this.getTimes(params);
+    this.showPendant();
+  },
+};
 </script>
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-#box {
-    position: absolute;
-    z-index: 9999999;
+#PendantBox {
+  position: relative;
+  z-index: 2;
+}
+
+.showPendant {
+  position: fixed;
+  background-image: url("~static/mobile/index/leaf.png");
+  background-size: 100%;
+  .D-rotate-Long();
+  .icon(@width: 40px);
+}
+
+.noshowPendant {
+  position: fixed;
+  background-image: url("~static/mobile/index/leaf.png");
+  background-size: 100%;
+  .icon(@width: 40px);
 }
 
 .icon {
-    .icon(@width: 40px);
+  .icon(@width: 40px);
+}
+
+// 最外框绝对定位，内部滚动
+.D-show {
+  display: fixed;
+  height: 100%;
+  overflow: scroll;
 }
 </style>
 

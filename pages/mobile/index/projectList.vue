@@ -7,23 +7,43 @@
       <div :class="{'choosed-text':index==choose}">{{item.name}}</div>
     </div>
   </div>
-  <!-- 项目详情 -->
-  <div v-if="projectList" v-for="(item,index) in projectList" :key="index">
-    <div class="project-item" v-if="show">
-      <div class="flex-item">
-        <img v-if="projectType!=0" class="icon" :src="item.img" width="120" />
-        <div class="name">{{item.name}}</div>
+  <!-- 项目详情 0：自己的作品 1：h5页面，2：官网 3、小程序-->
+  <div v-if="projectList.length>0" class="project-item" v-for="(item,index) in projectList" :key="index">
+    <!-- 自己作品 -->
+    <div v-if="item.type==0">
+      <!-- 标题 -->
+      <div class="project-title-box" @click="goUrl(item)">
+        <img :src="playImg" />
+        <div class="title">{{item.name}}</div>
       </div>
+      <div class="content" @click="readMore(item)">{{item.intro}}</div>
       <div class="flex-row-between">
         <div class="gray-text">{{item.time}}</div>
-        <div v-if="projectType==0">去玩一下</div>
-        <div v-if="projectType==1||projectType==2" @click="readWeb()">查看页面</div>
-        <div v-if="projectType==3">去预览</div>
+        <div class="icon-readMore" @click="readMore(item)">阅读全文</div>
+      </div>
+    </div>
+    <!-- h5 -->
+    <div class="flex-row-between h5-title-box" v-if="item.type==1" @click="goUrl(item)">
+      <!-- 标题 -->
+      <img class="h5-img" :src="item.img" />
+      <div class="title">{{item.name}}</div>
+      <div class="gray-text">{{item.time}}</div>
+    </div>
+    <!-- 官方商城-->
+    <div class="flex-row-between" v-if="item.type==2" @click="goUrl(item)">
+      <!-- 标题 -->
+      <div class="guanfang-title-box">
+        <img class="guanfang-img" :src="item.img?item.img:ifImg" />
+        <div class="title">{{item.name}}</div>
+        <div class="gray-text">{{item.time}}</div>
       </div>
       <div class="content">{{item.intro}}</div>
-      <div class="text-right" v-if="projectType==0" @click="readArticle()">查看文章</div>
-      <!-- 标签 -->
-      <Tag v-if="item.keyword" color="magenta">{{item.keyword}}</Tag>
+    </div>
+    <!-- 小程序 -->
+    <div v-if="item.type==3" @click="goUrl(item)">
+      <div class="title">{{item.name}}</div>
+      <div class="content">{{item.intro}}</div>
+      <div class="gray-text">{{item.time}}</div>
     </div>
   </div>
 </div>
@@ -34,6 +54,8 @@ export default {
   transition: 'mobilePage',
   data() {
     return {
+      ifImg: require("~/static/mobile/index/iftu.jpg"),
+      playImg: require("~/static/mobile/index/play.png"),
       show: true,
       choose: 0,
       menu: [{
@@ -67,7 +89,6 @@ export default {
       [this.projectType, this.page] = [index, 0];
       setTimeout(() => {
         this.show = !this.show;
-
         this.getProjectByType();
       }, 1000);
     },
@@ -79,6 +100,7 @@ export default {
         num: this.num,
         page: this.page,
       }
+      this.projectList = null;
       // 接口方法
       SERVER.getProjectByType(params).then((data) => {
         if (data.data.length == 0) {
@@ -90,13 +112,17 @@ export default {
 
       })
     },
-    // 阅读文章
-    readArticle() {
-
+    // 页面跳转
+    goUrl(item) {
+      // 如果存在路径，则开启。
+      if (item.url) {
+        window.open(item.url)
+      }
     },
-    // 查看页面
-    readWeb() {
-
+    readMore(item) {
+      if (item.articleUrl) {
+        window.open(item.articleUrl)
+      }
     }
   },
   mounted() {
@@ -106,11 +132,41 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+// 伪类图标
+.icon-readMore {
+  line-height: @distansBig;
+  &:after {
+    content: " ";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: @distansSmall;
+    .icon(@width: 15px);
+    background: url(@img-more) no-repeat;
+    background-size: 100%;
+  }
+}
+
+// 图标
 .icon {
   width: 40px;
   height: auto;
 }
 
+.h5-img {
+  .icon(@width: 80px);
+  margin: @distansBig 0;
+}
+
+.guanfang-img {
+  .icon(@width: 80px);
+}
+
+.weapp-img {
+  height: 50px;
+  width: auto;
+}
+
+// 菜单样式
 // 选中的项目颜色；
 .choosed-img {
   text-align: center;
@@ -121,7 +177,6 @@ export default {
 .choosed-text {
   text-align: center;
   font-weight: bold;
-  color: @red;
 }
 
 .flex-row-around {
@@ -131,27 +186,39 @@ export default {
   }
 }
 
+// 项目样式
 .project-item {
-  width: 100%;
   padding: @distansBig;
-  .flex-item {
-    .flex();
-    align-items: center;
+  border-bottom: @line-sizeSmall @line-color solid;
+}
+
+.project-item:last-child {
+  padding: @distansSmall @distansBig;
+  border-bottom: 0 @line-color solid;
+}
+
+.project-title-box {
+  .flex();
+}
+
+.flex-row-between {
+  .guanfang-title-box {
+    width: 40%;
+    text-align: center;
   }
-  .name {
-    .text();
-    margin-left: @distansBig;
-    font-weight: bold;
+  .content {
+    width: 60%;
   }
-  .item-content {
-    .text();
-  }
-  .text-right {
-    .text();
-    text-align: right;
-  }
-  .item-key {
-    color: @red;
+}
+
+.weapp-title-box {
+  text-align: center;
+}
+
+.h5-title-box {
+  .title {
+    width: 50%;
+    padding: @distansBig;
   }
 }
 </style>
