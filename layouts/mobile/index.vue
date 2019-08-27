@@ -1,10 +1,10 @@
 <template>
-  <div class="D-show">
-    <div id="box"></div>
-    <Header></Header>
-    <nuxt />
-    <Footer :num="times"></Footer>
-  </div>
+<div class="D-show">
+  <div id="box"></div>
+  <!-- <Header></Header>
+  <nuxt />
+  <Footer :num="times"></Footer> -->
+</div>
 </template>
 <script>
 import SERVER from "~/assets/server/api.js";
@@ -18,63 +18,75 @@ export default {
   data() {
     return {
       times: null,
-      imgUrl: require("~/static/mobile/index/me.png"),
-      haha:null
+      imgUrl: require("~/static/mobile/index/leaf.png"),
+      pendant: null, //挂件
     };
   },
   methods: {
+    // 获取随机数
     getRandom(x, y) {
       return Math.floor(Math.random() * (y - x)) + x;
     },
-    playFloatBox() {
+    // 悬浮挂件
+    makePendant() {
       var getbox = $("#box");
-      for (let index = 0; index < 10; index++) {
-        var item = $(` <img class="icon" src="${this.imgUrl}"/>`);
+      // 一次出现5个挂件
+      for (let index = 0; index < 5; index++) {
+        var item = $(` <img src="${this.imgUrl}"/>`);
         item.css({
           "position": "fixed",
           "top": `${this.getRandom(0, 100)}%`,
           "right": `${this.getRandom(0, 100)}%`,
-          "transfrom": "rotate(180deg)",
-          "animation": "rotateLong 2s infinite;nim",
-          "width":`${this.getRandom(50, 80)}px`,
-          "height":"auto",
-          "opacity": "0.7",
+          "transfrom": `rotate(${this.getRandom(0, 180)}deg)`,
+          "width": `${this.getRandom(30, 40)}px`,
+          "height": "auto",
+          "opacity": "0",
         });
         item.animate({
-            opacity: "1",
-            width:"0",
-            top:`${this.getRandom(0, 100)}%`
-          },10000);
+          transfrom: `rotate(${this.getRandom(0, 180)}deg)`,
+          opacity: "1",
+          width: "0",
+          top: `${this.getRandom(0, 100)}%`,
+          right: `${this.getRandom(0, 100)}%`
+        }, 6000);
         getbox.append(item);
       }
+    },
+    // 添加浏览次数
+    addTimes(params) {
+      SERVER.addTimes(params)
+        .then(data => {
+          // console.log(data)
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getTimes(params) {
+      SERVER.getTimes(params)
+        .then(data => {
+          this.times = data.data[0].times;
+          console.log(this.times);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mounted() {
     var params = {
       name: "mobileIndex"
     };
-    SERVER.addTimes(params)
-      .then(data => {
-        // console.log(data)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    SERVER.getTimes(params)
-      .then(data => {
-        this.times = data.data[0].times;
-        console.log(this.times);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    //   this.haha=setInterval(()=>{
-    //       this.playFloatBox();
-    //   },5000)
+    this.addTimes(params);
+    this.getTimes(params);
+    // 循环挂件，每隔10秒来一次
+    this.pendant = setInterval(() => {
+      this.makePendant();
+    }, 1000)
+
   },
-  destroyed(){
-      clearInterval(this.haha)
-      console.log("xia")
+  destroyed() {
+    clearInterval(this.pendant)
   }
 };
 </script>
@@ -88,6 +100,7 @@ export default {
 .icon {
   .icon(@width: 40px);
 }
+
 .D-show {
   position: relative;
 }
