@@ -1,10 +1,10 @@
 <template>
-<div id="PendantBox">
-  <div class="D-show">
-    <Header></Header>
-    <nuxt />
-    <Footer :num="times"></Footer>
+<div class="D-show">
+  <div id="PendantBox">
   </div>
+  <Header></Header>
+  <nuxt />
+  <Footer :num="times"></Footer>
 </div>
 </template>
 <script>
@@ -113,7 +113,7 @@ export default {
 @import "~assets/css/mobile/base.less";
 #PendantBox {
   position: relative;
-  z-index: 9999999;
+  z-index: 2;
 }
 
 .icon {
