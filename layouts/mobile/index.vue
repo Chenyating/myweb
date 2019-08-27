@@ -1,9 +1,10 @@
 <template>
-<div class="D-show">
-  <div id="box"></div>
-  <!-- <Header></Header>
-  <nuxt />
-  <Footer :num="times"></Footer> -->
+<div id="PendantBox">
+  <div class="D-show">
+    <Header></Header>
+    <nuxt />
+    <Footer :num="times"></Footer>
+  </div>
 </div>
 </template>
 <script>
@@ -20,6 +21,8 @@ export default {
       times: null,
       imgUrl: require("~/static/mobile/index/leaf.png"),
       pendant: null, //挂件
+      pendantNum: 1, //数量
+      pendantSpeed: 10000, //速度
     };
   },
   methods: {
@@ -29,10 +32,11 @@ export default {
     },
     // 悬浮挂件
     makePendant() {
-      var getbox = $("#box");
-      // 一次出现5个挂件
-      for (let index = 0; index < 5; index++) {
+      var getPendantBox = $("#PendantBox");
+      // 一次出现pendantNum个挂件
+      for (let index = 0; index < this.pendantNum; index++) {
         var item = $(` <img src="${this.imgUrl}"/>`);
+        // 设置基础样式
         item.css({
           "position": "fixed",
           "top": `${this.getRandom(0, 100)}%`,
@@ -42,14 +46,23 @@ export default {
           "height": "auto",
           "opacity": "0",
         });
+        // 第一次移动的动画
         item.animate({
           transfrom: `rotate(${this.getRandom(0, 180)}deg)`,
           opacity: "1",
-          width: "0",
+          width: "20px",
           top: `${this.getRandom(0, 100)}%`,
           right: `${this.getRandom(0, 100)}%`
-        }, 6000);
-        getbox.append(item);
+        }, this.pendantSpeed);
+        // 第二次移动的动画
+        item.animate({
+          transfrom: `rotate(${this.getRandom(0, 180)}deg)`,
+          opacity: "0",
+          width: "10",
+          top: `${this.getRandom(0, 100)}%`,
+          right: `${this.getRandom(0, 100)}%`
+        }, this.pendantSpeed);
+        getPendantBox.append(item);
       }
     },
     // 添加浏览次数
@@ -82,7 +95,13 @@ export default {
     // 循环挂件，每隔10秒来一次
     this.pendant = setInterval(() => {
       this.makePendant();
-    }, 1000)
+      // 当漂浮物宽度为0的时候，那就清除它自己
+      $("#PendantBox img").each(function(index, element) {
+        if (element.style.width == "10px") {
+          element.remove();
+        }
+      });
+    }, 3000)
 
   },
   destroyed() {
@@ -92,8 +111,8 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-#box {
-  position: fixed;
+#PendantBox {
+  position: relative;
   z-index: 9999999;
 }
 
