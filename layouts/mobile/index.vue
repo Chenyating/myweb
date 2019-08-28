@@ -1,7 +1,7 @@
 <template>
 <div class="D-show">
+  <div :class="ifshow?'showPendant':'noshowPendant'" @click="showPendant"></div>
   <div id="PendantBox">
-    <div :class="ifshow?'showPendant':'noshowPendant'" @click="showPendant"></div>
   </div>
   <Header></Header>
   <nuxt />
@@ -120,10 +120,11 @@ export default {
 @import "~assets/css/mobile/base.less";
 #PendantBox {
   position: relative;
-  z-index: 2;
+  z-index: -1;
 }
 
 .showPendant {
+  z-index: 3;
   position: fixed;
   background-image: url("~static/mobile/index/leaf.png");
   background-size: 100%;
@@ -132,6 +133,7 @@ export default {
 }
 
 .noshowPendant {
+  z-index: 3;
   position: fixed;
   background-image: url("~static/mobile/index/leaf.png");
   background-size: 100%;

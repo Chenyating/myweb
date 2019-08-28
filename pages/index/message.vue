@@ -177,6 +177,7 @@ export default {
 
 // 留言信息卡
 .message-card {
+    background: transparent;
     margin: @distansBig;
     .border-shadow();
     .message-info {
