@@ -5,6 +5,7 @@ import axios from 'axios'
   // 它可以通过设置一个 `baseURL` 便于为 axios 实例的方法传递相对 URL
 axios.defaults.baseURL = '/api'//这是请求的域名地址
 axios.defaults.headers = {'Cache-Control': 'no-cache'}//去掉get缓存
+// axios.defaults.timeout = 6000;//请求时间的设置。超过6秒就算超时
 
 // get和post传params的区别，get要{params},否则失败；
 
