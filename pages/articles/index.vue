@@ -2,7 +2,8 @@
 <div class="D-big">
   <go-back routerName="/" title="文章列表"></go-back>
   <div class="article-box">
-    <div class="article-item" v-for="(item,index) in blogList" :key="index">
+    <reject v-if="blogList==null"></reject>
+    <div v-else class="article-item" v-for="(item,index) in blogList" :key="index">
       <div @click="goArticle(item[0])" class="title"> 《 {{item[0]}} 》</div>
       <div class="flex-row-between">
         <!-- 最新编辑时间 -->
@@ -12,16 +13,17 @@
       </div>
     </div>
   </div>
-  <div class="border-bottom"></div>
 </div>
 </template>
 <script>
-import SERVER from '~/assets/server/api.js'
-import goBack from '~/components/mobile/back.vue'
+import SERVER from '~/assets/server/api.js';
+import goBack from '~/components/mobile/back.vue';
+import reject from "~/components/mobile/reject";
 export default {
   transition: 'article',
   components: {
     goBack,
+    reject
   },
   data() {
     return {
@@ -40,7 +42,9 @@ export default {
           var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
           element[1] = time;
         });
-      }).catch((err) => {})
+      }).catch((err) => {
+        this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
+      })
     },
     goArticle(title) {
       // 跳转去查看文章详情

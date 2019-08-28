@@ -12,35 +12,44 @@
     </Form>
     <!-- 留言列表 -->
     <Divider orientation="left" class="title">留言列表</Divider>
-    <Card class="message-card" v-for="(item,index) in messageList" :key="index">
-        <img class="border-message" src="~static/mobile/icon/borderMessage.png" />
-        <!-- <div slot="extra">回复</div> -->
-        <div class="flex">
-            <Avatar shape="square" :src="require('~/static/mobile/headImg/'+item.headImg+'.png')" size="large" />
-            <div class="message-info">
-                <div class="text-bold">{{item.name}}</div>
-                <div class="gray-text" v-if="item.createTime">{{item.createTime}}</div>
+    <reject v-if="messageList==null"></reject>
+    <div v-else>
+        <Card class="message-card" v-for="(item,index) in messageList" :key="index">
+            <img class="border-message" src="~static/mobile/icon/borderMessage.png" />
+            <!-- <div slot="extra">回复</div> -->
+            <div class="flex">
+                <Avatar shape="square" :src="require('~/static/mobile/headImg/'+item.headImg+'.png')" size="large" />
+                <div class="message-info">
+                    <div class="text-bold">{{item.name}}</div>
+                    <div class="gray-text" v-if="item.createTime">{{item.createTime}}</div>
+                </div>
             </div>
+            <div class="text">
+                <div>{{item.content}}</div>
+                <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime}}</div>
+                <div v-if="item.returnContent">{{item.returnContent}}</div>
+            </div>
+        </Card>
+        <div @click="getmore">
+            <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
         </div>
-        <div class="text">
-            <div>{{item.content}}</div>
-            <div v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnTime}}</div>
-            <div v-if="item.returnContent">{{item.returnContent}}</div>
-        </div>
-    </Card>
-    <div @click="getmore">
-        <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
     </div>
+
 </div>
 </template>
+
 <script>
-import SERVER from '~/assets/server/api.js'
+import SERVER from '~/assets/server/api.js';
+import reject from "~/components/mobile/reject";
 export default {
     transition: 'mobilePage',
+    components: {
+        reject
+    },
     data() {
         return {
             // 留言列表
-            messageList: [],
+            messageList: null,
             // 表单信息
             messageForm: {
                 name: '',
@@ -107,7 +116,7 @@ export default {
                             this.$Message.info("出现了其他错误，一会再提交吧~");
                         }
                     }).catch((err) => {
-                        this.$Message.error(err);
+                         this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
                     })
                 } else {
                     this.$Message.error('是不是你填的姿势有问题？||!');
@@ -134,7 +143,7 @@ export default {
                     }
                 }
             }).catch((err) => {
-                this.$Message.error(err);
+                this.$Message.error("请求留言列表失败惹……(；′⌒`)");
             })
         },
         // 获得更多；
@@ -152,6 +161,7 @@ export default {
     }
 }
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 // 输入框

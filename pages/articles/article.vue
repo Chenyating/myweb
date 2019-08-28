@@ -46,7 +46,9 @@ export default {
                         this.content = data.data.content;
                     }
                 })
-                .catch();
+                .catch(err=>{
+                    this.$Message.error("๑乛◡乛๑后台卡在了奇怪的地方");
+                });
         },
         // 回到顶部
         backTop() {

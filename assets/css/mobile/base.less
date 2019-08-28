@@ -116,6 +116,16 @@
     height: @width;
 }
 
+// 系统提示图片
+.tip-box {
+    text-align: center;
+    padding-top: @distansBig*4;
+    .tip-icon {
+        width: 100px;
+        height: 100px;
+    }
+}
+
 
 // 改动的标签
 .em-blue {
@@ -175,6 +185,7 @@
         transform: scale(1)
     }
 }
+
 // 由小变大
 @keyframes beShow {
     from {
@@ -189,21 +200,26 @@
 // 360度旋转
 @keyframes rotateLong {
     30% {
-      transform: scale(1) rotate(180deg);
+        transform: scale(1) rotate(180deg);
     }
+
     60% {
-      transform: scale(.5) rotate();
+        transform: scale(.5) rotate();
     }
+
     100% {
-      transform: scale(1) rotate(360deg);
+        transform: scale(1) rotate(360deg);
     }
-  }
+}
+
 .D-big {
     animation: beBig .5s;
 }
+
 .D-show {
     animation: beShow 2s;
 }
+
 .D-rotate-Long {
     animation: rotateLong 3s infinite;
 }

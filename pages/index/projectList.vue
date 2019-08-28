@@ -7,8 +7,9 @@
       <div :class="{'choosed-text':index==choose}">{{item.name}}</div>
     </div>
   </div>
+  <reject v-if="projectList==null"></reject>
   <!-- 项目详情 0：自己的作品 1：h5页面，2：官网 3、小程序-->
-  <div v-if="projectList.length>0" class="project-item" v-for="(item,index) in projectList" :key="index">
+  <div v-else class="project-item" v-for="(item,index) in projectList" :key="index">
     <!-- 自己作品 -->
     <div v-if="item.type==0">
       <!-- 标题 -->
@@ -48,10 +49,15 @@
   </div>
 </div>
 </template>
+
 <script>
-import SERVER from '~/assets/server/api.js'
+import SERVER from '~/assets/server/api.js';
+import reject from "~/components/mobile/reject";
 export default {
   transition: 'mobilePage',
+  components: {
+    reject
+  },
   data() {
     return {
       ifImg: require("~/static/mobile/index/iftu.jpg"),
@@ -109,7 +115,7 @@ export default {
           this.projectList = data.data
         }
       }).catch((err) => {
-
+        this.$Message.error("请求失败惹……(╥╯^╰╥)");
       })
     },
     // 页面跳转
@@ -130,6 +136,7 @@ export default {
   }
 };
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 // 伪类图标
