@@ -14,8 +14,8 @@
                 <div class="gray-text">2019-11-13 11:20</div>
             </div>
         </div>
-        <div @click="getmore">
-            <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
+        <div @click="getmore" class="more-text">
+            {{ifmore?'点击更多……':"已经到底啦"}}
         </div>
     </div>
 </div>
@@ -94,6 +94,10 @@ export default {
 
 .text {
     line-height: 24px;
+}
+.more-text{
+    .text();
+    text-align: center;
 }
 
 .mobile-index-box {
