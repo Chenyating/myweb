@@ -1,6 +1,7 @@
 # myweb
 
-## 预览地址：
+## 预览地址： www.yating.online
+
 
 > Nuxt.js project
 
