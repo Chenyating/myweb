@@ -9,7 +9,8 @@
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
                 <!-- 视频 -->
-                <video v-if="item.type==3" class="content-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""><source :src="item.url" type="video/mp4" /></video>
+                <video v-if="item.type==3" class="content-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline="">
+                    <source :src="item.url" type="video/mp4" /></video>
                 <img v-if="item.type==2" class="content-img" :src="item.url" />
                 <div class="gray-text">2019-11-13 11:20</div>
             </div>
@@ -71,7 +72,7 @@ export default {
             } else {
                 return;
             }
-        }
+        },
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
@@ -81,6 +82,7 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
 .flex {
     flex-wrap: nowrap;
     margin: @distansBig;
@@ -95,7 +97,8 @@ export default {
 .text {
     line-height: 24px;
 }
-.more-text{
+
+.more-text {
     .text();
     text-align: center;
 }
@@ -106,9 +109,11 @@ export default {
         .icon(@width: 20%);
         padding: 0 @distansBig;
     }
+
     .shuoshuo {
         width: 80%;
     }
+
     .content-img {
         width: 80%;
         height: auto;
@@ -116,5 +121,3 @@ export default {
     }
 }
 </style>
-
-
