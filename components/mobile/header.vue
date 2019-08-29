@@ -4,7 +4,7 @@
     <!-- 这是导航栏 -->
     <div class="bg">
         <div class="inf-me">
-            <img class="head-img" src="~static/mobile/index/yating.jpg" />
+            <img @click="clickHead" class="head-img" :src="headImg" />
             <div>用心写代码，不负程序员之名</div>
         </div>
         <ul class="nav">
@@ -17,10 +17,12 @@
     <!--  -->
 </div>
 </template>
+
 <script>
 export default {
     data() {
         return {
+            headImg: require("~/static/mobile/index/yating.jpg"),
             navId: '0',
             indexRoutes: [{
                     path: '/',
@@ -42,45 +44,59 @@ export default {
                     name: '留言板',
                     imgUrl: require("~/static/mobile/index/message.png")
                 },
-            ]
-
+            ],
         }
     },
+    methods: {
+        clickHead() {
+            this.$router.push(`/articles/article?title=RESUME`);
+        }
+    }
 }
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
 .mobile-header {
     width: 100%;
     margin-bottom: 9*@distansBig;
+
     .bg {
         background-image: url("~static/mobile/index/bg.jpg");
         width: 100%;
         height: 200px;
         background-size: 100%;
         position: relative;
+
         .inf-me {
             position: absolute;
             text-align: right;
             bottom: -80px;
             right: @distansBig;
         }
+
         .head-img {
             .icon(@width: 80px);
         }
     }
+
     .nav {
         position: absolute;
         bottom: -50px;
+
         .nav-img {
             .icon(@width: 20px);
         }
+
         .flex();
         text-align: center;
         height: 50px; // 导航选中情况
+
         .unget-a {
             margin: @distansBig;
         }
+
         .get-a {
             text-shadow: 0 1px 6px white;
             font-weight: bold;
@@ -88,5 +104,3 @@ export default {
     }
 }
 </style>
-
-
