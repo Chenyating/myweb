@@ -1,29 +1,35 @@
 <template>
 <div>
-    <Button type="primary" @click="uploadImg">上传按钮</Button>
-    <!-- 上传input放在外面，防止触发点击事件的时候冒泡到父容器 -->
-    <input ref="imgFile" type="file" @change="handleUpload" multiple/>
-    <div v-for="(item,index) in fileData" :key="index">
-        <img :src="item.base64" />
+    <div class="shuoshuo-box">
+        <Input v-model="shuoshuo" type="textarea" :rows="3" placeholder="我要发表说说了~" />
+        <!-- 图片 -->
+        <div class="flex">
+            <div class="choose-img-box" v-for="(item,index) in fileData" :key="index">
+                <img class="close-img" @click="deleteImg(index)" :src="subImg" />
+                <img v-if="fileData" class="mini-img" :src="item.base64" />
+            </div>
+            <img class="add-img" v-if="fileData.length<9" :src="addImg" @click="uploadImg" />
+        </div>
+        <input style="display: none;" ref="imgFile" type="file" @change="handleUpload" />
+        <Button type="success" @click="upload" long>提交</Button>
+
     </div>
-    <Button type="primary" @click="upload">确定</Button>
-       <Upload
-        multiple
-        action="/api/upload/img">
-        <Button icon="ios-cloud-upload-outline">Upload files</Button>
-    </Upload>
-    
 </div>
 </template>
+
 <script>
 import SERVER from "~/assets/server/api.js";
 
 export default {
+     layout: 'mobile/index',
     data() {
         return {
-            shuoshuo: "",
+            subImg: require("~/static/mobile/icon/close.png"),
+            addImg: require("~/static/mobile/icon/upload.png"),
+            shuoshuo: "", //说说内容
             fileData: [],
-            filesList:null
+            filesList: [],
+            uploadFilesList: null
         };
     },
     methods: {
@@ -39,26 +45,72 @@ export default {
         // 上传的文件可以预览
         handleUpload(e) {
             // 获取上传的文件
-            this.filesList = e.target.files;
-            for (let i = 0; i < this.filesList.length; i++) {
+            var filesList = e.target.files;
+            for (let i = 0; i < filesList.length; i++) {
+                this.filesList.push(filesList[i]);
                 let reader = new FileReader();
                 reader.onloadend = e => {
                     // 把图片转码，为base64位
                     var img = {
-                        name: this.filesList[i].name,
+                        name: filesList[i].name,
                         base64: reader.result
-                    }
-                    this.fileData.push(img)
+                    };
+                    this.fileData.push(img);
                 };
-                reader.readAsDataURL(this.filesList[i]);
-
+                reader.readAsDataURL(filesList[i]);
             }
-            console.log(this.fileData, "???")
         },
-        upload(){
-            console.log(this.filesList,"??")
-            SERVER.upload(this.filesList)
+        // 删除图片
+        deleteImg(index) {
+            this.fileData.splice(index, 1);
+            this.filesList.splice(index, 1);
+        },
+        // 上传图片
+        upload() {
+            for (let i = 0; i < this.filesList.length; i++) {
+                SERVER.upload(this.filesList[i])
+                    .then((data) => {
+                        this.uploadFilesList.push(data.data)
+                    })
+                    .catch((err) => {})
+            }
         }
     }
 };
 </script>
+
+<style lang="less" scoped>
+@import "~assets/css/mobile/base.less";
+
+.shuoshuo-box {
+    padding: @distansBig;
+}
+
+.flex {
+    padding: @distansBig 0;
+
+}
+
+.choose-img-box {
+    position: relative;
+    margin-right: @distansBig;
+    margin-top: @distansBig;
+
+    .close-img {
+        .icon(@width: 20px);
+        position: absolute;
+        right: -@distansBig;
+        top: -@distansBig;
+    }
+
+    .mini-img {
+        .icon(@width: 80px);
+        border: solid @line-sizeSmall @line-color;
+    }
+}
+
+.add-img {
+    .icon(@width: 80px);
+    margin: @distansSmall;
+}
+</style>
