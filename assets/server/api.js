@@ -58,6 +58,10 @@ function getProjectByType(params) {
    return HTTP.POST('/project/getProjectByType', params)//增加次数
 }
 
+// ————上传————
+function upload(params) {
+   return HTTP.UPLOAD('/upload/img', params)//增加次数
+}
 
 
 export default {
@@ -81,7 +85,10 @@ export default {
    getTimes,
 
    // 项目
-   getProjectByType
+   getProjectByType,
+
+   // 上传
+   upload
 }
 
 // ##############################################################################################
