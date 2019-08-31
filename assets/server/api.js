@@ -63,6 +63,11 @@ function upload(params) {
    return HTTP.UPLOAD('/upload/img', params)//增加次数
 }
 
+// ————发布————
+function publicShuoshuo(params) {
+   return HTTP.POST('/public/shuoshuo', params)//增加次数
+}
+
 
 export default {
    // funcName
@@ -88,7 +93,10 @@ export default {
    getProjectByType,
 
    // 上传
-   upload
+   upload,
+
+   // 发表
+   publicShuoshuo,
 }
 
 // ##############################################################################################

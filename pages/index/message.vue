@@ -3,10 +3,10 @@
     <!-- 留言输入框 -->
     <Form class="input-box" ref="messageForm" :model="messageForm" :rules="messageRule" inline :label-width="100">
         <FormItem class='input-fill' prop="name" label="你的姓名：">
-            <Input type="text" v-model="messageForm.name" placeholder="请输入你的大名~" />
+            <Input type="text" maxlength="15" v-model="messageForm.name" placeholder="请输入你的大名~" />
         </FormItem>
         <FormItem class='input-fill' prop="content" label="给我的留言：">
-            <Input type="textarea" v-model="messageForm.content" placeholder="等你好久，快跟我说话~" />
+            <Input type="textarea" maxlength="100" v-model="messageForm.content" placeholder="等你好久，快跟我说话~" />
         </FormItem>
         <Button class="input-btn" type="primary" @click="takeMessage('messageForm')">提交</Button>
     </Form>
@@ -99,11 +99,9 @@ export default {
         takeMessage(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    var createTime = new Date();
                     var messageForm = {
                         name: this.messageForm.name,
                         content: this.messageForm.content,
-                        createTime: createTime.toLocaleString()
                     }
                     SERVER.postMessage(messageForm).then((data) => {
                         if (data.data.code == 1) {
@@ -116,7 +114,7 @@ export default {
                             this.$Message.info("出现了其他错误，一会再提交吧~");
                         }
                     }).catch((err) => {
-                         this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
+                        this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
                     })
                 } else {
                     this.$Message.error('是不是你填的姿势有问题？||!');
@@ -164,12 +162,15 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
 // 输入框
 .input-box {
     padding: @distansBig;
+
     .input-fill {
         width: 100%;
     }
+
     .input-btn {
         float: right;
     }
@@ -180,6 +181,7 @@ export default {
     background: transparent;
     margin: @distansBig;
     .border-shadow();
+
     .message-info {
         margin-left: @distansBig;
     }
