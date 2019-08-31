@@ -5,12 +5,13 @@
         <!-- 图片 -->
         <div class="flex">
             <div class="choose-img-box" v-for="(item,index) in fileData" :key="index">
-                <img class="close-img" @click="deleteImg(index)" :src="subImg" />
+                <Icon v-if="item.ifupload" class="upload-ok" color="#19be6b" size="24" type="ios-checkmark-circle" />
+                <img v-if="!imgUploading" class="close-img" @click="deleteImg(index)" :src="subImg" />
                 <img v-if="fileData" class="mini-img" :src="item.base64" />
             </div>
             <img class="add-img" v-if="fileData.length<9" :src="addImg" @click="uploadImg" />
         </div>
-        <input style="display: none;" ref="imgFile" type="file" @change="handleUpload" />
+        <input style="display: none;" ref="imgFile" type="file" accept="image/*" @change="handleUpload" />
         <Button type="success" @click="upload" long>提交</Button>
 
     </div>
@@ -21,15 +22,16 @@
 import SERVER from "~/assets/server/api.js";
 
 export default {
-     layout: 'mobile/index',
+    layout: "mobile/index",
     data() {
         return {
             subImg: require("~/static/mobile/icon/close.png"),
             addImg: require("~/static/mobile/icon/upload.png"),
             shuoshuo: "", //说说内容
-            fileData: [],
-            filesList: [],
-            uploadFilesList: null
+            fileData: [], //显示缩略图
+            filesList: [], //上传文件列表
+            returnImgs: [], //上传返回的文件
+            imgUploading: false //是否上传
         };
     },
     methods: {
@@ -53,7 +55,8 @@ export default {
                     // 把图片转码，为base64位
                     var img = {
                         name: filesList[i].name,
-                        base64: reader.result
+                        base64: reader.result,
+                        ifupload: false
                     };
                     this.fileData.push(img);
                 };
@@ -67,13 +70,49 @@ export default {
         },
         // 上传图片
         upload() {
-            for (let i = 0; i < this.filesList.length; i++) {
-                SERVER.upload(this.filesList[i])
-                    .then((data) => {
-                        this.uploadFilesList.push(data.data)
-                    })
-                    .catch((err) => {})
+            // 只有有内容就可以发。
+            if (this.shuoshuo|| this.filesList.length > 0) {
+                this.imgUploading = true;
+                // 只有内容就发表内容
+                if (this.shuoshuo&& this.filesList.length == 0) {
+                    console.log("???")
+                    this.publicShuoshuo();
+                    // 有图片那就先发图片
+                } else {
+                    console.log(">>>")
+                    for (let i = 0; i < this.filesList.length; i++) {
+                        SERVER.upload(this.filesList[i])
+                            .then(data => {
+                                this.fileData[i].ifupload = true;
+                                this.returnImgs.push(data.data);
+                                // 当最后一张图片上传成功以后，就发表说说
+                                if (i == this.filesList.length - 1) {
+                                    this.publicShuoshuo();
+                                }
+                            })
+                            .catch(err => {
+                                this.$Message.error(
+                                    `Σσ(・Д・；)第${i + 1}个图片上传失败！我我我什么都没做!!!`
+                                );
+                            });
+                    }
+                }
+            } else {
+                this.$Message.error(`没有内容不能发表`);
             }
+        },
+        publicShuoshuo() {
+            var params = {
+                content: this.shuoshuo,
+                imgsUrl: JSON.stringify(this.returnImgs),
+                type: 1
+            };
+            console.log(params);
+            SERVER.publicShuoshuo(params).then(data => {
+                this.$Message.success(`发表成功`);
+            }).catch(err => {
+                this.$Message.error(`发表失败`);
+            })
         }
     }
 };
@@ -82,13 +121,18 @@ export default {
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 
+.upload-ok {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+}
+
 .shuoshuo-box {
     padding: @distansBig;
 }
 
 .flex {
     padding: @distansBig 0;
-
 }
 
 .choose-img-box {
@@ -111,6 +155,7 @@ export default {
 
 .add-img {
     .icon(@width: 80px);
-    margin: @distansSmall;
+    margin: @distansBig 0;
+    margin-right: @distansBig;
 }
 </style>

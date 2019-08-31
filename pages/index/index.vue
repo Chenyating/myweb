@@ -9,10 +9,10 @@
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
                 <!-- 视频 -->
-                <video v-if="item.type==3" class="content-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline="">
-                    <source :src="item.url" type="video/mp4" /></video>
+                <!-- <video v-if="item.type==3" class="content-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
+                <!-- <source :src="item.url" type="video/mp4" /></video> -->
                 <img v-if="item.type==2" class="content-img" :src="item.url" />
-                <div class="gray-text">2019-11-13 11:20</div>
+                <div class="gray-text">{{item.createTime}}</div>
             </div>
         </div>
         <div @click="getmore" class="more-text">
