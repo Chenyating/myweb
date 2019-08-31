@@ -9,9 +9,22 @@
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
                 <!-- 视频 -->
-                <!-- <video v-if="item.type==3" class="content-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
+                <!-- <video v-if="item.type==3" class="one-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
                 <!-- <source :src="item.url" type="video/mp4" /></video> -->
-                <img v-if="item.type==2" class="content-img" :src="item.url" />
+                <!-- 1张 -->
+                <div v-if="item.url">
+                    <div v-if="item.url.length==1">
+                        <img class="one-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
+                    <!-- 2-4张 -->
+                    <div v-if="item.url.length>1&&item.url.length<5">
+                        <img class="four-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
+                    <!-- 5-9张 -->
+                    <div v-if="item.url.length>4">
+                        <img class="nine-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
+                </div>
                 <div class="gray-text">{{item.createTime}}</div>
             </div>
         </div>
@@ -40,6 +53,14 @@ export default {
         };
     },
     methods: {
+        // 处理data，把图片转为数组
+        doData(data) {
+            for (let i = 0; i < data.length; i++) {
+                data[i].url = JSON.parse(data[i].url);
+            }
+            console.log(data, "???")
+            return data;
+        },
         getshuoshuo(page, num) {
             var params = {
                 page: page,
@@ -53,10 +74,11 @@ export default {
                     } else {
                         // 如果当前页码为0，那么就重新赋值给留言列表；
                         if (this.page == 0) {
-                            this.list = data.data;
+                            this.list = this.doData(data.data);
                         } else {
                             // 否则就在留言列表后面继续添加
-                            this.list = this.list.concat(data.data);
+                            var newData = this.doData(data.data);
+                            this.list = this.list.concat(newData);
                         }
                     }
                 })
@@ -114,10 +136,22 @@ export default {
         width: 80%;
     }
 
-    .content-img {
+    .one-img {
         width: 80%;
         height: auto;
-        margin: @distansSmall 0;
+        margin: @distansSmall;
+    }
+
+    .four-img {
+        width: 45%;
+        height: auto;
+        margin: @distansSmall;
+    }
+
+    .nine-img {
+        width: 25%;
+        height: auto;
+        margin: @distansSmall;
     }
 }
 </style>
