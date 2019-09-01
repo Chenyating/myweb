@@ -75,11 +75,9 @@ export default {
                 this.imgUploading = true;
                 // 只有内容就发表内容
                 if (this.shuoshuo&& this.filesList.length == 0) {
-                    console.log("???")
                     this.publicShuoshuo();
                     // 有图片那就先发图片
                 } else {
-                    console.log(">>>")
                     for (let i = 0; i < this.filesList.length; i++) {
                         SERVER.upload(this.filesList[i])
                             .then(data => {
