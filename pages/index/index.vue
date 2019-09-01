@@ -25,10 +25,7 @@
                         <img class="nine-img" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                 </div>
-                <div class="delete-box">
-                    <div class="gray-text">{{item.createTime}}</div>
-                    <div class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</div>
-                </div>
+                <div class="gray-text">{{item.createTime}}</div>
             </div>
         </div>
         <div @click="getmore" class="more-text">
@@ -56,27 +53,12 @@ export default {
         };
     },
     methods: {
-        // 删除该条信息
-        deleteShuoshuo(id, index) {
-            var params = {
-                tableName: "myIndex",
-                id: id
-            }
-            SERVER.deletById(params)
-                .then((data) => {
-                    this.list.splice(index, 1);
-                    this.$Message.success(`删除成功`);
-
-                })
-                .catch(err => {
-                    this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
-                });
-        },
         // 处理data，把图片转为数组
         doData(data) {
             for (let i = 0; i < data.length; i++) {
                 data[i].url = JSON.parse(data[i].url);
             }
+            console.log(data, "???")
             return data;
         },
         getshuoshuo(page, num) {
@@ -123,15 +105,6 @@ export default {
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 
-.delete-box {
-    display: flex;
-    justify-content: space-between;
-
-    .delete-text {
-        color: @red;
-    }
-}
-
 .flex {
     flex-wrap: nowrap;
     margin: @distansBig;
@@ -167,19 +140,18 @@ export default {
         width: 80%;
         height: auto;
         margin: @distansSmall;
-        border: #e8eaec4d @line-sizeSmall solid;
     }
 
     .four-img {
-        .icon(@width: 45%);
+        width: 45%;
+        height: auto;
         margin: @distansSmall;
-        border: #e8eaec4d @line-sizeSmall solid;
     }
 
     .nine-img {
-        .icon(@width: 25%);
+        width: 25%;
+        height: auto;
         margin: @distansSmall;
-        border: #e8eaec4d @line-sizeSmall solid;
     }
 }
 </style>
