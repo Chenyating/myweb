@@ -42,7 +42,7 @@ export default {
                 // 设置基础样式
                 item.css({
                     "position": "fixed",
-                    "top": `${this.getRandom(0, 100)}%`,
+                    "top": `${this.getRandom(20, 100)}%`,
                     "right": `${this.getRandom(0, 100)}%`,
                     "transfrom": `rotate(${this.getRandom(0, 180)}deg)`,
                     "width": `${this.getRandom(30, 40)}px`,

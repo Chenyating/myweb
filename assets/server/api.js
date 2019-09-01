@@ -76,6 +76,10 @@ function publicShuoshuo(params) {
   return HTTP.POST('/public/shuoshuo', params) //增加次数
 }
 
+// ————个人中心————
+function login(params) {
+  return HTTP.POST('/person/login', params) //增加次数
+}
 
 export default {
   // funcName
@@ -108,6 +112,9 @@ export default {
 
   // 发表
   publicShuoshuo,
+  
+  // 个人中心
+  login,
 }
 
 // ##############################################################################################

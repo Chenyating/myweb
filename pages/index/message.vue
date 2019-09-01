@@ -6,7 +6,7 @@
             <Input type="text" :maxlength="15" v-model="messageForm.name" placeholder="请输入你的大名~" />
         </FormItem>
         <FormItem class='input-fill' prop="content" label="给我的留言：">
-            <Input type="textarea" :maxlength="100" v-model="messageForm.content" placeholder="等你好久，快跟我说话~" />
+            <Input type="textarea" :maxlength="100" v-model="messageForm.content" placeholder="等你好久，快跟我说话~"></Input>
         </FormItem>
         <Button class="input-btn" type="primary" @click="takeMessage('messageForm')">提交</Button>
     </Form>
