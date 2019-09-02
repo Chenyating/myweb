@@ -75,7 +75,7 @@ export default {
                 if (valid) {
                     SERVER.login(this.userInfo).then(data => {
                         var userInfo = {
-                            token: data.data,
+                            token: data.data.token,
                             userName: this.userInfo.user
                         }
                         if (data.data.code == 1) {

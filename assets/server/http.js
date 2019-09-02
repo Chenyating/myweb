@@ -25,6 +25,7 @@ function POST(url, params) {
         var userInfo = sessionStorage.getItem('userInfo');
         if(userInfo){
             axios.defaults.headers.token = JSON.parse(userInfo).token;
+            console.log(JSON.parse(userInfo).token,"???")
             axios.defaults.headers.userName = JSON.parse(userInfo).userName;
         }
         axios.post(url, params)
