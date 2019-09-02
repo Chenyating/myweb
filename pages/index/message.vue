@@ -103,20 +103,26 @@ export default {
     methods: {
         // 删除留言
         delet(id, index) {
-            var params = {
-                tableName: "message",
-                id: id
-            }
-            SERVER.deletById(params)
-                .then((data) => {
-                    if (data.data.code == 1) {
-                        this.messageList.splice(index, 1);
+            this.$Modal.confirm({
+                title: `是否确定删除“${this.messageList[index].name}”的留言？`,
+                content: this.messageList[index].content,
+                onOk: () => {
+                    var params = {
+                        tableName: "message",
+                        id: id
                     }
-                    this.$Message.info(data.data.info);
-                })
-                .catch(err => {
-                    this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
-                });
+                    SERVER.deletById(params)
+                        .then((data) => {
+                            if (data.data.code == 1) {
+                                this.messageList.splice(index, 1);
+                            }
+                            this.$Message.info(data.data.info);
+                        })
+                        .catch(err => {
+                            this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
+                        });
+                }
+            });
         },
         // 回复留言
         reply(item) {
@@ -128,7 +134,7 @@ export default {
                                 type: 'primary',
                                 size: 'small',
                             },
-                        }, `回复${item.name}的留言:`),
+                        }, `回复“${item.name}”的留言:`),
                         h('div', {
                             props: {
                                 type: 'primary',
@@ -242,6 +248,10 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.em-red {
+    margin-right: @distansBig;
+}
+
 // 输入框
 .input-box {
     padding: @distansBig;

@@ -9,7 +9,7 @@
         <!-- 最新编辑时间 -->
         <div class="icon-time">{{item[1]}}</div>
         <!-- 阅读次数 -->
-        <div class="icon-read">10</div>
+        <div class="icon-read"></div>
       </div>
     </div>
   </div>

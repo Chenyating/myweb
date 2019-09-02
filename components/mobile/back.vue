@@ -2,7 +2,7 @@
     <div class="flex-row-between border"> 
         <img @click="goBack" class="icon-opr" src="~/static/mobile/icon/back.png"/>
         <div class="title">{{title}}</div>
-        <img @click="takeMessage" class="icon-opr" src="~/static/mobile/icon/menu.png" title="给我留言~"/>
+        <img @click="takeMessage" class="icon-opr" src="~/static/mobile/icon/message.png" title="给我留言~"/>
     </div>
 </template>
 <script>

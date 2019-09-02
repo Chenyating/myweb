@@ -58,20 +58,27 @@ export default {
     methods: {
         // 删除该条信息
         deleteShuoshuo(id, index) {
-            var params = {
-                tableName: "myIndex",
-                id: id
-            }
-            SERVER.deletById(params)
-                .then((data) => {
-                    if (data.data.code == 1) {
-                        this.list.splice(index, 1);
+            this.$Modal.confirm({
+                title: `是否确定删除这条内容`,
+                content: this.list[index].content,
+                onOk: () => {
+                    var params = {
+                        tableName: "myIndex",
+                        id: id
                     }
-                    this.$Message.info(data.data.info);
-                })
-                .catch(err => {
-                    this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
-                });
+                    SERVER.deletById(params)
+                        .then((data) => {
+                            if (data.data.code == 1) {
+                                this.list.splice(index, 1);
+                            }
+                            this.$Message.info(data.data.info);
+                        })
+                        .catch(err => {
+                            this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
+                        });
+                }
+            });
+
         },
         // 处理data，把图片转为数组
         doData(data) {
@@ -122,6 +129,7 @@ export default {
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
+        console.log(this.$store.state,"???")
     }
 };
 </script>
