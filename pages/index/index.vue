@@ -4,7 +4,7 @@
     <reject v-if="list==null"></reject>
     <div v-else>
         <div class="flex" v-for="(item,index) in list" :key="index">
-            <img class="head-img" src="~static/mobile/index/yating.jpg" />
+            <img class="head-img" @click="goLogin" src="~static/mobile/index/yating.jpg" />
             <div class="shuoshuo">
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
@@ -64,9 +64,10 @@ export default {
             }
             SERVER.deletById(params)
                 .then((data) => {
-                    this.list.splice(index, 1);
-                    this.$Message.success(`删除成功`);
-
+                    if (data.data.code == 1) {
+                        this.list.splice(index, 1);
+                    }
+                    this.$Message.info(data.data.info);
                 })
                 .catch(err => {
                     this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
@@ -113,6 +114,11 @@ export default {
                 return;
             }
         },
+        // 去登陆
+        goLogin() {
+            this.$router.push(`/person`);
+
+        }
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
@@ -122,11 +128,9 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
 .delete-box {
     display: flex;
     justify-content: space-between;
-
     .delete-text {
         color: @red;
     }
@@ -158,24 +162,20 @@ export default {
         .icon(@width: 20%);
         padding: 0 @distansBig;
     }
-
     .shuoshuo {
         width: 80%;
     }
-
     .one-img {
         width: 80%;
         height: auto;
         margin: @distansSmall;
         border: #e8eaec4d @line-sizeSmall solid;
     }
-
     .four-img {
         .icon(@width: 45%);
         margin: @distansSmall;
         border: #e8eaec4d @line-sizeSmall solid;
     }
-
     .nine-img {
         .icon(@width: 25%);
         margin: @distansSmall;

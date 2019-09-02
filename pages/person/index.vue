@@ -18,12 +18,12 @@
             </FormItem>
         </Form>
         <div slot="footer">
-            <Button type="success" ghost size="large" long  @click="handleSubmit('userInfo')">登录</Button>
+            <Button type="success" ghost size="large" long @click="login('userInfo')">登录</Button>
         </div>
     </Modal>
     <!-- 个人中心菜单 -->
     <div>
-        <div></div>
+        <div>去发表心情~</div>
     </div>
 </div>
 </template>
@@ -35,26 +35,33 @@ export default {
     layout: "mobile/index",
     data() {
         return {
+            token: "",
             loginBox: true,
             userInfo: {
-                user: '',
+                user: 'tinger',
                 password: ''
             },
             userInfoRule: {
                 user: [{
                     required: true,
-                    message: '请输入账号',
+                    message: '请输入账号ヾ(ｏ･ω･)ﾉ',
                     trigger: 'blur'
                 }],
                 password: [{
                         required: true,
-                        message: '请输入密码',
+                        message: '请输入密码φ(>ω<*) ',
                         trigger: 'blur'
                     },
                     {
                         type: 'string',
-                        min: 6,
-                        message: '我就知道你是猜的输入密码',
+                        min: 3,
+                        message: '我就知道你是猜的输入密码o(￣▽￣)ｄ ',
+                        trigger: 'blur'
+                    },
+                    {
+                        type: 'string',
+                        max: 7,
+                        message: '我就知道你是猜的输入密码o(￣▽￣)ｄ ',
                         trigger: 'blur'
                     }
                 ]
@@ -62,14 +69,23 @@ export default {
         }
     },
     methods: {
-        handleSubmit(name) {
+        // 登录
+        login(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     SERVER.login(this.userInfo).then(data => {
-                        console.log(data);
-                        this.$Message.success('Success!');
+                        var userInfo = {
+                            token: data.data,
+                            userName: this.userInfo.user
+                        }
+                        if (data.data.code == 1) {
+                            this.token = data.data.token;
+                            sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); //把token存起来
+                            this.loginBox=false;
+                        }
+                        this.$Message.info(data.data.info);
                     }).catch(err => {
-                        console.log(err)
+                        this.$Message.error(data.data.info);
                     })
                 } else {
                     this.$Message.error('Fail!');
@@ -83,5 +99,4 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
 </style>

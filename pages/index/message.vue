@@ -109,9 +109,10 @@ export default {
             }
             SERVER.deletById(params)
                 .then((data) => {
-                    this.messageList.splice(index, 1);
-                    this.$Message.success(`删除成功`);
-
+                    if (data.data.code == 1) {
+                        this.messageList.splice(index, 1);
+                    }
+                    this.$Message.info(data.data.info);
                 })
                 .catch(err => {
                     this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
@@ -161,7 +162,7 @@ export default {
                             // 重新获取留言内容
                             [this.page, this.ifmore] = [0, true];
                             this.getMessageList(this.num, this.page);
-                            this.$Message.success(data.data);
+                            this.$Message.info(data.data.info);
                         })
                         .catch(err => {
                             this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
@@ -241,15 +242,12 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
 // 输入框
 .input-box {
     padding: @distansBig;
-
     .input-fill {
         width: 100%;
     }
-
     .input-btn {
         float: right;
     }
@@ -260,7 +258,6 @@ export default {
     background: transparent;
     margin: @distansBig;
     .border-shadow();
-
     .message-info {
         margin-left: @distansBig;
     }

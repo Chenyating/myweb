@@ -97,15 +97,17 @@ export default {
                 this.$Message.error(`没有内容不能发表`);
             }
         },
+        // 发表心情
         publicShuoshuo() {
             var params = {
                 content: this.shuoshuo,
                 imgsUrl: JSON.stringify(this.returnImgs),
                 type: 1
             };
-            console.log(params);
             SERVER.publicShuoshuo(params).then(data => {
-                this.$Message.success(`发表成功`);
+                this.$Message.info(data.data.info);
+                // 发表以后都置空；
+                [this.fileData,this.filesList,this.returnImgs,this.shuoshuo]=[[],[],[],""]
             }).catch(err => {
                 this.$Message.error(`发表失败`);
             })

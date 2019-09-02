@@ -20,7 +20,7 @@ function getshuoshuo(params) {
 }
 
 function deletById(params) {
-  return HTTP.GET('/modify/delete', params) //获得心情
+  return HTTP.POST('/person/delete', params) //删除
 }
 // ————次数————
 function getVisitors() {
@@ -46,7 +46,7 @@ function getMessageList(params) { //parames:{每页显示个数，页码}
 }
 
 function replyMessage(params) { //回复留言
-  return HTTP.GET('/modify/updateReply', params) //回复评论
+  return HTTP.POST('/person/updateReply', params) //回复评论
 }
 
 function postMessage(params) {
@@ -73,13 +73,14 @@ function upload(params) {
 
 // ————发布————
 function publicShuoshuo(params) {
-  return HTTP.POST('/public/shuoshuo', params) //增加次数
+  return HTTP.POST('/person/shuoshuo', params) //增加次数
 }
 
 // ————个人中心————
 function login(params) {
   return HTTP.POST('/person/login', params) //增加次数
 }
+
 
 export default {
   // funcName
