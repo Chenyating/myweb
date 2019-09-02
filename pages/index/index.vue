@@ -129,6 +129,7 @@ export default {
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
+        console.log(this.$store.state,"???")
     }
 };
 </script>
