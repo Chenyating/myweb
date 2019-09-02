@@ -22,6 +22,12 @@ function GET(url, params) {
 }
 function POST(url, params) {
     return new Promise((scuessful, fail) => {
+        var userInfo = sessionStorage.getItem('userInfo');
+        if(userInfo){
+            axios.defaults.headers.token = JSON.parse(userInfo).token;
+            console.log(JSON.parse(userInfo).token,"???")
+            axios.defaults.headers.userName = JSON.parse(userInfo).userName;
+        }
         axios.post(url, params)
             .then(function (response) {
                 scuessful(response);
@@ -35,7 +41,7 @@ function UPLOAD(url, files) {
     return new Promise((scuessful, fail) => {
         let formData = new FormData();
         formData.append("file", files)
-        axios.post(url, formData, {'Content-Type': 'multipart/form-data'})
+        axios.post(url, formData, { 'Content-Type': 'multipart/form-data' })
             .then(function (response) {
                 scuessful(response);
             })

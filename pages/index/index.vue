@@ -4,7 +4,7 @@
     <reject v-if="list==null"></reject>
     <div v-else>
         <div class="flex" v-for="(item,index) in list" :key="index">
-            <img class="head-img" src="~static/mobile/index/yating.jpg" />
+            <img class="head-img" @click="goLogin" src="~static/mobile/index/yating.jpg" />
             <div class="shuoshuo">
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
@@ -25,7 +25,10 @@
                         <img class="nine-img" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                 </div>
-                <div class="gray-text">{{item.createTime}}</div>
+                <div class="delete-box">
+                    <div class="gray-text">{{item.createTime}}</div>
+                    <div class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</div>
+                </div>
             </div>
         </div>
         <div @click="getmore" class="more-text">
@@ -53,12 +56,28 @@ export default {
         };
     },
     methods: {
+        // 删除该条信息
+        deleteShuoshuo(id, index) {
+            var params = {
+                tableName: "myIndex",
+                id: id
+            }
+            SERVER.deletById(params)
+                .then((data) => {
+                    if (data.data.code == 1) {
+                        this.list.splice(index, 1);
+                    }
+                    this.$Message.info(data.data.info);
+                })
+                .catch(err => {
+                    this.$Message.error("(╥╯﹏╰╥)ง删除失败~");
+                });
+        },
         // 处理data，把图片转为数组
         doData(data) {
             for (let i = 0; i < data.length; i++) {
                 data[i].url = JSON.parse(data[i].url);
             }
-            console.log(data, "???")
             return data;
         },
         getshuoshuo(page, num) {
@@ -95,6 +114,11 @@ export default {
                 return;
             }
         },
+        // 去登陆
+        goLogin() {
+            this.$router.push(`/person`);
+
+        }
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
@@ -104,6 +128,13 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.delete-box {
+    display: flex;
+    justify-content: space-between;
+    .delete-text {
+        color: @red;
+    }
+}
 
 .flex {
     flex-wrap: nowrap;
@@ -131,27 +162,24 @@ export default {
         .icon(@width: 20%);
         padding: 0 @distansBig;
     }
-
     .shuoshuo {
         width: 80%;
     }
-
     .one-img {
         width: 80%;
         height: auto;
         margin: @distansSmall;
+        border: #e8eaec4d @line-sizeSmall solid;
     }
-
     .four-img {
-        width: 45%;
-        height: auto;
+        .icon(@width: 45%);
         margin: @distansSmall;
+        border: #e8eaec4d @line-sizeSmall solid;
     }
-
     .nine-img {
-        width: 25%;
-        height: auto;
+        .icon(@width: 25%);
         margin: @distansSmall;
+        border: #e8eaec4d @line-sizeSmall solid;
     }
 }
 </style>
