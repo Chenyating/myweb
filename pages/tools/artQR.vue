@@ -6,7 +6,7 @@
     <div class="flex-row-between">
         <span class="em-red">生成以后可以截图保存丫(*^▽^*)</span>
         <Checkbox v-model="hasBg">背景</Checkbox>
-        <Button type="success" @click="toBeTableQR">开始生成</Button>
+        <Button type="success" @click="start">生成新的二维码</Button>
     </div>
     <div class="qr-box">
         <img v-if="hasBg" id="bg" :src="bgImg" />
@@ -17,8 +17,10 @@
     </div>
 </div>
 </template>
+
 <script>
 import goBack from "~/components/mobile/back.vue";
+import { resolve, reject } from 'q';
 export default {
     components: {
         goBack
@@ -53,11 +55,11 @@ export default {
         }
     },
     mounted() {
-        this.toBeTableQR();
+        this.start();
         // 获取canvas画布这个对象
         var c1 = document.getElementById("canvasQR");
         this.canvasBg = c1.getContext("2d");
-        this.canvasBg.fillStyle = "#fff799";
+        this.canvasBg.fillStyle = "red";
     },
     methods: {
         // 返回图片src
@@ -421,20 +423,23 @@ export default {
         },
         // 清空原来的二维码，把内容二维码转为table格式；
         toBeTableQR() {
-            var that = this;
-            $("#qrcode").html("");
-            // 绘制二维码
-            var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: this.inputMessage,
-                width: this.qrLength,
-                height: this.qrLength,
-                colorDark: "black",
-                colorLight: "transparent",
-                correctLevel: QRCode.CorrectLevel.H
-            }, function() {
-                //  绘制结束回调函数；计算二维码的信息；
-                that.countWidth();
-            });
+            return new Promise((resolve,reject)=>{
+                $("#qrcode").html("");
+                // 绘制二维码
+                var qrcode = new QRCode(document.getElementById("qrcode"), {
+                    text: this.inputMessage,
+                    width: this.qrLength,
+                    height: this.qrLength,
+                    colorDark: "black",
+                    colorLight: "transparent",
+                    correctLevel: QRCode.CorrectLevel.H
+                },function(){});
+                    resolve();
+            })
+        },
+        start() {
+            this.toBeTableQR().then(()=>this.countWidth())
+            //  绘制结束回调函数；计算二维码的信息；
         },
         // 开始转为二维码的table
         toBeQR() {
@@ -449,8 +454,10 @@ export default {
 
 }
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
 .qr-box {
     position: relative;
     width: 100%;
