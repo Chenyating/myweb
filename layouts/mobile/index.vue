@@ -15,7 +15,7 @@ import Header from "~/components/mobile/header";
 import Footer from "~/components/mobile/footer";
 import {
     mapActions
-} from 'Vuex';
+} from 'vuex';
 export default {
     components: {
         Header,

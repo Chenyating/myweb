@@ -26,7 +26,7 @@
 import SERVER from "~/assets/server/api.js";
 import {
     mapActions
-} from 'Vuex'
+} from 'vuex'
 export default {
     layout: "mobile/index",
     props: {

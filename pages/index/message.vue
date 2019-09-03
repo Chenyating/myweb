@@ -50,7 +50,7 @@ import loginBox from "~/components/mobile/login";
 
 import {
     mapActions
-} from 'Vuex';
+} from 'vuex';
 export default {
     transition: "mobilePage",
     components: {
