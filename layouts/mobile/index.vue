@@ -13,6 +13,9 @@
 import SERVER from "~/assets/server/api.js";
 import Header from "~/components/mobile/header";
 import Footer from "~/components/mobile/footer";
+import {
+    mapActions
+} from 'Vuex';
 export default {
     components: {
         Header,
@@ -29,6 +32,9 @@ export default {
         };
     },
     methods: {
+        ...mapActions([
+            'isLogin'
+        ]),
         // 获取随机数
         getRandom(x, y) {
             return Math.floor(Math.random() * (y - x)) + x;
@@ -95,7 +101,7 @@ export default {
                 this.pendant = setInterval(() => {
                     this.makePendant();
                     // 当漂浮物宽度为0的时候，那就清除它自己
-                    $("#PendantBox img").each(function (index, element) {
+                    $("#PendantBox img").each(function(index, element) {
                         if (element.style.width == "10px") {
                             element.remove();
                         }
@@ -108,6 +114,7 @@ export default {
         }
     },
     mounted() {
+        this.isLogin();
         var params = {
             name: "mobileIndex"
         };
@@ -120,7 +127,6 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
 #PendantBox {
     position: relative;
     z-index: -1;

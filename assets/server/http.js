@@ -22,7 +22,7 @@ function GET(url, params) {
 }
 function POST(url, params) {
     return new Promise((scuessful, fail) => {
-        var userInfo = sessionStorage.getItem('userInfo');
+        var userInfo = localStorage.getItem('userInfo');
         if(userInfo){
             axios.defaults.headers.token = JSON.parse(userInfo).token;
             axios.defaults.headers.userName = JSON.parse(userInfo).userName;
