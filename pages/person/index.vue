@@ -1,31 +1,19 @@
 <template>
-<div>
-    <Modal v-model="loginBox" :closable="false" :mask-closable="false">
-        <p slot="header" style="color:#19be6b;text-align:center">
-            <Icon type="md-boat" />
-            <span>LOGIN MY WORLD</span>
-        </p>
-        <Form ref="userInfo" :model="userInfo" :rules="userInfoRule">
-            <FormItem prop="user">
-                <Input type="text" v-model="userInfo.user" placeholder="用户名">
-                <Icon type="ios-person-outline" slot="prepend"></Icon>
-                </Input>
-            </FormItem>
-            <FormItem prop="password">
-                <Input type="password" v-model="userInfo.password" placeholder="密码">
-                <Icon type="ios-lock-outline" slot="prepend"></Icon>
-                </Input>
-            </FormItem>
-        </Form>
-        <div slot="footer">
-            <Button type="success" ghost size="large" long @click="login('userInfo')">登录</Button>
+    <div class="shuoshuo-box">
+        <Input v-model="shuoshuo" type="textarea" :rows="3" placeholder="我要发表说说了~" />
+        <!-- 图片 -->
+        <div class="flex">
+            <div class="choose-img-box" v-for="(item,index) in fileData" :key="index">
+                <Icon v-if="item.ifupload" class="upload-ok" color="#19be6b" size="24" type="ios-checkmark-circle" />
+                <img v-if="!imgUploading" class="close-img" @click="deleteImg(index)" :src="subImg" />
+                <img v-if="fileData" class="mini-img" :src="item.base64" />
+            </div>
+            <img class="add-img" v-if="fileData.length<9" :src="addImg" @click="uploadImg" />
         </div>
-    </Modal>
-    <!-- 个人中心菜单 -->
-    <div>
-        <div>去发表心情~</div>
+        <input style="display: none;" ref="imgFile" type="file" accept="image/*" @change="handleUpload" />
+        <Button type="success" @click="upload" long>提交</Button>
+
     </div>
-</div>
 </template>
 
 <script>
@@ -35,63 +23,94 @@ export default {
     layout: "mobile/index",
     data() {
         return {
-            token: "",
-            loginBox: true,
-            userInfo: {
-                user: 'tinger',
-                password: ''
-            },
-            userInfoRule: {
-                user: [{
-                    required: true,
-                    message: '请输入账号ヾ(ｏ･ω･)ﾉ',
-                    trigger: 'blur'
-                }],
-                password: [{
-                        required: true,
-                        message: '请输入密码φ(>ω<*) ',
-                        trigger: 'blur'
-                    },
-                    {
-                        type: 'string',
-                        min: 3,
-                        message: '我就知道你是猜的输入密码o(￣▽￣)ｄ ',
-                        trigger: 'blur'
-                    },
-                    {
-                        type: 'string',
-                        max: 7,
-                        message: '我就知道你是猜的输入密码o(￣▽￣)ｄ ',
-                        trigger: 'blur'
-                    }
-                ]
-            }
-        }
+            subImg: require("~/static/mobile/icon/close.png"),
+            addImg: require("~/static/mobile/icon/upload.png"),
+            shuoshuo: "", //说说内容
+            fileData: [], //显示缩略图
+            filesList: [], //上传文件列表
+            returnImgs: [], //上传返回的文件
+            imgUploading: false //是否上传
+        };
     },
     methods: {
-        // 登录
-        login(name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    SERVER.login(this.userInfo).then(data => {
-                        var userInfo = {
-                            token: data.data.token,
-                            userName: this.userInfo.user
-                        }
-                        if (data.data.code == 1) {
-                            this.token = data.data.token;
-                            sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); //把token存起来
-                            this.loginBox=false;
-                        }
-                        this.$Message.info(data.data.info);
-                    }).catch(err => {
-                        this.$Message.error(data.data.info);
-                    })
+        /**
+         * 触发上传图片事件
+         */
+        uploadImg() {
+            this.$refs.imgFile.click();
+        },
+        /**
+         * 上传图片前的限制
+         */
+        // 上传的文件可以预览
+        handleUpload(e) {
+            // 获取上传的文件
+            var filesList = e.target.files;
+            for (let i = 0; i < filesList.length; i++) {
+                this.filesList.push(filesList[i]);
+                let reader = new FileReader();
+                reader.onloadend = e => {
+                    // 把图片转码，为base64位
+                    var img = {
+                        name: filesList[i].name,
+                        base64: reader.result,
+                        ifupload: false
+                    };
+                    this.fileData.push(img);
+                };
+                reader.readAsDataURL(filesList[i]);
+            }
+        },
+        // 删除图片
+        deleteImg(index) {
+            this.fileData.splice(index, 1);
+            this.filesList.splice(index, 1);
+        },
+        // 上传图片
+        upload() {
+            // 只有有内容就可以发。
+            if (this.shuoshuo|| this.filesList.length > 0) {
+                this.imgUploading = true;
+                // 只有内容就发表内容
+                if (this.shuoshuo&& this.filesList.length == 0) {
+                    this.publicShuoshuo();
+                    // 有图片那就先发图片
                 } else {
-                    this.$Message.error('Fail!');
+                    for (let i = 0; i < this.filesList.length; i++) {
+                        SERVER.upload(this.filesList[i])
+                            .then(data => {
+                                this.fileData[i].ifupload = true;
+                                this.returnImgs.push(data.data);
+                                // 当最后一张图片上传成功以后，就发表说说
+                                if (i == this.filesList.length - 1) {
+                                    this.publicShuoshuo();
+                                }
+                            })
+                            .catch(err => {
+                                this.$Message.error(
+                                    `Σσ(・Д・；)第${i + 1}个图片上传失败！我我我什么都没做!!!`
+                                );
+                            });
+                    }
                 }
+            } else {
+                this.$Message.error(`没有内容不能发表`);
+            }
+        },
+        // 发表心情
+        publicShuoshuo() {
+            var params = {
+                content: this.shuoshuo,
+                imgsUrl: JSON.stringify(this.returnImgs),
+                type: 1
+            };
+            SERVER.publicShuoshuo(params).then(data => {
+                this.$Message.info(data.data.info);
+                // 发表以后都置空；
+                [this.fileData,this.filesList,this.returnImgs,this.shuoshuo]=[[],[],[],""]
+            }).catch(err => {
+                this.$Message.error(`发表失败`);
             })
-            this.loginBox = true;
         }
     }
 };
@@ -99,4 +118,42 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
+.upload-ok {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+}
+
+.shuoshuo-box {
+    padding: @distansBig;
+}
+
+.flex {
+    padding: @distansBig 0;
+}
+
+.choose-img-box {
+    position: relative;
+    margin-right: @distansBig;
+    margin-top: @distansBig;
+
+    .close-img {
+        .icon(@width: 20px);
+        position: absolute;
+        right: -@distansBig;
+        top: -@distansBig;
+    }
+
+    .mini-img {
+        .icon(@width: 80px);
+        border: solid @line-sizeSmall @line-color;
+    }
+}
+
+.add-img {
+    .icon(@width: 80px);
+    margin: @distansBig 0;
+    margin-right: @distansBig;
+}
 </style>

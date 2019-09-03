@@ -4,7 +4,7 @@
     <reject v-if="list==null"></reject>
     <div v-else>
         <div class="flex" v-for="(item,index) in list" :key="index">
-            <img class="head-img" @click="goLogin" src="~static/mobile/index/yating.jpg" />
+            <img class="head-img" @click="goPerson" src="~static/mobile/index/yating.jpg" />
             <div class="shuoshuo">
                 <div class="title">YATING</div>
                 <div class="text">{{item.content}}</div>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
-                    <div class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</div>
+                    <div v-if="$store.state.ifLogin" class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</div>
                 </div>
             </div>
         </div>
@@ -35,27 +35,35 @@
             {{ifmore?'点击更多……':"已经到底啦"}}
         </div>
     </div>
+    <loginBox :loginBox="iflogin" @hasLogin="haslogin"></loginBox>
 </div>
 </template>
 
 <script>
 import SERVER from '~/assets/server/api.js';
 import reject from "~/components/mobile/reject";
+import loginBox from "~/components/mobile/login";
 
 export default {
     transition: 'mobilePage',
     components: {
-        reject
+        reject,
+        loginBox
     },
     data() {
         return {
             list: null,
             page: 0,
             num: 5,
-            ifmore: true
+            ifmore: true,
+            iflogin: false,
         };
     },
     methods: {
+        haslogin(val) {
+            // 子组件传值给我了。
+            this.iflogin = val;
+        },
         // 删除该条信息
         deleteShuoshuo(id, index) {
             this.$Modal.confirm({
@@ -122,14 +130,18 @@ export default {
             }
         },
         // 去登陆
-        goLogin() {
-            this.$router.push(`/person`);
+        goPerson() {
+            if (this.$store.state.ifLogin) {
+                // 跳转去查看文章详情
+                this.$router.push(`/person`);
+            }else{
+                this.iflogin = true;
+            }
 
         }
     },
     mounted() {
         this.getshuoshuo(this.page, this.num);
-        console.log(this.$store.state,"???")
     }
 };
 </script>

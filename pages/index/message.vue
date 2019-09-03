@@ -16,7 +16,7 @@
     <div v-else>
         <Card class="message-card" v-for="(item,index) in messageList" :key="index">
             <img class="border-message" src="~static/mobile/icon/borderMessage.png" />
-            <div slot="extra" class="flex">
+            <div v-if="$store.state.ifLogin" slot="extra" class="flex">
                 <div @click="delet(item.id,index)" class="em-red">
                     删除
                 </div>
@@ -46,6 +46,9 @@
 <script>
 import SERVER from "~/assets/server/api.js";
 import reject from "~/components/mobile/reject";
+import {
+    mapActions
+} from 'Vuex';
 export default {
     transition: "mobilePage",
     components: {
@@ -101,6 +104,9 @@ export default {
         };
     },
     methods: {
+        ...mapActions([
+            'isLogin'
+        ]),
         // 删除留言
         delet(id, index) {
             this.$Modal.confirm({
@@ -241,6 +247,7 @@ export default {
         }
     },
     mounted() {
+        this.isLogin();
         this.getMessageList(this.num, this.page);
     }
 };
