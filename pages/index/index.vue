@@ -79,6 +79,9 @@ export default {
                             if (data.data.code == 1) {
                                 this.list.splice(index, 1);
                             }
+                            if (data.data.code == -1) {
+                                this.iflogin = true;
+                            }
                             this.$Message.info(data.data.info);
                         })
                         .catch(err => {
@@ -134,7 +137,7 @@ export default {
             if (this.$store.state.ifLogin) {
                 // 跳转去查看文章详情
                 this.$router.push(`/person`);
-            }else{
+            } else {
                 this.iflogin = true;
             }
 

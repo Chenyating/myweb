@@ -39,23 +39,27 @@
             <Divider orientation="center" class="text">{{ifmore?'点击更多……':"已经到底啦"}}</Divider>
         </div>
     </div>
-
+    <loginBox :loginBox="iflogin" @hasLogin="haslogin"></loginBox>
 </div>
 </template>
 
 <script>
 import SERVER from "~/assets/server/api.js";
 import reject from "~/components/mobile/reject";
+import loginBox from "~/components/mobile/login";
+
 import {
     mapActions
 } from 'Vuex';
 export default {
     transition: "mobilePage",
     components: {
-        reject
+        reject,
+        loginBox
     },
     data() {
         return {
+            iflogin: false,
             replyContent: '',
             // 留言列表
             messageList: null,
@@ -107,6 +111,10 @@ export default {
         ...mapActions([
             'isLogin'
         ]),
+        haslogin(val) {
+            // 子组件传值给我了。
+            this.iflogin = val;
+        },
         // 删除留言
         delet(id, index) {
             this.$Modal.confirm({
@@ -121,6 +129,9 @@ export default {
                         .then((data) => {
                             if (data.data.code == 1) {
                                 this.messageList.splice(index, 1);
+                            }
+                            if (data.data.code == -1) {
+                                this.iflogin = true;
                             }
                             this.$Message.info(data.data.info);
                         })
@@ -175,6 +186,9 @@ export default {
                             [this.page, this.ifmore] = [0, true];
                             this.getMessageList(this.num, this.page);
                             this.$Message.info(data.data.info);
+                            if (data.data.code == -1) {
+                                this.iflogin = true;
+                            }
                         })
                         .catch(err => {
                             this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
@@ -186,30 +200,35 @@ export default {
         takeMessage(name) {
             this.$refs[name].validate(valid => {
                 if (valid) {
-                    var messageForm = {
-                        name: this.messageForm.name,
-                        content: this.messageForm.content
-                    };
-                    SERVER.postMessage(messageForm)
-                        .then(data => {
-                            if (data.data.code == 1) {
-                                this.$Message.info(data.data.info);
-                                // 重新获取留言内容
-                                [this.page, this.ifmore] = [0, true];
-                                this.getMessageList(this.num, this.page);
-                            } else if (data.data.code == 0) {
-                                this.$Message.error(data.data.info);
-                            } else {
-                                this.$Message.info("出现了其他错误，一会再提交吧~");
-                            }
-                        })
-                        .catch(err => {
-                            this.$Message.error("Σσ(・Д・；)请求失败！我我我什么都没做!!!");
-                        });
+                    this.leaveMessage();
                 } else {
                     this.$Message.error("是不是你填的姿势有问题？||!");
                 }
             });
+        },
+        // 提交留言
+        leaveMessage() {
+            var messageForm = {
+                name: this.messageForm.name,
+                content: this.messageForm.content
+            };
+            SERVER.postMessage(messageForm)
+                .then(data => {
+                    if (data.data.code == 1) {
+                        this.$Message.info(data.data.info);
+                        // 重新获取留言内容
+                        [this.page, this.ifmore] = [0, true];
+                        this.getMessageList(this.num, this.page);
+                    } else if (data.data.code == 0) {
+                        this.$Message.error(data.data.info);
+                    } else {
+                        this.$Message.info("出现了其他错误，一会再提交吧~");
+                    }
+                })
+                .catch(err => {
+                    console.log(err, valid, "??")
+                    this.$Message.error("Σσ(・Д・；)留言失败了！我我我什么都没做!!!");
+                });
         },
         // 获得留言列表
         getMessageList(num, page) {
@@ -247,8 +266,10 @@ export default {
         }
     },
     mounted() {
-        this.isLogin();
         this.getMessageList(this.num, this.page);
+    },
+    updated() {
+        this.isLogin();
     }
 };
 </script>
