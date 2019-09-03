@@ -17,7 +17,7 @@
         <img :src="playImg" />
         <div class="title">{{item.name}}</div>
       </div>
-      <div class="content" @click="readMore(item)">{{item.intro}}</div>
+      <div class="content" @click="goUrl(item)">{{item.intro}}</div>
       <div class="flex-row-between">
         <div class="gray-text">{{item.time}}</div>
         <div class="icon-readMore" @click="readMore(item)">阅读全文</div>

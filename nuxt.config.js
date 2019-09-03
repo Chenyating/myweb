@@ -32,14 +32,18 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],script: 
+    [
+      {
+        src: 'http://www.yating.online/res/js/jquery.qr.js'  
+      }
+    ]  
   },
   plugins: [
     // 引入iview；
     { src: '~plugins/iview', ssr: true },
     // 引入mavonEditor
-    { src: '@/plugins/vue-mavon-editor', srr: false },
-    
+    { src: '@/plugins/vue-mavon-editor', srr: false },    
   ],
   css: ['~assets/css/base.less'],
   /*
