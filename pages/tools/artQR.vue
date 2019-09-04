@@ -20,7 +20,10 @@
 
 <script>
 import goBack from "~/components/mobile/back.vue";
-import { resolve, reject } from 'q';
+import {
+    resolve,
+    reject
+} from 'q';
 export default {
     components: {
         goBack
@@ -423,7 +426,7 @@ export default {
         },
         // 清空原来的二维码，把内容二维码转为table格式；
         toBeTableQR() {
-            return new Promise((resolve,reject)=>{
+            return new Promise((resolve, reject) => {
                 $("#qrcode").html("");
                 // 绘制二维码
                 var qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -433,12 +436,12 @@ export default {
                     colorDark: "black",
                     colorLight: "transparent",
                     correctLevel: QRCode.CorrectLevel.H
-                },function(){});
-                    resolve();
+                }, function() {});
+                resolve();
             })
         },
         start() {
-            this.toBeTableQR().then(()=>this.countWidth())
+            this.toBeTableQR().then(() => this.countWidth())
             //  绘制结束回调函数；计算二维码的信息；
         },
         // 开始转为二维码的table
@@ -457,7 +460,6 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
 .qr-box {
     position: relative;
     width: 100%;

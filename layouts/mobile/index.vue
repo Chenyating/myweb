@@ -88,7 +88,7 @@ export default {
             SERVER.getTimes(params)
                 .then(data => {
                     this.times = data.data[0].times;
-                    console.log(this.times);
+                    console.log("你是第"+this.times+"访问的客人哟~ヾ(ｏ･ω･)ﾉ");
                 })
                 .catch(err => {
                     console.log(err);
@@ -121,6 +121,26 @@ export default {
         this.addTimes(params);
         this.getTimes(params);
         this.showPendant();
+        console.log(`%c 
+欢迎来到雅婷的博客~如果你喜欢这样的注释，可以来这一页生成哦~
+http://www.yating.online/tools/notes 注释生成器哦~
+
+         @ @          @      @           
+ @@@@@@  @ @@         @      @ 
+    @   @   @        @   @@@@@@@@@@      
+  @ @  @@@@@@@@@     @
+ @  @ @@@   @      @@@@  @@@@@@@@       
+ @  @ @ @   @       @ @  @      @       
+ @  @   @   @       @ @  @@@@@@@@       
+ @@@@@@ @@@@@@@@    @ @       
+   @@   @   @       @  @ @@@@@@@@@@      
+   @@   @   @       @@ @ @        @      
+  @ @   @@@@@@@@     @@   @@@@@@@@       
+ @@ @   @   @         @@      @          
+ @  @   @   @        @ @@     @
+    @   @   @       @@  @     @
+  @@@   @@@@@@@@    @      @@@ 
+        `,'color: #19be6b')
     },
 };
 </script>
