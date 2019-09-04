@@ -91,7 +91,7 @@ export default {
                                 // 成功
                                 if (data.data.code == 1) {
                                     this.fileData[i].ifupload = true;
-                                    this.returnImgs.push(data.data.imgsUrl);
+                                    this.returnImgs.push(data.data.imgUrl);
                                     // 当最后一张图片上传成功以后，就发表说说
                                     if (i == this.filesList.length - 1) {
                                         this.publicShuoshuo();
