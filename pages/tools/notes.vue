@@ -1,6 +1,5 @@
 <template>
 <div>
-    <go-back routerName="/projectList" title="注释生成器"></go-back>
     <Tabs value="name1" class="notes-box">
         <!-- 文字 -->
         <TabPane label="文字生成注释" name="name1">
@@ -70,11 +69,8 @@
 </div>
 </template>
 <script>
-import goBack from "~/components/mobile/back.vue";
 export default {
-    components: {
-        goBack
-    },
+    layout: 'mobile/comeback',
     data() {
         return {
             exampleImg: require("~/static/game/img/notes.png"),

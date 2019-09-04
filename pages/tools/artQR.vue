@@ -1,6 +1,5 @@
 <template>
 <div class="artQR-box">
-    <go-back routerName="/projectList" title="艺术二维码生成"></go-back>
     <!-- 按钮 -->
     <Input v-model="inputMessage" type="textarea" placeholder="请输入英文或者数字，目前暂不支持中文" />
     <div class="flex-row-between">
@@ -19,15 +18,8 @@
 </template>
 
 <script>
-import goBack from "~/components/mobile/back.vue";
-import {
-    resolve,
-    reject
-} from 'q';
 export default {
-    components: {
-        goBack
-    },
+    layout: 'mobile/comeback',
     data() {
         return {
             bgImg: require("~/static/game/qr/bg.png"),

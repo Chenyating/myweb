@@ -15,6 +15,7 @@
   </div>
 </div>
 </template>
+
 <script>
 import SERVER from '~/assets/server/api.js';
 import goBack from '~/components/mobile/back.vue';
@@ -56,8 +57,19 @@ export default {
   }
 }
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.D-big {
+  display: fixed;
+  height: 100%;
+  width: 100%;
+  min-width: 350px;
+  max-width: 1024px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
 .article-box {
   padding: 0 @distansBig;
 }

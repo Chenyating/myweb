@@ -10,7 +10,7 @@ export default {
     props:{
         title:{
             type:String,
-            default:"这是标题"
+            default:"WELCOME"
         },
         routerName:{
             type:String,

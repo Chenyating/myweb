@@ -11,6 +11,7 @@
     </div>
 </div>
 </template>
+
 <script>
 import SERVER from "~/assets/server/api.js";
 import goBack from "~/components/mobile/back.vue";
@@ -46,7 +47,7 @@ export default {
                         this.content = data.data.content;
                     }
                 })
-                .catch(err=>{
+                .catch(err => {
                     this.$Message.error("๑乛◡乛๑后台卡在了奇怪的地方");
                 });
         },
@@ -88,6 +89,16 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.D-big {
+    display: fixed;
+    height: 100%;
+    width: 100%;
+    min-width: 350px;
+    max-width: 1024px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
 .flex-col-between {
     width: 100%;
     height: 100%;
@@ -95,13 +106,14 @@ export default {
 
 .hua {
     // x方向重复背景
-    background-image: url("~static/mobile/icon/hua.png"), url("~static/mobile/icon/cao.png");
+    background-image: url("~static/mobile/icon/bottom.png"), url("~static/mobile/icon/cao.png");
     background-position: bottom;
-    background-size: 40px, 20px;
+    background-size: 50px, 20px;
     background-repeat: repeat-x;
     bottom: 0;
     height: 50px;
     width: 100%;
+    max-width: 1024px;
     position: fixed;
     z-index: 1501;
 }

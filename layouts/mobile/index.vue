@@ -177,7 +177,6 @@ http://www.yating.online/tools/notes 注释生成器哦~
 .D-show {
     display: fixed;
     height: 100%;
-    overflow: scroll;
     width: 100%;
     min-width: 350px;
     max-width:1024px;
