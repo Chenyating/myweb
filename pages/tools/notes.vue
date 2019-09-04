@@ -6,20 +6,25 @@
         <TabPane label="文字生成注释" name="name1">
             <Input v-model="textContent" type="textarea" placeholder="请输入文字" />
             <Form class="flex" :label-width="80">
-                <FormItem label="文字位置X">
-                    <Input number class="input" type="text" v-model="textX" placeholder="仅限数字" />
+                <FormItem label="文字位置X:">
+                    <Input class="input" type="number" v-model="textX" placeholder="仅限数字" />
                 </FormItem>
-                <FormItem label="文字位置Y">
-                    <Input number class="input" type="text" v-model="textH" placeholder="仅限数字" />
+                <FormItem label="文字位置Y:">
+                    <Input class="input" type="number" v-model="textH" placeholder="仅限数字" />
                 </FormItem>
-                <FormItem label="画布宽度">
-                    <Input number class="input" type="text" v-model="cWidth" placeholder="仅限数字" />
+                <FormItem label="画布宽度:">
+                    <Input class="input" type="number" v-model="cWidth" placeholder="仅限数字" />
                 </FormItem>
-                <FormItem label="画布高度">
-                    <Input number class="input" type="text" v-model="cHeight" placeholder="仅限数字" />
+                <FormItem label="画布高度:">
+                    <Input class="input" type="number" v-model="cHeight" placeholder="仅限数字" />
+                </FormItem>
+                <FormItem label="替代符号:">
+                    <Input class="input" type="text" v-model="mark" placeholder="输入符合" />
+                </FormItem>
+                <FormItem label="完成请点击:">
+                    <Button type="success" ghost @click="textStart()">文字注释生成</Button>
                 </FormItem>
             </Form>
-            <Button type="success" ghost @click="textStart()">文字注释生成</Button>
             <div class="text em-red">点击按钮后，请按F12在控制台中复制，或预览效果。</div>
             <canvas id="canvasNote" :width="cWidth" :height="cHeight"></canvas>
             <div class="title">案列展示：</div>
@@ -30,22 +35,29 @@
         <TabPane label="图片转为注释" name="name2">
             <Form class="flex" :label-width="80">
                 <FormItem label="画布宽度">
-                    <Input number class="input" type="text" v-model="cWidth" placeholder="仅限数字" />
+                    <Input class="input" type="text" v-model="cWidth" placeholder="仅限数字" />
                 </FormItem>
                 <FormItem label="画布高度">
-                    <Input number class="input" type="text" v-model="cHeight" placeholder="仅限数字" />
+                    <Input class="input" type="text" v-model="cHeight" placeholder="仅限数字" />
                 </FormItem>
                 <FormItem label="图片高度">
-                    <Input number class="input" type="text" v-model="imgX" placeholder="仅限数字" />
+                    <Input class="input" type="text" v-model="imgX" placeholder="仅限数字" />
                 </FormItem>
                 <FormItem label="图片宽度">
-                    <Input number class="input" type="text" v-model="imgY" placeholder="仅限数字" />
+                    <Input class="input" type="text" v-model="imgY" placeholder="仅限数字" />
+                </FormItem>
+                <FormItem label="替代符号:">
+                    <Input class="input" type="text" v-model="mark" placeholder="输入符合" />
+                </FormItem>
+                <FormItem label="图片上传:">
+                    <img class="add-img" :src="addImg" @click="uploadImg" />
+                    <span class="em-red">只支持透明的图片哦(*^▽^*)</span>
+                    <input style="display: none;" ref="imgFile" type="file" accept="image/*" @change="handleUpload" />
+                </FormItem>
+                <FormItem label="完成请点击:">
+                    <Button type="success" @click="imgStart">图片注释生成</Button>
                 </FormItem>
             </Form>
-            <img class="add-img" :src="addImg" @click="uploadImg" />
-            <span class="em-red">请上传透明的图片哦(*^▽^*)</span>
-            <input number style="display: none;" ref="imgFile" type="file" accept="image/*" @change="handleUpload" />
-            <Button type="success" @click="imgStart">图片注释生成</Button>
             <div class="text em-red">点击按钮后，请按F12在控制台中复制，或预览效果。</div>
             <img id="show" :src="img"></img>
             <canvas id="canvasNoteImg" :width="cWidth" :height="cHeight"></canvas>
@@ -75,6 +87,7 @@ export default {
             ctx: null,
             shu: [],
             shuzu: [],
+            mark: "@",
             str: null,
             ruleInline: {
                 user: [{
@@ -152,7 +165,7 @@ export default {
                 this.shuzu[i] = [];
                 for (let j = 0; j < this.cWidth; j++) {
                     if (this.shu[a] == 1) {
-                        this.shuzu[i][j] = "@"
+                        this.shuzu[i][j] = this.mark
                     } else {
                         this.shuzu[i][j] = " "
                     }
@@ -202,6 +215,7 @@ export default {
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
 .example-img {
+    max-width: 400px;
     width: 100%;
 }
 
@@ -222,7 +236,7 @@ export default {
 }
 
 #show {
-    width: 100%;
+    max-width: 200px;
 }
 
 #canvasNote,
