@@ -226,7 +226,6 @@ export default {
                     }
                 })
                 .catch(err => {
-                    console.log(err, valid, "??")
                     this.$Message.error("Σσ(・Д・；)留言失败了！我我我什么都没做!!!");
                 });
         },

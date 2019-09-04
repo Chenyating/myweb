@@ -38,6 +38,11 @@ function POST(url, params) {
 }
 function UPLOAD(url, files) {
     return new Promise((scuessful, fail) => {
+        var userInfo = localStorage.getItem('userInfo');
+        if(userInfo){
+            axios.defaults.headers.token = JSON.parse(userInfo).token;
+            axios.defaults.headers.userName = JSON.parse(userInfo).userName;
+        }
         let formData = new FormData();
         formData.append("file", files)
         axios.post(url, formData, { 'Content-Type': 'multipart/form-data' })
