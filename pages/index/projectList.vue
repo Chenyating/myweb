@@ -14,8 +14,9 @@
     <div v-if="item.type==0">
       <!-- 标题 -->
       <div class="project-title-box" @click="goUrl(item)">
-        <img :src="playImg" />
+        <img class="project-icon" :src="playImg" />
         <div class="title">{{item.name}}</div>
+        <img class="project-icon" :src="playImg" />
       </div>
       <div class="content" @click="goUrl(item)">{{item.intro}}</div>
       <div class="flex-row-between">
@@ -200,6 +201,9 @@ export default {
   border-bottom: @line-sizeSmall @line-color solid;
 }
 
+.project-icon{
+  .icon(@width:25px)
+}
 .project-item:last-child {
   padding: @distansSmall @distansBig;
   border-bottom: 0 @line-color solid;
@@ -207,6 +211,10 @@ export default {
 
 .project-title-box {
   .flex();
+  align-items: center;
+  .title{
+    margin: 0 @distansSmall;
+  }
 }
 
 .flex-row-between {
