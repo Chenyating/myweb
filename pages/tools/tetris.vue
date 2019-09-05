@@ -1,17 +1,14 @@
 <template>
 <div class="tetris-box">
-        <div class="bottom-box">
-            <div class="hua"></div>
-        </div>
     <Modal v-model="modal" :title="title" :closable="false" :mask-closable="false">
         <ul class="content">
-            <li><span class="em-red">旋转：</span>点击屏幕上方，<span class="em-red">向左：</span>点击屏幕左侧，</li>
+            <li><span class="em-red">旋转：</span>点击屏幕中间，<span class="em-red">向左：</span>点击屏幕左侧，</li>
             <li><span class="em-red">向右：</span>点击屏幕右侧，<span class="em-red">提速：</span>点击屏幕下方，</li>
             <li><span class="em-red">暂停：</span>请点击右上角，<span class="em-red">重来：</span>请点击右上角。</li>
         </ul>
         <div slot="footer">
-            <Button type="error" size="large"  @click="goIndex">返回首页</Button>
-            <Button type="error" size="large"  @click="begin">开始游戏</Button>
+            <Button type="error" size="large" @click="goIndex">返回首页</Button>
+            <Button type="error" size="large" @click="begin">开始游戏</Button>
         </div>
     </Modal>
     <div class="info">
@@ -22,7 +19,7 @@
         <div>
             <img v-if="ifStop" :src="Gplay" class="opt" @click="goon" />
             <img v-else :src="Gstop" class="opt D-rotate-Long" @click="stop" />
-            <img :src="Gmenu" class="opt" @click="begin" />
+            <img :src="Gmenu" class="opt" @click="menu" />
         </div>
     </div>
     <div class="stage">
@@ -30,14 +27,7 @@
             <!-- 左 -->
             <div class="bian" @click="left"></div>
             <div class="zhongjian">
-                <!-- 上 -->
-                <div class="shang" @click="change"></div>
-                <div class="zhong">
-                    <!-- 左 -->
-                    <div class="btn" @click="left"></div>
-                    <!-- 右 -->
-                    <div class="btn" @click="right"></div>
-                </div>
+                <div class="zhong" @click="change"></div>
                 <!-- 下 -->
                 <div class="shang" @click="down"></div>
             </div>
@@ -45,10 +35,12 @@
             <div class="bian" @click="right"></div>
         </div>
         <canvas id="stage" :width="canvasWidth" :height="canvasHeight">
-      </canvas>
+        </canvas>
+        <!-- <div class="hua"></div> -->
     </div>
 </div>
 </template>
+
 <script>
 export default {
     data() {
@@ -69,14 +61,15 @@ export default {
             rotateID: 0, //旋转的状态,
             allLength: null,
             gameState: 0,
-            canvasWidth: 400,
-            canvasHeight: 700,
+            canvasWidth: 360,
+            canvasHeight: 800,
             timer: null,
             ifStop: true,
+            result:0,//最终结果
         }
     },
     methods: {
-        goIndex(){
+        goIndex() {
             this.$router.push("/projectList")
         },
         // 继续
@@ -90,6 +83,17 @@ export default {
         stop() {
             this.ifStop = true;
             clearInterval(this.timer);
+        },
+        menu(){
+              //游戏结束状态
+                clearInterval(this.timer);
+                this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+                this.modal = true;
+                this.gameState = 0;
+                this.scope = 0;
+                this.all.splice(0, this.all.length); //清空存放单方块的数组
+                // //清空整个画布
+                this.modal=true;
         },
         begin() {
             if (this.gameState != 0) {
@@ -121,6 +125,7 @@ export default {
                 this.timer = setInterval(() => {
                     this.down();
                 }, this.v)
+                this.result=0;
                 this.modal = false;
                 this.ifStop = false;
             }
@@ -373,10 +378,14 @@ export default {
         },
         //向下
         down() {
+              if(this.ifStop){
+                return;
+            }
             //到头了。就自杀了。
             for (let i = 0; i < this.all[0].length; i++) {
                 if (this.all[0][i] == 1) {
-                    this.title = "哈哈~游戏结束了。ヽ(ー_ー)ノ"
+                    this.result=this.scope;
+                    this.title = `上一局你得了${this.result}分，要继续吗`
                     clearInterval(this.timer);
                     this.modal = true;
                     this.gameState = 0;
@@ -412,7 +421,7 @@ export default {
                             this.timer = setInterval(() => {
                                 this.down();
                             }, this.v)
-                            console.log(this.all)
+                            // console.log(this.all)
                             return;
                         }
                     } catch (error) {
@@ -474,6 +483,9 @@ export default {
         },
         // 向左
         left() {
+              if(this.ifStop){
+                return;
+            }
             //判断左移动的过程中是否会与下一层堆积好的方块重叠；是否会超过范围；如果会的话，就开始把shap加入this.all然后退出；
             for (let i = 0; i < this.shap.length; i++) {
                 for (let j = 0; j < this.shap[i].length; j++) {
@@ -511,6 +523,9 @@ export default {
         },
         // 向右
         right() {
+            if(this.ifStop){
+                return;
+            }
             //判断左移动的过程中是否会与右边堆积好的方块重叠；是否会超过范围；如果会的话退出；
             for (let i = 0; i < this.shap.length; i++) {
                 for (let j = 0; j < this.shap[i].length; j++) {
@@ -519,7 +534,7 @@ export default {
                     try {
                         //因为x可能会等于0；所以用try，catch过滤掉好了。不想管。。。。
                         if (
-                            (this.shap[i][j][0] > 360 || this.all[y][x + 1] == 1) && this.shap[i][j][2] == 1
+                            (this.shap[i][j][0] > this.canvasWidth - 20 * 2 || this.all[y][x + 1] == 1) && this.shap[i][j][2] == 1
                         ) {
                             return;
                         }
@@ -615,18 +630,28 @@ export default {
     mounted() {
         var c = document.getElementById("stage");
         this.context = c.getContext("2d");
+        this.canvasWidth = Math.floor(document.body.clientWidth / 20) * 20;
+        this.canvasHeight = Math.ceil(document.body.clientHeight / 20) * 20;
+        // console.log(this.canvasWidth, this.canvasHeight)
     }
 }
 </script>
+
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+
 .tetris-box {
     position: relative;
-    // background: #000000;
-    margin: 0 auto;
-    // background: black;
+    background: #000000;
     height: 100%;
-    max-height: 800px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+    // background: black;
+    background-image:url("~static/game/tetris/bg.jpg"), url("~static/mobile/icon/cao.png");
+    background-position: bottom;
+    background-size:100%, 50px;
+    background-repeat:no-repeat, repeat-x;
 }
 
 .stage {
@@ -652,7 +677,7 @@ export default {
 
 .zhong {
     width: 100%;
-    height: 60%; // background: red;
+    height: 80%; // background: red;
     // border: solid 1px black;
     display: flex;
 }
@@ -675,10 +700,10 @@ export default {
 #stage {
     display: block;
     margin: 0 auto;
-    background: black;
-    width: 98%;
+    // background: black;
+    width: 100%;
     height: 100%;
-    width: auto;
+    z-index: 2;
 }
 
 .info {
@@ -688,8 +713,9 @@ export default {
     width: 100%;
     justify-content: space-between;
     padding: 10px;
-    
+
 }
+
 .scope-box {
     display: flex;
     align-items: center;
@@ -707,26 +733,18 @@ export default {
     height: 30px;
     background-size: 100%;
 }
-.bottom-box {
+
+.hua {
     // x方向重复背景
+    background-image: url("~static/mobile/icon/cao.png");
+    background-position: bottom;
+    background-size: 50px;
+    background-repeat: repeat-x;
     bottom: 0;
-    height: 25px;
+    height: 50px;
     width: 100%;
     max-width: 1024px;
     position: fixed;
     z-index: 1;
-}
-.hua {
-    // x方向重复背景
-    background-image: url("~static/mobile/icon/bottom.png"), url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 25px, 20px;
-    background-repeat: repeat-x;
-    bottom: 0;
-    height: 25px;
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    z-index: 2;
 }
 </style>
