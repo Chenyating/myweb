@@ -1,35 +1,57 @@
 <template>
 <div>
-    <Button type="success" @click="changgeX(20)">上</Button>
-    <Button type="success" @click="changgeX(-20)">上</Button>
-    <Button type="success" @click="changgeY(20)">上</Button>
-    <Button type="success" @click="changgeY(-20)">上</Button>
-    <div class="title">RETRO-SNAKER-贪吃蛇</div>
-    <div class="stage">
-        <canvas id="tanchi" width=400 height=800>
-      </canvas>
-        <div class="operation">
-            <p>SCOPE</p>
-            <div class="inf">分值：{{scope}}</div>
-            <p>GAME</p>
-            <div class="inf" id="title" @click="begin()">
-                游戏开始
+    <div class="tetris-box">
+        <Modal v-model="modal" :title="title" :closable="false" :mask-closable="false">
+            <ul class="content">
+                <li><span class="em-red">旋转：</span>点击屏幕中间，<span class="em-red">向左：</span>点击屏幕左侧，</li>
+                <li><span class="em-red">向右：</span>点击屏幕右侧，<span class="em-red">提速：</span>点击屏幕下方，</li>
+                <li><span class="em-red">暂停：</span>请点击右上角，<span class="em-red">重来：</span>请点击右上角。</li>
+            </ul>
+            <div slot="footer">
+                <!-- <Button type="error" size="large" @click="goIndex">返回首页</Button>
+                <Button type="error" size="large" @click="begin">开始游戏</Button> -->
             </div>
-            <p>AUTHOR</p>
-            <div class="inf">YATING</div>
+        </Modal>
+        <div class="info">
+            <div class="scope-box">
+                <img :src="Gscope" class="opt" @click="begin" />
+                <span class="scope">{{scope}}</span>
+            </div>
+            <div>
+                <!-- <img v-if="ifStop" :src="Gplay" class="opt" @click="goon" />
+            <img v-else :src="Gstop" class="opt D-rotate-Long" @click="stop" />
+            <img :src="Gmenu" class="opt" @click="menu" /> -->
+            </div>
         </div>
-    </div>
-    <div class="explain">
-        Fingers slide up and down in the screen, click on the screen to pause.If you bump into yourself, the game is over.
-        <div class="chinese">手指在屏幕中上下左右滑动，点击屏幕暂停。如果撞到自己或墙，游戏结束</div>
+        <div class="stage">
+            <div class="btn-box">
+                <!-- 左 -->
+                <!-- <div class="bian" @click="left"></div> -->
+                <!-- <div class="zhongjian"> -->
+                    <!-- <div class="zhong" @click="change"></div> -->
+                    <!-- 下 -->
+                    <!-- <div class="shang" @click="down"></div> -->
+                <!-- </div> -->
+                <!-- 右 -->
+                <!-- <div class="bian" @click="right"></div> -->
+            </div>
+            <canvas id="stage" :width="canvasWidth" :height="canvasHeight">
+            </canvas>
+        </div>
     </div>
 </div>
 </template>
+
 <script>
 export default {
-    layout: 'mobile/comeback',
     data() {
         return {
+            title: "规则说明~(￣▽￣)~*：",
+            modal: false,
+            Gscope: require("~/static/game/tetris/scope.png"),
+            Gplay: require("~/static/game/tetris/play.png"),
+            Gstop: require("~/static/game/tetris/stop.png"),
+            Gmenu: require("~/static/game/tetris/reload.png"),
             scope: 0,
             radomX: null,
             radomY: null,
@@ -42,9 +64,21 @@ export default {
             canvasWidth: 400,
             canvasHeight: 800,
             timer: null
-        }
+        };
     },
     methods: {
+        leftRight(x) {
+            clearInterval(this.timer);
+            this.timer = setInterval(() => {
+                this.changgeX(x);
+            }, this.v);
+        },
+        upDown(y) {
+            clearInterval(this.timer);
+            this.timer = setInterval(() => {
+                this.changgeY(y);
+            }, this.v);
+        },
         //随机生成x坐标
         radomx(width) {
             this.radomX = parseInt((Math.random() * width) / 20);
@@ -59,7 +93,10 @@ export default {
         snakerHead() {
             //清空蛇身
             this.snaker.splice(0, this.snaker.length);
-            this.snaker.push([this.radomx(this.canvasWidth) * 20, this.radomy(this.canvasHeight) * 20]);
+            this.snaker.push([
+                this.radomx(this.canvasWidth) * 20,
+                this.radomy(this.canvasHeight) * 20
+            ]);
             //蛇头也不能和食物重复；
             if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]) {
                 return this.snakerHead();
@@ -72,7 +109,10 @@ export default {
             //判断食物不能和蛇重复了。
             for (var i = 0; i < this.snaker.length; i++) {
                 //只要出现重复，则重新调用food（）；
-                if (this.foodX == this.snaker[i][0] && this.foodY == this.snaker[i][1]) {
+                if (
+                    this.foodX == this.snaker[i][0] &&
+                    this.foodY == this.snaker[i][1]
+                ) {
                     return this.food();
                 }
             }
@@ -80,10 +120,10 @@ export default {
         },
         //绘制红色食物
         painFood() {
-            var c = document.getElementById("tanchi");
-            this.context = c.getContext("2d");
-            this.context.fillStyle = "#8A3324";
-            this.context.fillRect(this.foodX, this.foodY, 20, 20);
+            var img = new Image()
+            img.src = require("~/static/game/snaker/food.png");
+            // img.onload = function () {
+            this.context.drawImage(img, this.foodX, this.foodY, 20, 20);
         },
         //是否出界
         ifOut() {
@@ -98,9 +138,12 @@ export default {
                 this.gameOver();
             }
             for (var i = this.snaker.length - 1; i > 0; i--) {
-                if (this.snaker[0][0] == this.snaker[i][0] && this.snaker[0][1] == this.snaker[i][1]) {
+                if (
+                    this.snaker[0][0] == this.snaker[i][0] &&
+                    this.snaker[0][1] == this.snaker[i][1]
+                ) {
                     clearInterval(this.timer);
-                    alert("游戏结束，你撞到你自己啦！")
+                    alert("游戏结束，你撞到你自己啦！");
                     this.gameOver();
                 }
             }
@@ -131,7 +174,7 @@ export default {
                 //游戏开始状态
                 this.food();
                 this.snakerHead();
-                this.painSnakerHead()
+                this.painSnakerHead();
                 this.gameState = 1;
                 $("#title").html("");
                 $("#title").html("游戏结束");
@@ -141,7 +184,12 @@ export default {
         //蛇在x轴的变化
         changgeX(x) {
             try {
-                this.context.clearRect(this.snaker[this.snaker.length - 1][0], this.snaker[this.snaker.length - 1][1], 20, 20);
+                this.context.clearRect(
+                    this.snaker[this.snaker.length - 1][0],
+                    this.snaker[this.snaker.length - 1][1],
+                    20,
+                    20
+                );
                 for (var i = this.snaker.length - 1; i >= 0; i--) {
                     if (i == 0) {
                         this.snaker[0][0] = this.snaker[0][0] + x;
@@ -154,7 +202,10 @@ export default {
                     }
                 }
                 //食物出现的位置和蛇头重合，则在末尾加上食物的位置，就是y轴最后+-20；
-                if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]) {
+                if (
+                    this.foodX == this.snaker[0][0] &&
+                    this.foodY == this.snaker[0][1]
+                ) {
                     this.snaker.push([this.foodX - x, this.foodY]);
                     this.context.fillRect(
                         this.snaker[this.snaker.length - 1][0],
@@ -167,16 +218,17 @@ export default {
                     this.scope = this.scope + 1;
                 }
                 this.ifOut();
-                this.timer = setInterval(() => {
-                    this.changgeX(x);
-                }, 1000)
             } catch (error) {}
-
         },
         //蛇在y轴的变化
         changgeY(y) {
             try {
-                this.context.clearRect(this.snaker[this.snaker.length - 1][0], this.snaker[this.snaker.length - 1][1], 20, 20);
+                this.context.clearRect(
+                    this.snaker[this.snaker.length - 1][0],
+                    this.snaker[this.snaker.length - 1][1],
+                    20,
+                    20
+                );
                 for (var i = this.snaker.length - 1; i >= 0; i--) {
                     if (i == 0) {
                         this.snaker[0][1] = this.snaker[0][1] - y;
@@ -189,7 +241,10 @@ export default {
                     }
                 }
                 //食物出现的位置和蛇头重合，则在末尾加上食物的位置，就是y轴最后+-20；
-                if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]) {
+                if (
+                    this.foodX == this.snaker[0][0] &&
+                    this.foodY == this.snaker[0][1]
+                ) {
                     this.snaker.push([this.foodX, this.foodY + y]);
                     this.context.fillRect(
                         this.snaker[this.snaker.length - 1][0],
@@ -202,9 +257,6 @@ export default {
                     this.scope = this.scope + 1;
                 }
                 this.ifOut();
-                this.timer = setInterval(() => {
-                    this.changgeY(y);
-                }, 1000)
             } catch (error) {}
         },
         //画蛇身
@@ -215,58 +267,126 @@ export default {
         painSnakerHead() {
             this.context.fillStyle = "#00755E";
             this.context.fillRect(this.snaker[0][0], this.snaker[0][1], 20, 20);
-        },
+        }
     },
-    mounted() {},
-}
+    mounted() {
+        var c = document.getElementById("stage");
+        this.context = c.getContext("2d");
+        this.canvasWidth = Math.floor(document.body.clientWidth / 20) * 20;
+        this.canvasHeight = Math.ceil(document.body.clientHeight / 20) * 20;
+        // console.log(this.canvasWidth, this.canvasHeight)
+        this.begin();
+    }
+};
 </script>
+
 <style lang="less" scoped>
-.title {
-    font-size: 1.5rem;
-    text-align: center;
-    margin: 0.5rem;
-    font-weight: bold;
+@import "~assets/css/mobile/base.less";
+
+.tetris-box {
+    position: relative;
+    background: #000000;
+    height: 100%;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+    // background: black;
+    background-image:url("~static/game/tetris/bg.jpg"), url("~static/mobile/icon/cao.png");
+    background-position: bottom;
+    background-size:100%, 50px;
+    background-repeat:no-repeat, repeat-x;
 }
 
 .stage {
-    display: flex;
-    flex-wrap: nowrap;
-    padding: 0.5rem;
+    width: 100%;
+    position: relative;
 }
 
-#tanchi {
-    background: white;
-    border: solid 0.1rem #000000;
-    width: 65%;
+// 区域按钮
+.btn-box {
+    position: absolute; // background: white;
+    width: 100%;
     height: 100%;
+    display: flex;
 }
 
-.operation {
+.zhongjian {
+    width: 60%;
+    height: 100%; // background: red;
+    border: solid 1px black;
+    display: flex;
+    flex-direction: column;
+}
+
+.zhong {
     width: 100%;
-    text-align: center;
-    margin-left: 0.5rem;
-    border: solid 0.1rem black;
+    height: 80%; // background: red;
+    border: solid 1px black;
+    display: flex;
 }
 
-.inf {
-    font-size: 1rem;
-    padding: 0.5rem 0;
-    background: black;
-    color: white;
+.bian {
+    width: 20%;
+    height: 100%; // background: red;
+    border: solid 1px black;
+    display: flex;
+}
+
+.shang {
+    width: 100%;
+    height: 20%; // background: red;
+    border: solid 1px black;
+    display: flex;
+}
+
+// 区域按钮结束
+#stage {
+    display: block;
+    margin: 0 auto;
+    // background: black;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.info {
+    display: flex;
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+
+}
+
+.scope-box {
+    display: flex;
+    align-items: center;
+}
+
+.scope {
+    font-size: 15px;
+    color: yellow;
     font-weight: bold;
+    margin-left: 5px;
+}
+
+.opt {
+    width: 30px;
+    height: 30px;
+    background-size: 100%;
+}
+
+.hua {
+    // x方向重复背景
+    background-image: url("~static/mobile/icon/cao.png");
+    background-position: bottom;
+    background-size: 50px;
+    background-repeat: repeat-x;
+    bottom: 0;
+    height: 50px;
     width: 100%;
+    max-width: 1024px;
+    position: fixed;
+    z-index: 1;
 }
-
-.explain {
-    padding: 0.1rem 0.6rem;
-    text-align: center;
-}
-
-.chinese {
-    font-size: 0.5rem;
-}
-
-p {
-    padding: 1rem;
-}
-</style>
