@@ -127,7 +127,7 @@ export default {
         getmore() {
             if (this.ifmore) {
                 this.page = this.page + 1;
-                this.getshuoshuo(this.num, this.page);
+                this.getshuoshuo(this.page, this.num);
             } else {
                 return;
             }
