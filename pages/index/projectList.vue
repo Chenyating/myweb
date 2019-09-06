@@ -21,7 +21,7 @@
       <div class="content" @click="goUrl(item)">{{item.intro}}</div>
       <div class="flex-row-between">
         <div class="gray-text">{{item.time}}</div>
-        <div class="icon-readMore" @click="readMore(item)">阅读全文</div>
+        <div v-if="item.articleUrl" class="icon-readMore" @click="readMore(item)">阅读全文</div>
       </div>
     </div>
     <!-- h5 -->
