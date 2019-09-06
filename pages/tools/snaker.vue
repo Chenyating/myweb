@@ -373,10 +373,9 @@ export default {
     margin: 0 auto;
     width: 100%;
     max-width: 500px; // background: black;
-    background-image: url("~static/game/tetris/bg.jpg"), url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 100%, 50px;
-    background-repeat: no-repeat, repeat-x;
+    background-image: url("~static/game/tetris/bg.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 .stage {
@@ -395,7 +394,7 @@ export default {
 .zhongjian {
     width: 60%;
     height: 100%; // background: red;
-    border: solid 1px black;
+    // border: solid 1px black;
     display: flex;
     flex-direction: column;
 }
@@ -403,21 +402,23 @@ export default {
 .zhong {
     width: 100%;
     height: 80%; // background: red;
-    border: solid 1px black;
+    // border: solid 1px black;
     display: flex;
 }
 
 .bian {
     width: 20%;
     height: 100%; // background: red;
-    border: solid 1px black;
+    // border: solid 1px black;
     display: flex;
 }
 
 .shang {
     width: 100%;
     height: 50%; // background: red;
-    border: solid 1px black;
+    // border: solid 1px black;
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.034);
+    // border-color: #eee;
     display: flex;
 }
 
@@ -460,19 +461,5 @@ export default {
     width: 30px;
     height: 30px;
     background-size: 100%;
-}
-
-.hua {
-    // x方向重复背景
-    background-image: url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 50px;
-    background-repeat: repeat-x;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    z-index: 1;
 }
 </style>

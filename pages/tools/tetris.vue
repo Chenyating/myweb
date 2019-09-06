@@ -631,7 +631,7 @@ export default {
         var c = document.getElementById("stage");
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / 20) * 20;
-        this.canvasHeight = Math.ceil(document.body.clientHeight / 20) * 20;
+        this.canvasHeight = Math.ceil(document.body.clientHeight / 20) * 20-100;
         // console.log(this.canvasWidth, this.canvasHeight)
     }
 }
@@ -648,10 +648,9 @@ export default {
     width: 100%;
     max-width: 500px;
     // background: black;
-    background-image:url("~static/game/tetris/bg.jpg"), url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size:100%, 50px;
-    background-repeat:no-repeat, repeat-x;
+    background-image:url("~static/game/tetris/bg.jpg");
+    background-size:100%;
+    background-repeat:no-repeat;
 }
 
 .stage {
@@ -679,6 +678,7 @@ export default {
     width: 100%;
     height: 80%; // background: red;
     // border: solid 1px black;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.034);
     display: flex;
 }
 
@@ -693,6 +693,7 @@ export default {
     width: 100%;
     height: 20%; // background: red;
     // border: solid 1px black;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.034);
     display: flex;
 }
 
@@ -704,6 +705,7 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 2;
+    padding-top: 60px;
 }
 
 .info {
@@ -713,7 +715,10 @@ export default {
     width: 100%;
     justify-content: space-between;
     padding: 10px;
-
+    background-image: url("~static/mobile/icon/cao.png");
+    background-position: bottom;
+    background-size: 20px;
+    background-repeat: repeat-x;
 }
 
 .scope-box {
@@ -732,19 +737,5 @@ export default {
     width: 30px;
     height: 30px;
     background-size: 100%;
-}
-
-.hua {
-    // x方向重复背景
-    background-image: url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 50px;
-    background-repeat: repeat-x;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
-    max-width: 1024px;
-    position: fixed;
-    z-index: 1;
 }
 </style>
