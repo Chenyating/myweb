@@ -182,7 +182,7 @@ export default {
                 this.radomy(this.canvasHeight) * this.unit
             ]);
             //蛇头也不能和食物重复；
-            if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]) {
+            if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]&&this.foodY<=60) {
                 return this.snakerHead();
             }
             this.painSnakerHead();
@@ -196,11 +196,12 @@ export default {
                 //只要出现重复，则重新调用food（）；
                 if (
                     this.foodX == this.snaker[i][0] &&
-                    this.foodY == this.snaker[i][1]
+                    this.foodY == this.snaker[i][1]&&this.foodY<=60
                 ) {
                     return this.food();
                 }
             }
+            console.log(this.foodX,this.foodY,"??")
             this.painFood();
         },
         //绘制红色食物
@@ -237,6 +238,7 @@ export default {
         },
         //游戏结束
         gameOver() {
+            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             this.snaker.splice(0, this.snaker.length);
             this.result = this.scope;
             this.title = `你找到了${this.result}只小鸭鸭，不能出鸭圈o(´^｀)o`;
@@ -246,7 +248,6 @@ export default {
             this.gameState = 0;
             this.scope = 0;
             //清空整个画布
-            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         },
         //游戏开始
         begin() {
@@ -359,7 +360,7 @@ export default {
         var c = document.getElementById("stage");
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / this.unit) * this.unit;
-        this.canvasHeight = Math.floor(document.body.clientHeight / this.unit) * this.unit - 100;
+        this.canvasHeight = Math.floor(document.body.clientHeight / this.unit) * this.unit;
     }
 };
 </script>
@@ -429,7 +430,6 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 2;
-    padding-top: 60px;
 }
 
 .info {
@@ -439,10 +439,6 @@ export default {
     width: 100%;
     justify-content: space-between;
     padding: 10px;
-    background-image: url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 20px;
-    background-repeat: repeat-x;
 }
 
 .scope-box {

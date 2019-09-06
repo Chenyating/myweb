@@ -631,7 +631,7 @@ export default {
         var c = document.getElementById("stage");
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / 20) * 20;
-        this.canvasHeight = Math.floor(document.body.clientHeight / 20) * 20-100;
+        this.canvasHeight = Math.floor(document.body.clientHeight / 20) * 20;
         // console.log(this.canvasWidth, this.canvasHeight)
     }
 }
@@ -705,7 +705,6 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 2;
-    padding-top: 60px;
 }
 
 .info {
@@ -715,10 +714,6 @@ export default {
     width: 100%;
     justify-content: space-between;
     padding: 10px;
-    background-image: url("~static/mobile/icon/cao.png");
-    background-position: bottom;
-    background-size: 20px;
-    background-repeat: repeat-x;
 }
 
 .scope-box {
