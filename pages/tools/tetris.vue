@@ -631,7 +631,7 @@ export default {
         var c = document.getElementById("stage");
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / 20) * 20;
-        this.canvasHeight = Math.floor(document.body.clientHeight / 20) * 20;
+        this.canvasHeight = Math.ceil(document.body.clientHeight / 20) * 20;
         // console.log(this.canvasWidth, this.canvasHeight)
     }
 }
