@@ -216,32 +216,29 @@ export default {
         ifOut() {
             if (
                 0 > this.snaker[0][0] ||
-                this.snaker[0][0] > this.canvasWidth - 2 * this.unit ||
-                this.canvasHeight - this.unit < this.snaker[0][1] ||
+                this.snaker[0][0] > this.canvasWidth-this.unit ||
+                this.canvasHeight-this.unit < this.snaker[0][1] ||
                 this.snaker[0][1] < 0
             ) {
-                clearInterval(this.timer);
+                this.title = `你找到了${this.result}只小鸭鸭，不能出鸭圈o(´^｀)o`;
                 this.gameOver();
-            } else {
-                return;
+            } 
+            for (var i = this.snaker.length - 1; i > 0; i--) {
+                if (
+                    this.snaker[0][0] == this.snaker[i][0] &&
+                    this.snaker[0][1] == this.snaker[i][1]
+                ) {
+                    this.title = `你找到了${this.result}只小鸭鸭，不能撞小鸭子o(´^｀)o`;
+                    this.gameOver();
+                }
             }
-            // for (var i = this.snaker.length - 1; i > 0; i--) {
-            //     if (
-            //         this.snaker[0][0] == this.snaker[i][0] &&
-            //         this.snaker[0][1] == this.snaker[i][1]
-            //     ) {
-            //         clearInterval(this.timer);
-            //         alert("游戏结束，你撞到你自己啦！");
-            //         this.gameOver();
-            //     }
-            // }
         },
         //游戏结束
         gameOver() {
+            clearInterval(this.timer);
             this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             this.snaker.splice(0, this.snaker.length);
             this.result = this.scope;
-            this.title = `你找到了${this.result}只小鸭鸭，不能出鸭圈o(´^｀)o`;
             this.modal = true;
             //清空蛇身；
             //游戏分值清空，游戏状态改为0；
@@ -253,7 +250,7 @@ export default {
         begin() {
             this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             clearInterval(this.timer);
-            this.directer="";
+            this.directer = "";
             if (this.gameState != 0) {
                 //游戏结束状态
                 this.modal = true;
@@ -362,6 +359,7 @@ export default {
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / this.unit) * this.unit;
         this.canvasHeight = Math.ceil(document.body.clientHeight / this.unit) * this.unit;
+        console.log(this.canvasWidth,this.canvasHeight,"|||")
     }
 };
 </script>
