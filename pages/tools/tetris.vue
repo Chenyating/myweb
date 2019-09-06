@@ -77,7 +77,7 @@ export default {
             this.ifStop = false;
             this.timer = setInterval(() => {
                 this.down();
-            }, this.v)
+            }, this.v-this.scope)
         },
         // 暂停
         stop() {
@@ -124,7 +124,7 @@ export default {
                 //游戏开始，默认自己往下移动；
                 this.timer = setInterval(() => {
                     this.down();
-                }, this.v)
+                }, this.v-this.scope)
                 this.result=0;
                 this.modal = false;
                 this.ifStop = false;
@@ -420,7 +420,7 @@ export default {
                             clearInterval(this.timer);
                             this.timer = setInterval(() => {
                                 this.down();
-                            }, this.v)
+                            }, this.v-this.scope)
                             // console.log(this.all)
                             return;
                         }
