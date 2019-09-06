@@ -122,8 +122,12 @@ export default {
     // 页面跳转
     goUrl(item) {
       // 如果存在路径，则开启。
-      if (item.url) {
-        window.open(item.url)
+      if(item.url) {
+        if(item.type==0){
+          this.$router.push(item.url)
+        }else{
+          window.open(item.url)
+        }
       }
     },
     readMore(item) {
