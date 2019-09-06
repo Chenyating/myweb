@@ -100,7 +100,7 @@ export default {
                         this.changgeY(20);
                         break;
                 }
-            }, this.v-this.scope)
+            }, this.v - this.scope)
         },
         // 暂停
         stop() {
@@ -130,7 +130,7 @@ export default {
                 clearInterval(this.timer);
                 this.timer = setInterval(() => {
                     this.changgeX(x);
-                }, this.v-this.scope);
+                }, this.v - this.scope);
             }
         },
         upDown(y) {
@@ -148,7 +148,7 @@ export default {
                     clearInterval(this.timer);
                     this.timer = setInterval(() => {
                         this.changgeY(y);
-                    }, this.v-this.scope);
+                    }, this.v - this.scope);
                 }
             } else {
                 if (y > 0) {
@@ -160,7 +160,7 @@ export default {
                 clearInterval(this.timer);
                 this.timer = setInterval(() => {
                     this.changgeY(y);
-                }, this.v-this.scope);
+                }, this.v - this.scope);
             }
         },
         //随机生成x坐标
@@ -182,7 +182,7 @@ export default {
                 this.radomy(this.canvasHeight) * this.unit
             ]);
             //蛇头也不能和食物重复；
-            if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1]&&this.foodY<=60) {
+            if (this.foodX == this.snaker[0][0] && this.foodY == this.snaker[0][1] && this.foodY <= 60) {
                 return this.snakerHead();
             }
             this.painSnakerHead();
@@ -196,12 +196,12 @@ export default {
                 //只要出现重复，则重新调用food（）；
                 if (
                     this.foodX == this.snaker[i][0] &&
-                    this.foodY == this.snaker[i][1]&&this.foodY<=60
+                    this.foodY == this.snaker[i][1] && this.foodY <= 60
                 ) {
                     return this.food();
                 }
             }
-            console.log(this.foodX,this.foodY,"??")
+            console.log(this.foodX, this.foodY, "??")
             this.painFood();
         },
         //绘制红色食物
@@ -251,13 +251,15 @@ export default {
         },
         //游戏开始
         begin() {
+            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            clearInterval(this.timer);
+            this.directer="";
             if (this.gameState != 0) {
                 //游戏结束状态
                 this.modal = true;
                 this.gameState = 0;
                 this.scope = 0;
                 //清空整个画布
-                this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             } else {
                 //游戏开始状态
                 this.food();
@@ -266,7 +268,6 @@ export default {
                 this.modal = false;
                 this.result = 0;
                 this.ifStop = false;
-                clearInterval(this.timer);
             }
         },
         //蛇在x轴的变化
@@ -418,8 +419,7 @@ export default {
     width: 100%;
     height: 50%; // background: red;
     // border: solid 1px black;
-        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.034);
-    // border-color: #eee;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.034); // border-color: #eee;
     display: flex;
 }
 
