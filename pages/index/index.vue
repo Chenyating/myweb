@@ -4,25 +4,25 @@
     <reject v-if="list==null"></reject>
     <div v-else>
         <div class="flex" v-for="(item,index) in list" :key="index">
-            <img class="head-img" @click="goPerson" src="~static/mobile/index/yating.jpg" />
+            <img class="head-img" @click="goPerson" :src="item.headImg" />
             <div class="shuoshuo">
-                <div class="title">YATING</div>
+                <div class="title">{{item.user}}</div>
                 <div class="text">{{item.content}}</div>
                 <!-- 视频 -->
                 <!-- <video v-if="item.type==3" class="one-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
                 <!-- <source :src="item.url" type="video/mp4" /></video> -->
                 <!-- 1张 -->
                 <div v-if="item.url">
-                    <div v-if="item.url.length==1">
-                        <img class="one-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    <div v-if="item.url.length<3">
+                        <img class="one-img"  @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                     <!-- 2-4张 -->
-                    <div v-if="item.url.length>1&&item.url.length<5">
-                        <img class="four-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    <div v-if="item.url.length>2&&item.url.length<5">
+                        <img class="four-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                     <!-- 5-9张 -->
                     <div v-if="item.url.length>4">
-                        <img class="nine-img" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="nine-img"  @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                 </div>
                 <div class="delete-box">
@@ -60,6 +60,10 @@ export default {
         };
     },
     methods: {
+        // 查看图片
+        seeImg(img){
+            window.open(img);
+        },
         haslogin(val) {
             // 子组件传值给我了。
             this.iflogin = val;
@@ -189,7 +193,8 @@ export default {
         width: 80%;
     }
     .one-img {
-        width: 80%;
+        width: 120px;
+        width: 45%;
         height: auto;
         margin: @distansSmall;
         border: #e8eaec4d @line-sizeSmall solid;
