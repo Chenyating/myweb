@@ -84,7 +84,7 @@ export default {
                         }
                         if (data.data.code == 1) {
                             this.token = data.data.token;
-                            localStorage.setItem('userInfo', JSON.stringify(userInfo)); //把token存起来
+                            sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); //把token存起来
                             this.isLogin();
                             // 把值传给父组件去。
                             this.$emit('hasLogin', false)
