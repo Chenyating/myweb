@@ -1,5 +1,3 @@
-import { AST_This } from "_terser@4.2.1@terser";
-
 function betweenRandom(min, max) {
     return Math.random() * (max - min) + min;
 }
