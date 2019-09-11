@@ -1,6 +1,7 @@
 <template>
 <!-- mobile首页 -->
 <div class="mobile-index-box">
+    <seeImg @closeImg="closeImg" class="see-img" v-if="ifSeeImg" :imgInfo='imgInfo'></seeImg>
     <reject v-if="list==null"></reject>
     <div v-else>
         <div class="flex" v-for="(item,index) in list" :key="index">
@@ -53,12 +54,14 @@
 import SERVER from '~/assets/server/api.js';
 import reject from "~/components/mobile/reject";
 import loginBox from "~/components/mobile/login";
+import seeImg from "~/components/mobile/seeImg";
 
 export default {
     transition: 'mobilePage',
     components: {
         reject,
-        loginBox
+        loginBox,
+        seeImg
     },
     data() {
         return {
@@ -69,12 +72,22 @@ export default {
             iflogin: false,
             oldContent: "", //原来的内容
             modifyId: null, //要更新的id
+            ifSeeImg: false,
+            imgInfo: null, //查看图片信息
         };
     },
     methods: {
+        closeImg(ifClose){
+            this.ifSeeImg=ifClose;
+        },
         // 查看图片
-        seeImg(item,img,index) {
-            this.$router.push({name:`seeImg`,params:{item:item,img:img,index:index}});
+        seeImg(item, img, index) {
+            this.ifSeeImg = true;
+            this.imgInfo = {
+                item: item,
+                img: img,
+                index: index
+            }
         },
         haslogin(val) {
             // 子组件传值给我了。
@@ -197,6 +210,11 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.see-img{
+    z-index: 33;
+    position: fixed;
+    top: 0;
+}
 .modify-box {
     padding: @distansSmall 0;
     .modify-btn-box {
