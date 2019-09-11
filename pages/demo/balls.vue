@@ -38,7 +38,7 @@ export default {
         window.onresize = () => {
             this.canvasWidth = Math.floor(document.body.clientWidth);
             this.canvasHeight = Math.ceil(document.body.clientHeight);
-            console.log(this.canvasWidth, this.canvasHeight)
+            // console.log(this.canvasWidth, this.canvasHeight)
         }
         var c = document.getElementById("stage");
         this.ctx = c.getContext("2d");

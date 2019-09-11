@@ -6,10 +6,14 @@
         <div class="flex" v-for="(item,index) in list" :key="index">
             <img class="head-img" @click="goPerson" :src="item.headImg" />
             <div class="shuoshuo">
-                <div class="title">{{item.user}}</div>
+                <div class="user-name">{{item.user}}</div>
                 <div v-if="modifyId!=item.id" class="text">{{item.content}}</div>
                 <div class="modify-box" v-if="modifyId==item.id">
                     <Input v-model="item.content" type="textarea" :rows="4" placeholder="Enter something..." />
+                    <div class="modify-btn-box" v-if="modifyId==item.id">
+                        <Button @click="cancleEdit(index)" type="info" ghost>取消</Button>
+                        <Button @click="modifyShuoshuo(item.id,index,item.content)" type="success" ghost>修改</Button>
+                    </div>
                 </div>
                 <!-- 视频 -->
                 <!-- <video v-if="item.type==3" class="one-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
@@ -17,23 +21,19 @@
                 <!-- 1张 -->
                 <div v-if="item.url">
                     <div v-if="item.url.length<3">
-                        <img class="one-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="one-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                     <!-- 2-4张 -->
                     <div v-if="item.url.length>2&&item.url.length<5">
-                        <img class="four-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="four-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                     <!-- 5-9张 -->
                     <div v-if="item.url.length>4">
-                        <img class="nine-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="nine-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                 </div>
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
-                    <div v-if="modifyId==item.id">
-                        <Button @click="cancleEdit(index)" type="info" ghost>取消</Button>
-                        <Button @click="modifyShuoshuo(item.id,index,item.content)" type="success" ghost>修改</Button>
-                    </div>
                     <div v-if="$store.state.ifLogin&&modifyId!=item.id">
                         <span class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</span>
                         <span class="modify-text" @click="eidt(item.id,item.content)">编辑</span>
@@ -67,14 +67,14 @@ export default {
             num: 5,
             ifmore: true,
             iflogin: false,
-            oldContent: "",//原来的内容
-            modifyId: null//要更新的id
+            oldContent: "", //原来的内容
+            modifyId: null, //要更新的id
         };
     },
     methods: {
         // 查看图片
-        seeImg(img) {
-            window.open(img);
+        seeImg(item,img,index) {
+            this.$router.push({name:`seeImg`,params:{item:item,img:img,index:index}});
         },
         haslogin(val) {
             // 子组件传值给我了。
@@ -110,12 +110,12 @@ export default {
         // 取消编辑
         cancleEdit(index) {
             this.modifyId = null;
-            this.list[index].content=this.oldContent;
+            this.list[index].content = this.oldContent;
         },
         // 编辑该条信息
         eidt(id, content) {
             this.modifyId = id;
-            this.oldContent=content;
+            this.oldContent = content;
         },
         // 提交编辑该条信息
         modifyShuoshuo(id, index, content) {
@@ -206,6 +206,7 @@ export default {
 }
 
 .delete-box {
+    margin-top: @distansBig;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -226,8 +227,10 @@ export default {
     border-bottom: @line-sizeSmall @line-color solid;
 }
 
-.title {
+.user-name {
     line-height: 16px;
+    .text();
+    font-weight: bold;
 }
 
 .text {

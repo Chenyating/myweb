@@ -201,7 +201,6 @@ export default {
                     return this.food();
                 }
             }
-            console.log(this.foodX, this.foodY, "??")
             this.painFood();
         },
         //绘制红色食物
@@ -359,7 +358,6 @@ export default {
         this.context = c.getContext("2d");
         this.canvasWidth = Math.floor(document.body.clientWidth / this.unit) * this.unit;
         this.canvasHeight = Math.ceil(document.body.clientHeight / this.unit) * this.unit;
-        console.log(this.canvasWidth,this.canvasHeight,"|||")
     }
 };
 </script>

@@ -6,9 +6,9 @@
     </p>
     <Form ref="userInfo" :model="userInfo" :rules="userInfoRule">
         <FormItem prop="account">
-            <Input type="text" v-model="userInfo.account" placeholder="用户名">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-            </Input>
+            <Select v-model="userInfo.account">
+                <Option v-for="item in accountList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
         </FormItem>
         <FormItem prop="password">
             <Input type="password" v-model="userInfo.password" placeholder="密码">
@@ -37,9 +37,18 @@ export default {
     },
     data() {
         return {
+            accountList: [{
+                    value: '737323',
+                    label: '(❁´ω`❁) 婷儿'
+                },
+                {
+                    value: '517768',
+                    label: '(◍´꒳`◍) WHERE哥哥'
+                }
+            ],
             token: "",
             userInfo: {
-                account: '15222737323',
+                account: '737323',
                 password: ''
             },
             userInfoRule: {

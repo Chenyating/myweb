@@ -316,7 +316,7 @@ export default {
         //旋转90度的方法
         rotate() {
             var changge = parseInt(Math.random() * 4);
-            console.log("变" + changge + "次")
+            // console.log("变" + changge + "次")
             for (var i = 0; i <= changge; i++) {
                 let shap1 = [];
                 // 深拷贝
