@@ -7,6 +7,8 @@ export const userInfo = {
         var userInfo = sessionStorage.getItem('userInfo');
         if (userInfo) {
             state.ifLogin = true;
+            state.account=JSON.parse(userInfo).account;
+            console.log(state)
         } else {
             state.ifLogin = false;
         }

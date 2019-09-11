@@ -22,6 +22,9 @@ function getshuoshuo(params) {
 function deletById(params) {
   return HTTP.POST('/person/delete', params) //删除
 }
+function modifyById(params) {
+  return HTTP.POST('/person/modify', params) //修改
+}
 // ————次数————
 function getVisitors() {
   return HTTP.GET('/article/articleList') //访问次数
@@ -86,6 +89,8 @@ export default {
   // funcName
   //    删除
   deletById,
+  // 修改说说
+  modifyById,
   //  获得说说
   getshuoshuo,
   // 访问次数
@@ -113,7 +118,7 @@ export default {
 
   // 发表
   publicShuoshuo,
-  
+
   // 个人中心
   login,
 }

@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="text">{{item.content}}</div>
-            <div class="text" v-if="item.returnContent"><em class="em-blue">楼主回复：</em>{{item.returnContent}}</div>
+            <div class="text" v-if="item.returnContent"><em class="em-blue">{{item.user}}回复：</em>{{item.returnContent}}</div>
             <div class="gray-text" v-if="item.returnContent">{{item.returnTime}}</div>
         </Card>
         <div @click="getmore">

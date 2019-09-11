@@ -5,8 +5,8 @@
         <span>LOGIN MY WORLD</span>
     </p>
     <Form ref="userInfo" :model="userInfo" :rules="userInfoRule">
-        <FormItem prop="user">
-            <Input type="text" v-model="userInfo.user" placeholder="用户名">
+        <FormItem prop="account">
+            <Input type="text" v-model="userInfo.account" placeholder="用户名">
             <Icon type="ios-person-outline" slot="prepend"></Icon>
             </Input>
         </FormItem>
@@ -39,13 +39,18 @@ export default {
         return {
             token: "",
             userInfo: {
-                user: 'tinger',
+                account: '15222737323',
                 password: ''
             },
             userInfoRule: {
-                user: [{
+                account: [{
                     required: true,
                     message: '请输入账号ヾ(ｏ･ω･)ﾉ',
+                    trigger: 'blur'
+                }, {
+                    type: 'string',
+                    max: 15,
+                    message: '我没有介么长的账号啦(￣▽￣)ｄ ',
                     trigger: 'blur'
                 }],
                 password: [{
@@ -80,7 +85,7 @@ export default {
                     SERVER.login(this.userInfo).then(data => {
                         var userInfo = {
                             token: data.data.token,
-                            userName: this.userInfo.user
+                            account: this.userInfo.account
                         }
                         if (data.data.code == 1) {
                             this.token = data.data.token;

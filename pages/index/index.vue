@@ -7,14 +7,17 @@
             <img class="head-img" @click="goPerson" :src="item.headImg" />
             <div class="shuoshuo">
                 <div class="title">{{item.user}}</div>
-                <div class="text">{{item.content}}</div>
+                <div v-if="modifyId!=item.id" class="text">{{item.content}}</div>
+                <div class="modify-box" v-if="modifyId==item.id">
+                    <Input v-model="item.content" type="textarea" :rows="4" placeholder="Enter something..." />
+                </div>
                 <!-- 视频 -->
                 <!-- <video v-if="item.type==3" class="one-img" autoplay="autoplay" muted="muted" loop="loop" x5-playsinline="" playsinline="" webkit-playsinline=""> -->
                 <!-- <source :src="item.url" type="video/mp4" /></video> -->
                 <!-- 1张 -->
                 <div v-if="item.url">
                     <div v-if="item.url.length<3">
-                        <img class="one-img"  @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="one-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                     <!-- 2-4张 -->
                     <div v-if="item.url.length>2&&item.url.length<5">
@@ -22,12 +25,19 @@
                     </div>
                     <!-- 5-9张 -->
                     <div v-if="item.url.length>4">
-                        <img class="nine-img"  @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                        <img class="nine-img" @click="seeImg(img)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     </div>
                 </div>
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
-                    <div v-if="$store.state.ifLogin" class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</div>
+                    <div v-if="modifyId==item.id">
+                        <Button @click="cancleEdit" type="info" ghost>取消</Button>
+                        <Button @click="modifyShuoshuo(item.id,index,item.content)" type="success" ghost>修改</Button>
+                    </div>
+                    <div v-if="$store.state.ifLogin&&modifyId!=item.id">
+                        <span class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</span>
+                        <span class="modify-text" @click="eidt(item.id)">编辑</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,11 +67,13 @@ export default {
             num: 5,
             ifmore: true,
             iflogin: false,
+            content: "",
+            modifyId: null
         };
     },
     methods: {
         // 查看图片
-        seeImg(img){
+        seeImg(img) {
             window.open(img);
         },
         haslogin(val) {
@@ -94,6 +106,34 @@ export default {
                 }
             });
 
+        },
+        // 取消编辑
+        cancleEdit() {
+            this.modifyId = null;
+        },
+        // 编辑该条信息
+        eidt(id, index) {
+            this.modifyId = id;
+        },
+        // 提交编辑该条信息
+        modifyShuoshuo(id, index, content) {
+            this.modifyId = id;
+            var params = {
+                tableName: "myIndex",
+                id: id,
+                content: content
+            }
+            SERVER.modifyById(params)
+                .then((data) => {
+                    this.$Message.info(data.data.info);
+                    this.modifyId = null;
+                    if (data.data.code == -1) {
+                        this.iflogin = true;
+                    }
+                })
+                .catch(err => {
+                    this.$Message.error("(╥╯﹏╰╥)ง修改失败~");
+                });
         },
         // 处理data，把图片转为数组
         doData(data) {
@@ -155,11 +195,25 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
+.modify-box {
+    padding: @distansSmall 0;
+    .modify-btn-box {
+        text-align: right;
+        padding: @distansSmall 0;
+    }
+}
+
 .delete-box {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     .delete-text {
+        padding: 0 @distansSmall;
         color: @red;
+    }
+    .modify-text {
+        padding: 0 @distansSmall;
+        color: @blue;
     }
 }
 

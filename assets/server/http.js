@@ -25,7 +25,7 @@ function POST(url, params) {
         var userInfo = sessionStorage.getItem('userInfo');
         if(userInfo){
             axios.defaults.headers.token = JSON.parse(userInfo).token;
-            axios.defaults.headers.userName = JSON.parse(userInfo).userName;
+            axios.defaults.headers.account = JSON.parse(userInfo).account;
         }
         axios.post(url, params)
             .then(function (response) {
@@ -41,7 +41,7 @@ function UPLOAD(url, files) {
         var userInfo = sessionStorage.getItem('userInfo');
         if(userInfo){
             axios.defaults.headers.token = JSON.parse(userInfo).token;
-            axios.defaults.headers.userName = JSON.parse(userInfo).userName;
+            axios.defaults.headers.account = JSON.parse(userInfo).account;
         }
         let formData = new FormData();
         formData.append("file", files)
