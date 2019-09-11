@@ -31,12 +31,12 @@
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
                     <div v-if="modifyId==item.id">
-                        <Button @click="cancleEdit" type="info" ghost>取消</Button>
+                        <Button @click="cancleEdit(index)" type="info" ghost>取消</Button>
                         <Button @click="modifyShuoshuo(item.id,index,item.content)" type="success" ghost>修改</Button>
                     </div>
                     <div v-if="$store.state.ifLogin&&modifyId!=item.id">
                         <span class="delete-text" @click="deleteShuoshuo(item.id,index)">删除</span>
-                        <span class="modify-text" @click="eidt(item.id)">编辑</span>
+                        <span class="modify-text" @click="eidt(item.id,item.content)">编辑</span>
                     </div>
                 </div>
             </div>
@@ -67,8 +67,8 @@ export default {
             num: 5,
             ifmore: true,
             iflogin: false,
-            content: "",
-            modifyId: null
+            oldContent: "",//原来的内容
+            modifyId: null//要更新的id
         };
     },
     methods: {
@@ -108,12 +108,14 @@ export default {
 
         },
         // 取消编辑
-        cancleEdit() {
+        cancleEdit(index) {
             this.modifyId = null;
+            this.list[index].content=this.oldContent;
         },
         // 编辑该条信息
-        eidt(id, index) {
+        eidt(id, content) {
             this.modifyId = id;
+            this.oldContent=content;
         },
         // 提交编辑该条信息
         modifyShuoshuo(id, index, content) {
