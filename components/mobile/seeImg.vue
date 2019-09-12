@@ -124,12 +124,11 @@ export default {
 .img-box {
     width: 100%;
     background: @black;
-    position: fixed;
     overflow-y: scroll;
     overflow-x: scroll;
     text-align: center;
     .see-img {
-        margin: 20% 0;
+        // margin: 20% 0;
         width: 100%;
         vertical-align: middle;
         height: auto;

@@ -21,17 +21,11 @@
                 <!-- <source :src="item.url" type="video/mp4" /></video> -->
                 <!-- 1张 -->
                 <div v-if="item.url">
-                    <div v-if="item.url.length<3">
-                        <img class="one-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
-                    </div>
+                    <img v-if="item.url.length<3" class="one-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     <!-- 2-4张 -->
-                    <div v-if="item.url.length>2&&item.url.length<5">
-                        <img class="four-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
-                    </div>
+                    <img v-if="item.url.length>2&&item.url.length<5" class="four-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                     <!-- 5-9张 -->
-                    <div v-if="item.url.length>4">
-                        <img class="nine-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
-                    </div>
+                    <img v-if="item.url.length>4" class="nine-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
                 </div>
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
@@ -77,8 +71,8 @@ export default {
         };
     },
     methods: {
-        closeImg(ifClose){
-            this.ifSeeImg=ifClose;
+        closeImg(ifClose) {
+            this.ifSeeImg = ifClose;
         },
         // 查看图片
         seeImg(item, img, index) {
@@ -210,11 +204,12 @@ export default {
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-.see-img{
+.see-img {
     z-index: 33;
     position: fixed;
     top: 0;
 }
+
 .modify-box {
     padding: @distansSmall 0;
     .modify-btn-box {
@@ -270,7 +265,6 @@ export default {
         width: 80%;
     }
     .one-img {
-        width: 120px;
         width: 45%;
         height: auto;
         margin: @distansSmall;
