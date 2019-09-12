@@ -21,11 +21,17 @@
                 <!-- <source :src="item.url" type="video/mp4" /></video> -->
                 <!-- 1张 -->
                 <div v-if="item.url">
-                    <img v-if="item.url.length<3" class="one-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    <div v-if="item.url.length<3">
+                        <img class="one-img" :id="img.replace('http://www.yating.online/res/img/','img').replace('.jpg','')" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
                     <!-- 2-4张 -->
-                    <img v-if="item.url.length>2&&item.url.length<5" class="four-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    <div v-if="item.url.length>2&&item.url.length<5">
+                        <img class="four-img" :id="img.replace('http://www.yating.online/res/img/','img').replace('.jpg','')" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
                     <!-- 5-9张 -->
-                    <img v-if="item.url.length>4" class="nine-img" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    <div v-if="item.url.length>4">
+                        <img class="nine-img" :id="img.replace('http://www.yating.online/res/img/','img').replace('.jpg','')" @click="seeImg(item,img,index)" v-for="(img,index) in item.url" :key="index" :src="img" />
+                    </div>
                 </div>
                 <div class="delete-box">
                     <div class="gray-text">{{item.createTime}}</div>
@@ -76,6 +82,28 @@ export default {
         },
         // 查看图片
         seeImg(item, img, index) {
+            // var name = img.replace('http://www.yating.online/res/img/', 'img').replace('.jpg','');
+            // if (this.ifSeeImg) {
+            //     $(`#${name}`).css({
+            //         "position": "static",
+            //         "width": "45%",
+            //         "height": "20%",
+            //         "top": "0",
+            //         "left": '0'
+            //     })
+            // } else {
+            //     $(`#${name}`).css({
+            //         "position": "fixed",
+            //         "width": "100%",
+            //         "height": "auto",
+            //         "margin":'0',
+            //         "top": "0",
+            //         "left": '0',
+            //         "z-index":"3"
+            //     })
+                
+            // }
+            // this.ifSeeImg=!this.ifSeeImg;
             this.ifSeeImg = true;
             this.imgInfo = {
                 item: item,

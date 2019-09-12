@@ -22,7 +22,7 @@ mother.prototype = {
         // 随机配置
         this.x = betweenRandom(0, this.maxWidth);
         this.y = betweenRandom(0, this.maxHeight);
-        this.r = betweenRandom(1, 2);
+        this.r = betweenRandom(1, 10);
         this.beiyongR = this.r;
         this.color = acolor[Math.floor(betweenRandom(0, 5))];
         this.vx = betweenRandom(-1, 1);
@@ -39,7 +39,9 @@ mother.prototype = {
     // 移动
     move: function () {
         // 在鼠标周围就放大
-        if ((mouseX - this.x <= 20 && this.x - mouseX <= 20) && (this.y - mouseY <= 20 && mouseY - this.y <= 20)) {
+        if (this.x - this.r < 0 || this.x + this.r > this.maxWidth) { this.vx = -this.vx; }
+        if (this.y - this.r < 0 || this.y + this.r > this.maxHeight) { this.vy = -this.vy; }
+        if ((mouseX - this.x <= 50 && this.x - mouseX <= 50) && (this.y - mouseY <= 50 && mouseY - this.y <= 50)) {
             if (this.r >= 50) {
                 this.r = 50
             } else {
