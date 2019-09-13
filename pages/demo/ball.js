@@ -41,25 +41,93 @@ mother.prototype = {
         // 在鼠标周围就放大
         if (this.x - this.r < 0 || this.x + this.r > this.maxWidth) { this.vx = -this.vx; }
         if (this.y - this.r < 0 || this.y + this.r > this.maxHeight) { this.vy = -this.vy; }
-        if ((mouseX - this.x <= 50 && this.x - mouseX <= 50) && (this.y - mouseY <= 50 && mouseY - this.y <= 50)) {
-            if (this.r >= 50) {
-                this.r = 50
-            } else {
-                this.r++
+        var distance = Math.sqrt((mouseX - this.x)**2 + (this.y - mouseY)**2)
+        // 圆形
+//        if (distance < 99){
+//            this.x += -this.vx;
+//            this.y += -this.vy;
+//        }
+//        else if(distance > 101){
+//           this.x += this.vx;
+//           this.y += this.vy;
+//        }
+//        else{
+//            if (this.r < 20){
+//                this.r++
+//            }
+//        }
+//        //心形1
+//        var dlta_x = this.x - mouseX
+//        var dlta_y = this.y - mouseY
+//        var a = 100
+//        if (dlta_x**2+dlta_y**2 - a*dlta_y > a * Math.sqrt(dlta_x**2+dlta_y**2)){
+//            this.x += -this.vx;
+//            this.y += -this.vy;
+//        }
+//        else if(dlta_x**2+dlta_y**2 - a * dlta_y < a * Math.sqrt(dlta_x**2+dlta_y**2)){
+//            this.x += this.vx;
+//            this.y += this.vy;
+//        }
+
+//        //心形2
+//        var dlta_x = this.x - mouseX
+//        var dlta_y = this.y - mouseY
+//        var a = 12500 * 4
+//        var jiange = 500 *4
+//
+//        var distance = 5*(dlta_x**2) + 6*Math.abs(dlta_x)*(dlta_y) + 5*(dlta_y**2)
+//        if (distance < a-jiange){
+//            this.x += -10*this.vx;
+//            this.y += -10*this.vy;
+//        }
+//        else if(distance > a+jiange){
+//            this.x += this.vx;
+//            this.y += this.vy;
+//        }
+
+        //心形2 快速
+        var dlta_x = this.x - mouseX
+        var dlta_y = this.y - mouseY
+        var a = 12500 * 4
+        var jiange = 500 *4
+
+        var distance = 5*(dlta_x**2) + 6*Math.abs(dlta_x)*(dlta_y) + 5*(dlta_y**2)
+        if (distance < a-jiange){
+          for(var i=0; i<10; i++){
+            this.x += this.vx;
+            this.y += this.vy;
             }
+            if(this.r<20){
+            this.r++}
         }
-        // 不在鼠标周围时
-        else {
-            if (this.r > this.beiyongR) {
-                this.r--
-            } else {
-                this.r = this.beiyongR
+        else if(distance > a+jiange){
+            this.x +=this.vx;
+            this.y +=this.vy;
+            if(this.r>this.beiyongR){
+            this.r--
             }
         }
 
-        this.x += this.vx;
-        this.y += this.vy;
+
+
+
+
+
+//        if (distance <=100) {
+//            if (this.r < 100)
+//            {
+//                this.r++
+//            }
+//        }
+//        // 不在鼠标周围时
+//        else {
+//            if (this.r > this.beiyongR) {
+//                this.r--
+//            }
+//        }
+
         this.draw()
+
     }
 }
 

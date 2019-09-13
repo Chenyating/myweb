@@ -43,7 +43,7 @@ export default {
         var c = document.getElementById("stage");
         this.ctx = c.getContext("2d");
         getMouseXY();
-        this.begin(250);
+        this.begin(1000);
     }
 }
 </script>
