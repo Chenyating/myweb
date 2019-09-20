@@ -11,7 +11,7 @@ module.exports = {
   },
   proxy: {
     '/api': {
-      target: 'http://yating.online/api', // 阿里云
+      target: 'https://yating.online/api', // 阿里云
       // target: 'http://172.28.194.52:3000/', // 目标接口域名
       // target: 'http://192.168.43.121:3000/', // 目标接口域名
       changeOrigin: true, // 表示是否跨域
@@ -28,7 +28,7 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' },
+      { hid: 'description', name: 'YATING', content: 'this is YATING’s world' },
       { httpEquiv:"Content-Security-Policy", content:"upgrade-insecure-requests" }
     ],
     link: [
