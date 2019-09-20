@@ -36,7 +36,7 @@ module.exports = {
     ],
     script: [
       {
-        src: 'http://www.yating.online/res/js/jquery.qr.js'
+        src: 'https://www.yating.online/res/js/jquery.qr.js'
       }
     ]
   },
