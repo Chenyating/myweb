@@ -84,8 +84,12 @@ function login(params) {
   return HTTP.POST('/person/login', params) //增加次数
 }
 
+function ai(params) {
+  return HTTP.GET('/aiSpend', params) //获得心情
+}
 
 export default {
+  ai,//ai组花费记录
   // funcName
   //    删除
   deletById,

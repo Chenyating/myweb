@@ -24,7 +24,7 @@ export default {
         return {
             // 标题
             title: '',
-            content: "#haha", //内容
+            content: "# haha", //内容
             markdownOption: {
                 bold: true // 粗体
             },
