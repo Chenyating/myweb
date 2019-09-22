@@ -47,6 +47,11 @@ export default {
                     key: "time"
                 },
                 {
+                    title: "支付方式",
+                    minWidth: 45,
+                    key: "spendType"
+                },
+                {
                     title: "花费",
                     minWidth: 45,
                     key: "spend"
