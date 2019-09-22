@@ -9,6 +9,13 @@
             <Table border :columns="columns2" :data="data2"></Table>
         </TabPane>
         <TabPane label="团建规章" name="rules">
+            <h1 class="rules-title">《 {{rules.title}} 》</h1>
+            <div class="rules-box" v-for="(item,index) in rules.content" :key="index">
+                <div class="title">{{item.title}}：</div>
+                <div v-for="(i ,index) in item.content" :key="index">
+                  <div class="text">{{i.split(":")[0]}}</div>
+                </div>
+            </div>
         </TabPane>
     </Tabs>
 </div>
@@ -17,7 +24,7 @@
 <script>
 import SERVER from "~/assets/server/api.js";
 import goBack from "~/components/mobile/back.vue";
-// import rules from './rules.md'
+import rules from './rules.json'
 export default {
     transition: "article",
     components: {
@@ -25,6 +32,7 @@ export default {
     },
     data() {
         return {
+            rules:rules,
             name:"spend",
             data1: [],
             data2: [],
@@ -143,13 +151,19 @@ export default {
         if (this.phoneWidth < this.phoneHeight) {
             this.$Message.info("横屏效果更佳哦~");
         }
+        console.log(rules,"???")
     }
 };
 </script>
 
 <style lang="less" scoped>
 @import "~assets/css/mobile/base.less";
-
+.rules-title{
+    text-align: center;
+}
+.rules-box{
+    padding: @distansBig;
+}
 .D-big {
     display: fixed;
     height: 100%;
