@@ -18,6 +18,7 @@
             <span class="text"><span class="em-blue">(2). 正式员工：</span>500元/次;</span>
             <span class="text"><span class="em-blue">(3). 外包、实习生：</span>200元/次;</span>
             <div class="text"><span class="em-blue">(4). 其他：</span>避免混淆已退费的人员，已从名单上除去</div>
+            <div class="text"><span class="em-blue">(5). 提醒：</span>有出路请自行计算，再找YATING咨询</div>
             <Table border :columns="columns2" :data="data2"></Table>
         </TabPane>
         <TabPane label="团建规章" name="rules">
