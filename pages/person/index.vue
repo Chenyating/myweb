@@ -5,7 +5,7 @@
     <div class="flex">
         <div class="choose-img-box" v-for="(item,index) in fileData" :key="index">
             <Icon v-if="item.ifupload" class="upload-ok" color="#19be6b" size="24" type="ios-checkmark-circle" />
-            <img v-if="!imgUploading" class="close-img" @click="deleteImg(index)" :src="subImg" />
+            <img class="close-img" @click="deleteImg(index)" :src="subImg" />
             <img v-if="fileData" class="mini-img" :src="item.base64" />
         </div>
         <img class="add-img" v-if="fileData.length<9" :src="addImg" @click="uploadImg" />
