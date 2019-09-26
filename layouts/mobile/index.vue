@@ -88,7 +88,7 @@ export default {
             SERVER.getTimes(params)
                 .then(data => {
                     this.times = data.data[0].times;
-                    console.log(`%c 你是第${this.times}访问的客人哟~ヾ(ｏ･ω･)ﾉ`,"color:#d6204b");
+                    console.log(`%c 你是第${this.times}访问的客人哟~ヾ(ｏ･ω･)ﾉ`, "color:#d6204b");
                 })
                 .catch(err => {
                     console.log(err);
@@ -114,6 +114,7 @@ export default {
         }
     },
     mounted() {
+        clearInterval(this.pendant);
         this.isLogin();
         var params = {
             name: "mobileIndex"
@@ -144,7 +145,7 @@ http://www.yating.online/tools/notes 注释生成器哦.
   @@@   @@@@@@@@    @      @@@
 
  THIS IS MY WORD WELCOME~  ヾ(✿ﾟ▽ﾟ)ノ
-        `,'color: #19be6b')
+        `, 'color: #19be6b')
     },
 };
 </script>
@@ -183,7 +184,7 @@ http://www.yating.online/tools/notes 注释生成器哦.
     height: 100%;
     width: 100%;
     min-width: 350px;
-    max-width:1024px;
+    max-width: 1024px;
     margin: 0 auto;
     overflow: hidden;
 }
