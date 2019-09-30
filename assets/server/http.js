@@ -4,7 +4,8 @@ import axios from 'axios'
 // `baseURL` 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL。
 // 它可以通过设置一个 `baseURL` 便于为 axios 实例的方法传递相对 URL
 axios.defaults.baseURL = '/api'//这是请求的域名地址
-axios.defaults.headers = { 'Cache-Control': 'no-cache' }//去掉get缓存
+// 信息头中包含 Cache-Control:no-cache，pragma:no-cache，或 Cache-Control:max-age=0 等告诉浏览器不用缓存的请求
+axios.defaults.headers = { 'Cache-Control': 'no-cache' }//去掉get缓存HTTP 
 // axios.defaults.timeout = 6000;//请求时间的设置。超过6秒就算超时
 
 // get和post传params的区别，get要{params},否则失败；

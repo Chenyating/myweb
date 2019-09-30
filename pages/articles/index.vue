@@ -4,12 +4,12 @@
   <div class="article-box">
     <reject v-if="blogList==null"></reject>
     <div v-else class="article-item" v-for="(item,index) in blogList" :key="index">
-      <div @click="goArticle(item[0])" class="title"> 《 {{item[0]}} 》</div>
+      <div @click="goArticle(item.articleName,item.knowledgeType)" class="title"> 《 {{item.articleName}} 》</div>
       <div class="flex-row-between">
         <!-- 最新编辑时间 -->
-        <div class="icon-time">{{item[1]}}</div>
+        <div class="icon-time">{{item.createTime}}</div>
         <!-- 阅读次数 -->
-        <div class="icon-read"></div>
+        <div class="icon-read">{{item.readTimes}}</div>
       </div>
     </div>
   </div>
@@ -34,22 +34,27 @@ export default {
   methods: {
     // 获得文章列表
     getList() {
-      SERVER.getAticleList().then((data) => {
+      var params = {
+        type: 'react'
+      };
+      console.log(params,"??")
+      SERVER.getAticleList(params).then((data) => {
         this.blogList = data.data;
         data.data.forEach(element => {
 
           // 处理T型时间
-          var jsonTime = new Date(element[1]).toJSON();
+          var jsonTime = new Date(element.createTime).toJSON();
           var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-          element[1] = time;
+          element.createTime = time;
+          console.log(element.createTime,"???")
         });
       }).catch((err) => {
         this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
       })
     },
-    goArticle(title) {
+    goArticle(title,type) {
       // 跳转去查看文章详情
-      this.$router.push(`/articles/article?title=${title}`);
+      this.$router.push(`/articles/article?title=${title}&type=${type}`);
     }
   },
   mounted() {

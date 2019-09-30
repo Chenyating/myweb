@@ -31,8 +31,8 @@ function getVisitors() {
 }
 
 // ————文章————
-function getAticleList() {
-  return HTTP.GET('/article/articleList') //获得文章列表
+function getAticleList(params) {
+  return HTTP.GET('/article/articleList',params) //获得文章列表
 }
 
 function postAticle(params) {

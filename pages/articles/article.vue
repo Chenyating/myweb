@@ -34,9 +34,10 @@ export default {
     },
     methods: {
         // 获得文字内容
-        getArticle(title) {
+        getArticle(title,type) {
             var params = {
-                title: title
+                title: title,
+                type:type
             };
             SERVER.postAticle(params)
                 .then(data => {
@@ -77,7 +78,8 @@ export default {
     },
     mounted() {
         this.title = this.$route.query.title;
-        this.getArticle(this.title);
+        this.type = this.$route.query.type;
+        this.getArticle(this.title,this.type);
         window.addEventListener('scroll', this.scrollToTop)
     },
     destroyed() {
