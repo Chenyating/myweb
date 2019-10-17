@@ -31,6 +31,10 @@ function getVisitors() {
 }
 
 // ————文章————
+function getAticleType(params) {
+  return HTTP.GET('/article/articleType',params) //获得文章类型
+}
+
 function getAticleList(params) {
   return HTTP.GET('/article/articleList',params) //获得文章列表
 }
@@ -101,6 +105,7 @@ export default {
   getVisitors,
 
   // 博客接口
+  getAticleType,
   getAticleList,
   postAticle,
   getAticleRead,

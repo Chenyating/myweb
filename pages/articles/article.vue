@@ -42,10 +42,10 @@ export default {
             SERVER.postAticle(params)
                 .then(data => {
                     if (data.data.code == 1) {
-                        this.content = JSON.parse(data.data.content);
+                        this.content = "```python\n"+JSON.parse(data.data.content)+"\n```";
                         this.ifhas = true;
                     } else {
-                        this.content = data.data.content;
+                        this.content = "```python\n"+data.data.content+"\n```";
                     }
                 })
                 .catch(err => {
@@ -79,7 +79,8 @@ export default {
     mounted() {
         this.title = this.$route.query.title;
         this.type = this.$route.query.type;
-        this.getArticle(this.title,this.type);
+        // this.getArticle(this.title,this.type);
+        this.getArticle('','this.type');
         window.addEventListener('scroll', this.scrollToTop)
     },
     destroyed() {
