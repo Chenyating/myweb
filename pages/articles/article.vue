@@ -35,18 +35,16 @@ export default {
     },
     methods: {
         // 获得文字内容
-        getArticle(title,type,whoes) {
+        getArticle(whoes,road) {
             var params = {
-                title: title,
-                type:type,
+                road:road,
                 whoes:whoes
             };
             SERVER.postAticle(params)
                 .then(data => {
                     if (data.data.code == 1) {
-
-                        this.content = whoes=='where'?"```python\n"+JSON.parse(data.data.content)+"\n```":JSON.parse(data.data.content);
                         this.ifhas = true;
+                        this.content = whoes=='where'?"```python\n"+JSON.parse(data.data.content)+"\n```":JSON.parse(data.data.content);
                     } else {
                         this.content =whoes=='where'? "```python\n"+data.data.content+"\n```":JSON.parse(data.data.content);
                     }
@@ -82,9 +80,9 @@ export default {
     mounted() {
         this.title = this.$route.query.title;
         this.road=sessionStorage.getItem('road');
-        this.getArticle(this.title,this.road);
+        this.author=sessionStorage.getItem('author');
+        this.getArticle(this.author,this.road);
         window.addEventListener('scroll', this.scrollToTop)
-        console.log(this.$route)
     },
     destroyed() {
         window.removeEventListener('scroll', this.scrollToTop)
