@@ -10,9 +10,9 @@ module.exports = {
     },
     proxy: {
         '/api': {
-            // target: 'https://yating.online/api', // 阿里云
+            target: 'https://yating.online/api', // 阿里云
             // target: 'http://172.28.194.52:3000/', // 目标接口B域名
-            target: 'http://192.168.43.121:3000/', // 目标接口M域名
+            // target: 'http://192.168.43.121:3000/', // 目标接口M域名
             // target: 'http://192.168.191.1:3000/', // 哥哥接口域名
             changeOrigin: true, // 表示是否跨域
             pathRewrite: {
