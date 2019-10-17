@@ -22,6 +22,7 @@ export default {
     },
     data() {
         return {
+            whoes:'',
             // 标题
             title: '',
             content: "# haha", //内容
@@ -34,18 +35,20 @@ export default {
     },
     methods: {
         // 获得文字内容
-        getArticle(title,type) {
+        getArticle(title,type,whoes) {
             var params = {
                 title: title,
-                type:type
+                type:type,
+                whoes:whoes
             };
             SERVER.postAticle(params)
                 .then(data => {
                     if (data.data.code == 1) {
-                        this.content = "```python\n"+JSON.parse(data.data.content)+"\n```";
+
+                        this.content = whoes=='where'?"```python\n"+JSON.parse(data.data.content)+"\n```":JSON.parse(data.data.content);
                         this.ifhas = true;
                     } else {
-                        this.content = "```python\n"+data.data.content+"\n```";
+                        this.content =whoes=='where'? "```python\n"+data.data.content+"\n```":JSON.parse(data.data.content);
                     }
                 })
                 .catch(err => {
@@ -79,8 +82,8 @@ export default {
     mounted() {
         this.title = this.$route.query.title;
         this.type = this.$route.query.type;
-        // this.getArticle(this.title,this.type);
-        this.getArticle('','this.type');
+        this.whoes = this.$route.query.author;
+        this.getArticle(this.title,this.type,this.whoes);
         window.addEventListener('scroll', this.scrollToTop)
     },
     destroyed() {

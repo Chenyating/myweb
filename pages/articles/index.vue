@@ -2,20 +2,19 @@
   <div class="D-big">
     <go-back routerName="/" title="文章列表"></go-back>
     <div class="article-box">
-      <div class="tag-list">
-        <Select v-model="author" style="width:200px" placeholder="请选择作者">
-          <Option v-for="(item,index) in authorList" :key="index" :value="item.key">{{ item.name }}
-          </Option>
+      <div class="tag-list" v-if="typeList.length>0">
+        <Select class="select-box " @on-change="changeAuthor" v-model="author" style="width:200px">
+          <Option v-for="(item,index) in authorList" :key="index" :value="item.key">{{ item.name }}</Option>
         </Select>
-        <Select v-model="articleType" style="width:200px" placeholder="请选择文章类型">
-          <Option v-for="(item,index) in tingerType" :key="index" :value="item.articleType">{{ item.articleType }}
+        <Select v-if="author" v-model="articleType" style="width:200px" placeholder="请选择文章类型">
+          <Option v-for="(item,index) in typeList" :key="index" :value="item.articleType">{{ item.articleType }}
           </Option>
         </Select>
       </div>
-      <reject v-if="blogList==null"></reject>
-      <div v-else class="article-item" v-for="(item,index) in blogList" :key="index">
-        <div @click="goArticle(item.articleName,item.knowledgeType)" class="title"> 《{{item.title}} 》
-          <Tag type="border" color="lime">{{item.articleType}}</Tag>
+      <reject v-if="blogList.length==0"></reject>
+      <div v-else class="article-item" v-for="(item,index) in filterList" :key="index">
+        <div @click="goArticle(item.title,item.articleType)" class="title"> 《{{item.title}} 》
+          <Tag v-if="articleType==''" type="border" color="lime">{{item.articleType}}</Tag>
         </div>
         <div class="flex-row-between">
           <!-- 最新编辑时间 -->
@@ -41,65 +40,134 @@
         },
         data() {
             return {
+                //博客信息
                 blogList: [],
-                articleType: 'react',
+                articleType:null,
+                //类型列表
+                typeList: [],
                 tingerType: [],
+                whereType: [],
+                //作者
                 author: 'tinger',
                 authorList: [{name: 'where哥哥(✺ω✺)', key: 'where'}, {name: '婷儿(❁´ω`❁)', key: 'tinger'}]
             }
         },
+        computed: {
+            //过滤
+            filterList: function () {
+                var listType = this.articleType;
+                console.log(this.blogList,"||||||")
+                if (listType == null) {
+                    return this.blogList;
+                } else {
+                    var list = this.blogList.filter(item => {
+                        if (item.articleType == listType) {
+                            return item
+                        }
+                    })
+                    return list;
+                }
+            }
+        },
         methods: {
+            changeAuthor(val) {
+                this.articleType=null;
+                if (val == 'tinger') {
+                    this.getList('tinger').then(data=>{
+                        this.blogList = data;
+                        data.forEach(element => {
+                            // 处理T型时间
+                            var jsonTime = new Date(element.createTime).toJSON();
+                            var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+                            element.createTime = time;
+                        });
+                        this.typeList=this.tingerType;
+                    })
+                } else {
+                    this.getList('where').then(data=>{
+                        this.blogList = data;
+                        data.forEach(element => {
+                            // 处理T型时间
+                            var jsonTime = new Date(element.createTime).toJSON();
+                            var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+                            element.createTime = time;
+                        });
+                        this.typeList=this.whereType;
+                    })
+                }
+            },
             // 获得文章列表
-            getList() {
-                var params = {
-                    whoes: 'tinger',
-                    type: 'all'
-                };
-                SERVER.getAticleList(params).then((data) => {
-                    this.blogList = data.data;
-                    data.data.forEach(element => {
-
-                        // 处理T型时间
-                        var jsonTime = new Date(element.createTime).toJSON();
-                        var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-                        element.createTime = time;
-                    });
-                }).catch((err) => {
-                    this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
+            getList(whoes) {
+                return new Promise((resolve, reject) => {
+                    var params = {
+                        whoes: whoes,
+                        type: 'all'
+                    };
+                    SERVER.getAticleList(params).then((data) => {
+                        resolve(data.data);
+                    }).catch((err) => {
+                        reject(err)
+                        this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
+                    })
                 })
             },
             // 获得文章类型
             getListType(whoes) {
-                var params = {
-                    whoes: whoes,
-                };
-                SERVER.getAticleType(params).then((data) => {
-                    this.tingerType = data.data;
-                }).catch((err) => {
-                    this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
+                return new Promise((resolve, reject) => {
+                    var params = {
+                        whoes: whoes,
+                    };
+                    SERVER.getAticleType(params).then((data) => {
+                        resolve(data.data);
+                    }).catch((err) => {
+                        this.$Message.error("(╥╯﹏╰╥)ง请求失败，改bug去~");
+                        reject(err)
+                    })
                 })
             },
-            goArticle(title, type) {
                 // 跳转去查看文章详情
-                this.$router.push(`/articles/article?title=${title}&type=${type}`);
+            goArticle(title, type) {
+                this.$router.push(`/articles/article?title=${title}&type=${type}&author=${this.author}`);
+                sessionStorage.setItem('author',this.author);
             }
         },
         mounted() {
-            this.getListType('tinger');
-            this.getList();
+            if (sessionStorage.getItem('author')==undefined){
+                this.author=sessionStorage.getItem('author');
+            }
+            //获得类型和列表
+            this.getListType('tinger').then(data => {
+                this.tingerType = data;
+                if (this.author=='tinger'){
+                    this.typeList=this.tingerType;
+                }
+            });
+            this.getListType('where').then(data => {
+                this.whereType = data;
+                if (this.author=='where'){
+                    this.typeList=this.whereType;
+                }
+            });
+            //先获得我的博客
+            this.getList(this.author).then(data=>{
+                this.blogList = data;
+                data.forEach(element => {
+                    // 处理T型时间
+                    var jsonTime = new Date(element.createTime).toJSON();
+                    var time = new Date(+new Date(jsonTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+                    element.createTime = time;
+                });
+                this.typeList=this.author=='where'?this.tingerType:this.whereType;
+            })
         },
-        filters: {
-            // hehe: function (item, type) {
-            //     return this.blogList.filters(function (item,type){
-            //         return item.titel==type;
-            //     })
-            // }
-        }
     }
 </script>
 
 <style lang="less" scoped>
   @import "~assets/css/mobile/base.less";
+  .select-box {
+    margin-right: 10px;
+  }
 
   .tag-list {
     .flex-row-around();
