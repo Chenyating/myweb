@@ -22,7 +22,7 @@ export default {
     },
     data() {
         return {
-            whoes:'',
+            road:'',
             // 标题
             title: '',
             content: "# haha", //内容
@@ -81,10 +81,10 @@ export default {
     },
     mounted() {
         this.title = this.$route.query.title;
-        this.type = this.$route.query.type;
-        this.whoes = this.$route.query.author;
-        this.getArticle(this.title,this.type,this.whoes);
+        this.road=sessionStorage.getItem('road');
+        this.getArticle(this.title,this.road);
         window.addEventListener('scroll', this.scrollToTop)
+        console.log(this.$route)
     },
     destroyed() {
         window.removeEventListener('scroll', this.scrollToTop)

@@ -13,8 +13,8 @@
       </div>
       <reject v-if="blogList.length==0"></reject>
       <div v-else class="article-item" v-for="(item,index) in filterList" :key="index">
-        <div @click="goArticle(item.title,item.articleType)" class="title"> 《{{item.title}} 》
-          <Tag v-if="articleType==''" type="border" color="lime">{{item.articleType}}</Tag>
+        <div @click="goArticle(item.title,item.road)" class="title"> 《{{item.title}} 》
+          <Tag v-if="articleType==null" type="border" color="lime">{{item.articleType}}</Tag>
         </div>
         <div class="flex-row-between">
           <!-- 最新编辑时间 -->
@@ -56,7 +56,6 @@
             //过滤
             filterList: function () {
                 var listType = this.articleType;
-                console.log(this.blogList,"||||||")
                 if (listType == null) {
                     return this.blogList;
                 } else {
@@ -126,9 +125,10 @@
                 })
             },
                 // 跳转去查看文章详情
-            goArticle(title, type) {
-                this.$router.push(`/articles/article?title=${title}&type=${type}&author=${this.author}`);
+            goArticle(title, road) {
+                this.$router.push(`/articles/article?title=${title}`);
                 sessionStorage.setItem('author',this.author);
+                sessionStorage.setItem('road',road);
             }
         },
         mounted() {
