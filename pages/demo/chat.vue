@@ -53,6 +53,7 @@ export default {
             message: { //发送的消息格式
                 type: '', //发送类型
                 user: '',
+                userId:'',
                 content: '', //发送内容
                 time: '' //发送时间
             }
@@ -76,16 +77,17 @@ export default {
                 type: 'addUser',
                 user: userName,
                 content: '',
+                userId:new Date().getTime(),
                 time: new Date().toLocaleString()
             }
             this.initWbs();
         },
         // wbs初始化；
         initWbs() {
-            this.ws = new WebSocket('ws://172.28.194.52:8080');
+            this.ws = new WebSocket(`ws://172.28.194.52:8080/chat?userId=${this.message.userId}&userName=${this.userName}`);
             // 设置属性
             // 连接时
-            this.ws.onopen = () => {
+            this.ws.onopen = (e) => {
                 var sendMessage = JSON.stringify(this.message);
                 this.ws.send(sendMessage)
             };
@@ -100,7 +102,7 @@ export default {
                         // 退出消息
                     case 'quit':
                         this.users = this.users.filter((element, index) => {
-                            if (recieve.user != element.user) {
+                            if (recieve.userId != element.user) {
                                 return element;
                             }
                         })
@@ -125,11 +127,14 @@ export default {
                 this.messageList = [];
                 console.log("退出")
             };
+            this.ws.toWho=()=>{
+                console.log("hahah")
+                this.ws.send("hahah")
+            }
         },
         send() {
             this.message.type = 'message';
             this.message.content = this.text;
-
             this.ws.onopen();
         }
     },
