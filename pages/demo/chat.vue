@@ -2,7 +2,7 @@
 <div>
     <!-- 先输入昵称 -->
     <div class="before" v-if="!ifEnter">
-        <Input @on-search="settingName(userName)" v-model="userName" :value="userName" search enter-button="确定" placeholder="请输入您的昵称" />
+        <Input @on-search="settingName()" v-model="userName" :value="userName" search enter-button="确定" placeholder="请输入您的昵称" />
     </div>
     <!-- 开始群聊 -->
     <div class="after" v-else>
@@ -19,7 +19,7 @@
                         <div>{{item.user}}退出群聊</div>
                     </div>
                     <!-- 收到消息 -->
-                    <div :class="{'myMessage':item.user==userName}" v-if="item.type=='message'">
+                    <div :class="{'myMessage':item.userId==userId}" v-if="item.type=='message'">
                         <div>{{item.user}}:{{item.time}}</div>
                         <h3 class="message">{{item.content}}</h3>
                     </div>
@@ -35,7 +35,7 @@
         <!-- 用户信息 -->
         <div class="right">
             <h1>《用户列表》</h1>
-            <div v-for="(item,index) in users" :key="index">{{item.user}}</div>
+            <div v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
         </div>
     </div>
 </div>
@@ -48,12 +48,15 @@ export default {
             users: [], //用户列表
             ifEnter: false, //是否聊天状态
             userName: '游客',
-            text: '大家好丫~我是婷婷儿', //内容
+            userId: '',
+            text: '大家好 丫~我是婷婷儿', //内容
             ws: null, //wbs
             message: { //发送的消息格式
                 type: '', //发送类型
                 user: '',
-                userId:'',
+                userId: '',
+                toUser: '', //消息接收方名
+                toUser: '', //消息接收方id
                 content: '', //发送内容
                 time: '' //发送时间
             }
@@ -70,16 +73,13 @@ export default {
 
         },
         // 设置昵称
-        settingName(userName) {
+        settingName() {
             this.ifEnter = true;
-            this.users.push(userName)
-            this.message = {
-                type: 'addUser',
-                user: userName,
-                content: '',
-                userId:new Date().getTime(),
-                time: new Date().toLocaleString()
-            }
+            this.userId = new Date().getTime();
+            this.message.type = 'addUser';
+            this.message.user = this.userName;
+            this.message.userId = this.userId;
+            this.message.time = new Date().toLocaleString()
             this.initWbs();
         },
         // wbs初始化；
@@ -95,42 +95,40 @@ export default {
             this.ws.onmessage = (e) => {
                 var recieve = JSON.parse(e.data);
                 switch (recieve.type) {
-                    // 加入消息
+                    // 首次连接会发送所有用户信息
+                    case 'allUser':
+                        this.users = recieve.userList;
+                        break;
+                        // 添加用户
                     case 'addUser':
-                        this.users.push(recieve)
                         break;
                         // 退出消息
                     case 'quit':
+                        // 获得退出用户信息，从列表中去掉；
                         this.users = this.users.filter((element, index) => {
-                            if (recieve.userId != element.user) {
+                            if (recieve.userId != element.userId) {
                                 return element;
                             }
                         })
                         break;
                         // 普通消息
                 }
-                this.messageList.push(recieve);
-                // ue中数据和dom渲染由于是异步的，所以，要让dom结构随数据改变这样的操作都应该放进this.$nextTick()的回调函数中。
-                this.$nextTick(() => {
-                    var ele = document.getElementById('content');
-                    ele.scrollTop = ele.scrollHeight - ele.clientHeight;
-                })
+                if (recieve.type != 'allUser') {
+                    this.messageList.push(recieve);
+                    // ue中数据和dom渲染由于是异步的，所以，要让dom结构随数据改变这样的操作都应该放进this.$nextTick()的回调函数中。
+                    this.$nextTick(() => {
+                        var ele = document.getElementById('content');
+                        ele.scrollTop = ele.scrollHeight - ele.clientHeight;
+                    })
+                }
             };
-            this.ws.uid=(new Date).getTime,
-            this.ws.onerror = () => {
-                console.log("报错")
-            }
             // 退出时
             this.ws.onclose = () => {
-                alert("你已经退出聊天室了");
                 this.users = [];
+                console.log(this.users)
                 this.messageList = [];
-                console.log("退出")
+                console.log("你已经退出聊天室了!!");
             };
-            this.ws.toWho=()=>{
-                console.log("hahah")
-                this.ws.send("hahah")
-            }
         },
         send() {
             this.message.type = 'message';
@@ -138,8 +136,8 @@ export default {
             this.ws.onopen();
         }
     },
-    mounted() {
-
+    beforeDestroy() {
+        this.ws.close();
     }
 }
 </script>
@@ -172,6 +170,9 @@ export default {
         width: 200px;
         height: inherit;
         border: solid 1px blue;
+        .isMe{
+            color: red;
+        }
     }
 }
 </style>
