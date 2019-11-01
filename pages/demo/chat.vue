@@ -18,6 +18,10 @@
                     <div class="notice" v-if="item.type=='quit'">
                         <div>{{item.user}}退出群聊</div>
                     </div>
+                    <!-- 单聊 -->
+                    <div v-if="item.type=='talk'">
+                        <div>{{item.user}}对你说{{item.content}}</div>
+                    </div>
                     <!-- 收到消息 -->
                     <div :class="{'myMessage':item.userId==userId}" v-if="item.type=='message'">
                         <div>{{item.user}}:{{item.time}}</div>
@@ -27,6 +31,10 @@
             </div>
             <!-- 编辑栏 -->
             <div>
+                <Select  v-model="to" style="width:200px">
+                     <Option value="all" :key="-1">所有人</Option>
+                     <Option v-for="(item,index) in users" :value="item.userId" :key="index">{{item.userName}}( {{item.userId}} )</Option>
+                </Select>
                 <Input v-model="text" show-word-limit type="textarea" placeholder="Enter something..." style="width: 200px" />
                 <Button type="info" @click="send()">发送</Button>
                 <Button type="error" @click="quit()">退出</Button>
@@ -35,7 +43,7 @@
         <!-- 用户信息 -->
         <div class="right">
             <h1>《用户列表》</h1>
-            <div v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
+            <div @click="talkto(item)" v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
         </div>
     </div>
 </div>
@@ -51,18 +59,29 @@ export default {
             userId: '',
             text: '大家好 丫~我是婷婷儿', //内容
             ws: null, //wbs
+            to: 'all',
             message: { //发送的消息格式
                 type: '', //发送类型
                 user: '',
                 userId: '',
                 toUser: '', //消息接收方名
-                toUser: '', //消息接收方id
+                toUserId: '', //消息接收方id
                 content: '', //发送内容
                 time: '' //发送时间
             }
         }
     },
     methods: {
+        // 单聊
+        talkto(toUser) {
+            this.message.toUser = toUser.user;
+            this.message.toUserId = toUser.userId;
+            this.message.type = 'talk';
+            this.message.content=this.text;
+            this.ws.onopen();
+            // 单聊发消息
+            this.message.type = 'message';
+        },
         // 退出聊天室
         quit() {
             this.message.type = 'quit';
@@ -102,6 +121,9 @@ export default {
                         // 添加用户
                     case 'addUser':
                         break;
+                    case 'talk':
+                        console.log(recieve)
+                        break;
                         // 退出消息
                     case 'quit':
                         // 获得退出用户信息，从列表中去掉；
@@ -136,9 +158,15 @@ export default {
             this.ws.onopen();
         }
     },
-    beforeDestroy() {
-        this.ws.close();
-    }
+    // mounted() {
+    //     console.log("???")
+    //     window.onbeforeunload = (event) => {
+    //         alert("???")
+    //         console.log("????")
+    //         this.ws.close();
+    //         return confirm("确定退出吗");
+    //     }
+    // }
 }
 </script>
 <style lang="less" scoped>
@@ -170,7 +198,7 @@ export default {
         width: 200px;
         height: inherit;
         border: solid 1px blue;
-        .isMe{
+        .isMe {
             color: red;
         }
     }
