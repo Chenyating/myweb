@@ -20,7 +20,8 @@
                     </div>
                     <!-- 单聊 -->
                     <div v-if="item.type=='talk'">
-                        <div>{{item.user}}对你说{{item.content}}</div>
+                        <div class="myMessage" v-if="item.userId==userId">你对{{item.toUser}}说{{item.content}}</div>
+                        <div v-else>{{item.user}}对你说{{item.content}}</div>
                     </div>
                     <!-- 收到消息 -->
                     <div :class="{'myMessage':item.userId==userId}" v-if="item.type=='message'">
@@ -31,9 +32,9 @@
             </div>
             <!-- 编辑栏 -->
             <div>
-                <Select  v-model="to" style="width:200px">
+                <Select style="width:200px" @on-change='talkto'>
                      <Option value="all" :key="-1">所有人</Option>
-                     <Option v-for="(item,index) in users" :value="item.userId" :key="index">{{item.userName}}( {{item.userId}} )</Option>
+                     <Option v-for="(item,index) in users" v-if="item.userId!=userId" :value="item.userId" :key="index">{{item.userName}}( {{item.userId}} )</Option>
                 </Select>
                 <Input v-model="text" show-word-limit type="textarea" placeholder="Enter something..." style="width: 200px" />
                 <Button type="info" @click="send()">发送</Button>
@@ -43,7 +44,7 @@
         <!-- 用户信息 -->
         <div class="right">
             <h1>《用户列表》</h1>
-            <div @click="talkto(item)" v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
+            <div @click="talkto(item.userId)" v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
         </div>
     </div>
 </div>
@@ -59,7 +60,7 @@ export default {
             userId: '',
             text: '大家好 丫~我是婷婷儿', //内容
             ws: null, //wbs
-            to: 'all',
+            talkType: 'message',
             message: { //发送的消息格式
                 type: '', //发送类型
                 user: '',
@@ -73,14 +74,13 @@ export default {
     },
     methods: {
         // 单聊
-        talkto(toUser) {
-            this.message.toUser = toUser.user;
-            this.message.toUserId = toUser.userId;
-            this.message.type = 'talk';
-            this.message.content=this.text;
-            this.ws.onopen();
-            // 单聊发消息
-            this.message.type = 'message';
+        talkto(userId) {
+            if (userId == 'all') {
+                this.talkType = 'message';
+            } else {
+                this.talkType = 'talk';
+            }
+            this.message.toUserId = userId;
         },
         // 退出聊天室
         quit() {
@@ -153,7 +153,7 @@ export default {
             };
         },
         send() {
-            this.message.type = 'message';
+            this.message.type = this.talkType;
             this.message.content = this.text;
             this.ws.onopen();
         }
