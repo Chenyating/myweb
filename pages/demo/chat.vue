@@ -1,50 +1,62 @@
 <template>
-<div>
+<div class="chat-box">
     <!-- 先输入昵称 -->
     <div class="before" v-if="!ifEnter">
         <Input @on-search="settingName()" v-model="userName" :value="userName" search enter-button="确定" placeholder="请输入您的昵称" />
     </div>
     <!-- 开始群聊 -->
-    <div class="after" v-else>
-        <div class="left">
-            <!-- 聊天内容 -->
-            <div class="content" id="content">
-                <div v-for="(item,index) in messageList" :key="index">
-                    <!-- 加入群聊 -->
-                    <div class="notice" v-if="item.type=='addUser'">
-                        <h2>{{item.user}}加入群聊</h2>
-                    </div>
-                    <!-- 退出群聊 -->
-                    <div class="notice" v-if="item.type=='quit'">
-                        <div>{{item.user}}退出群聊</div>
-                    </div>
-                    <!-- 单聊 -->
-                    <div v-if="item.type=='talk'">
-                        <div class="myMessage" v-if="item.userId==userId">你对{{item.toUser}}说{{item.content}}</div>
-                        <div v-else>{{item.user}}对你说{{item.content}}</div>
-                    </div>
-                    <!-- 收到消息 -->
-                    <div :class="{'myMessage':item.userId==userId}" v-if="item.type=='message'">
-                        <div>{{item.user}}:{{item.time}}</div>
-                        <h3 class="message">{{item.content}}</h3>
+    <div class="after-box" v-else>
+        <div class="talk-title">
+            群聊
+        </div>
+        <div class="after">
+            <div class="left">
+                <!-- 聊天内容 -->
+                <div class="talk-box" id="content">
+                    <div v-for="(item,index) in messageList" :key="index">
+                        <!-- 加入群聊 -->
+                        <div class="notice" v-if="item.type=='addUser'">{{item.user}}加入群聊</div>
+                        <!-- 退出群聊 -->
+                        <div class="notice" v-if="item.type=='quit'">{{item.user}}退出群聊</div>
+                        <!-- 单聊 -->
+                        <div v-if="item.type=='talk'">
+                            <div class="you-secret" v-if="item.userId==userId">你对{{item.toUser}}说{{item.content}}</div>
+                            <div class="secret" v-else>{{item.user}}对你说{{item.content}}</div>
+                        </div>
+                        <!-- 收到消息 -->
+                        <div class="all-message" :class="{'myMessage':item.userId==userId}" v-if="item.type=='message'">
+                            <img v-if="item.userId!=userId" class="head-img" :src="headImg" />
+                            <div>
+                                <div class="time">{{item.user}}:{{item.time}}</div>
+                                <span class="message">{{item.content}}</span>
+                            </div>
+                            <img v-if="item.userId==userId" class="head-img" :src="headImg" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- 编辑栏 -->
-            <div>
-                <Select style="width:200px" @on-change='talkto'>
+                <!-- 编辑栏 -->
+                <div class="eidt-box">
+                    <Input v-model="text" show-word-limit type="textarea" placeholder="Enter something..." />
+                    <div class="eidt-btn">
+                        <Select style="width:200px" @on-change='talkto'>
                      <Option value="all" :key="-1">所有人</Option>
                      <Option v-for="(item,index) in users" v-if="item.userId!=userId" :value="item.userId" :key="index">{{item.userName}}( {{item.userId}} )</Option>
                 </Select>
-                <Input v-model="text" show-word-limit type="textarea" placeholder="Enter something..." style="width: 200px" />
-                <Button type="info" @click="send()">发送</Button>
-                <Button type="error" @click="quit()">退出</Button>
+                        <div>
+                            <Button type="error" @click="quit()">退出</Button>
+                            <Button type="success" @click="send()">发送</Button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- 用户信息 -->
-        <div class="right">
-            <h1>《用户列表》</h1>
-            <div @click="talkto(item.userId)" v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">{{item.userName}}( {{item.userId}} )</div>
+            <!-- 用户信息 -->
+            <div class="right">
+                <div class="title">当前在线{{users.length}}人</div>
+                <div class="user-list" @click="talkto(item.userId)" v-for="(item,index) in users" :key="index" :class="{'isMe':item.userId==userId}">
+                    <img class="head-img" :src="headImg" />
+                    <span>{{item.userName}}( {{item.userId}} )</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -69,7 +81,8 @@ export default {
                 toUserId: '', //消息接收方id
                 content: '', //发送内容
                 time: '' //发送时间
-            }
+            },
+            headImg: require("~/static/mobile/headImg/default.png")
         }
     },
     methods: {
@@ -122,7 +135,6 @@ export default {
                     case 'addUser':
                         break;
                     case 'talk':
-                        console.log(recieve)
                         break;
                         // 退出消息
                     case 'quit':
@@ -157,49 +169,141 @@ export default {
             this.message.content = this.text;
             this.ws.onopen();
         }
-    },
-    // mounted() {
-    //     console.log("???")
-    //     window.onbeforeunload = (event) => {
-    //         alert("???")
-    //         console.log("????")
-    //         this.ws.close();
-    //         return confirm("确定退出吗");
-    //     }
-    // }
+    }
 }
 </script>
 <style lang="less" scoped>
-.before {}
+@media screen and (max-width: 500px) {
+    .right{
+        display: none;
+    }
+}
+
+@import "~assets/css/mobile/base.less";
+@img-secret: '~static/mobile/icon/secret.png';
+::-webkit-scrollbar {
+    width: 1px;
+    background-color: @white;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #5a76cd;
+}
+
+.chat-box {
+    margin: 0 auto;
+    max-width: 1024px;
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.before {
+    width: 100%;
+}
+
+.after-box {
+    margin: 0 auto;
+    .talk-title {
+        .title();
+        background: @green;
+        color: white;
+        text-align: center;
+    }
+}
 
 .after {
+    width: 100%;
     display: flex;
     .left {
-        .content {
-            width: 500px;
-            height: 300px;
-            border: solid 1px red;
+        width: 100%;
+        border: solid 1px @line-color;
+        .eidt-btn {
+            padding: 10px;
+            .flex();
+            justify-content: space-between;
+        }
+        .talk-box {
+            width: 100%;
+            height: 100%;
             overflow: scroll;
             overflow-x: hidden;
-            padding: 0 20px;
+            padding: 10px;
             .notice {
+                &:before {
+                    content: " ";
+                    display: inline-block;
+                    margin-right: @distansSmall;
+                    .icon(@width: 15px);
+                    background: url(@img-notice) no-repeat;
+                    background-size: 100%;
+                    vertical-align: middle;
+                }
                 text-align: center;
+                font-size: 20px;
+                .gray-text();
+            }
+            .all-message {
+                padding: 10px 0;
+                .flex();
+                flex-wrap: nowrap;
+                .head-img {
+                    .icon(20px)
+                }
+                .time {
+                    text-align: right;
+                }
+                .message {
+                    background: @green;
+                    color: @white;
+                    margin: 5px 0;
+                    padding: 5px;
+                    border-radius: 5px;
+                    display: inline-block;
+                }
             }
             .myMessage {
-                text-align: right;
+                justify-content: flex-end;
+                .message {
+                    float: right;
+                }
             }
-            .message {
-                border: solid 2px black;
-                display: inline-block;
+            .you-secret {
+                color: @red;
+            }
+            .secret {
+                &:before {
+                    content: " ";
+                    display: inline-block;
+                    margin-right: @distansSmall;
+                    .icon(@width: 15px);
+                    background: url(@img-secret) no-repeat;
+                    background-size: 100%;
+                    vertical-align: middle;
+                }
+                color: @red;
             }
         }
-    }
+    } // 右侧列表
     .right {
-        width: 200px;
+        border: solid 1px @line-color;
+        padding: 10px;
+        width: auto;
+        min-width: 200px;
         height: inherit;
-        border: solid 1px blue;
+        overflow: auto;
+        .user-list {
+            line-height: 30px;
+        }
         .isMe {
-            color: red;
+            line-height: 20px;
+            color: @green;
+            font-weight: bold;
+        }
+        .head-img {
+            .icon(20px);
+            vertical-align: middle;
         }
     }
 }
