@@ -145,7 +145,8 @@ export default {
         },
         // wbs初始化；
         initWbs() {
-            this.ws = new WebSocket(`ws://localhost:9091/chat?userId=${this.message.userId}&userName=${this.userName}`);
+            this.ws = new WebSocket(`ws://localhost:1234/chat?userId=${this.message.userId}&userName=${this.userName}`);
+            // this.ws = new WebSocket(`ws://106.14.185.134:9091/chat?userId=${this.message.userId}&userName=${this.userName}`);
             // 设置属性
             // 连接时
             this.ws.onopen = (e) => {
