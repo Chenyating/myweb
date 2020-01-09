@@ -35,9 +35,10 @@ export default {
     },
     methods: {
         // 获得文字内容
-        getArticle(whoes,road) {
+        getArticle(whoes,title,road) {
             var params = {
                 road:road,
+                title:title,
                 whoes:whoes
             };
             SERVER.postAticle(params)
@@ -81,7 +82,7 @@ export default {
         this.title = this.$route.query.title;
         this.road=sessionStorage.getItem('road');
         this.author=sessionStorage.getItem('author');
-        this.getArticle(this.author,this.road);
+        this.getArticle(this.author,this.title,this.road);
         window.addEventListener('scroll', this.scrollToTop)
     },
     destroyed() {
